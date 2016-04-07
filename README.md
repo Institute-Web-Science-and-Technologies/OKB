@@ -10,8 +10,7 @@ For more information, please check our Web site [here]:
 
 Copyright the OKB Team. 
 
-The code developed within the Open Knowledge Bases Pro is licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
+The code developed within the Open Knowledge Bases Projektpraktikum & Forschungspraktikum is licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
