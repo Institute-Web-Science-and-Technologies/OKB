@@ -8,13 +8,22 @@ import com.sun.jersey.api.client.WebResource;
 
 public class WikidataItemReader {
 
+	
+	
 	public static void main(String[] args) {
+		String u = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q2&format=json";
+		
+		System.out.println( u );
+		
+		
+		
+		
 		try {
 
 			Client client = Client.create();
 
 			WebResource webResource = client
-			   .resource("https://www.wikidata.org/w/api.php");
+			   .resource(u);
 
 			ClientResponse response = webResource.accept("application/json")
 	                   .get(ClientResponse.class);

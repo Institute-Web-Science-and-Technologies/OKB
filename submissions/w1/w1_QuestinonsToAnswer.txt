@@ -1,0 +1,105 @@
+# Model
+	- What types of events will we consider? (Write definiton an examples.)
+		
+		current occurrences		natural disasters e.g.	2016 Ecuador earthquake
+														Language	Label	Description	Also known as
+														
+														Statements:
+														
+														coordinate location (Property:P625) : 0°22'15.6''N,79°56'24.0''W
+														
+														instance of (Property:P31) : earthquake
+														
+														point in time (Property:P585) : 16 April 2015
+														
+														country (Property:P17) : Ecuador (Q736)
+														
+														number of injured (Property:P1339) : 600+-15
+														
+														number of death (Property:P1120) : 609+-15
+														
+														Commons category (Property:P373) : 2016 Ecuador earthquake [linking to WikiCommons]
+														
+														moment magnitude scale (Property:P2527) : 7.8+-0.1
+														
+														cost of damage
+																	   
+								terror attacs e. g. 	2016 Brussels bombings
+														Language	Label	Description	Also known as
+														
+														Statements:
+														
+														instance of (Property:P31) : terrorist attack (Q5710433)
+														
+														country (Property:P17) : Belgium (Q31)
+														
+														point in time (Property:P585) : 22 March 2016
+														
+														coordinate location (Property:P625) : 	50°53'51.99''N,4°209'0.02''E
+																						...
+														target (Property:P533) : civilian (Q206887)
+														
+														number of deaths (Property:P1120) :	34	[reference]
+																								reference URL (Property:P854) http://www.washingtionpost.com/world/...
+																								retrieved (Property:P813)
+																								
+																							35+-1 	[reference]
+																									reference URL (Property:P854) http://www.bbc.com/news...
+																									publication date (Property:P577) : 28 March 2016
+																									retrieved (Property:P813) 15 April 2016
+																									
+														number of injured (Property:P1339) :	330+-1 [reference like above]
+														
+														Commons category (Property:P373) : March 2016 Brussels attacks [linking to WikiCommons]
+														
+														location (Property:P276) :	Brussels Airport (Q28934) [reference]
+														
+																					Maelebeek/Maalbeek metro station [reference]
+																					
+														participant (Property:P710) : Islamic State fo Iraq and the Levant (Q2429253) [reference]
+														
+														locator map image : 2016-Brussels-Bombing-OpenStreetMap.png
+														
+														topic's main category (Property:P910) : Category:2016 Brussels bombings (Q23419268)
+														
+								Elections
+								
+									Statements:
+									
+									point in time (Property:P585)
+									
+									country (Property:P17)
+									
+									candidates
+									
+									number of voters
+									
+									successful candidate
+									
+									participating parties
+									
+								sport events:
+								
+								country (Property:P17)
+								point in time (Property:P585)
+								
+								
+									
+								
+								Epidemics
+									point in time (Property:P585)
+									country (Property:P17)
+									
+								Major accidents
+									point in time (Property:P585)
+									country (Property:P17)
+								
+								
+# Multi-provenance facts
+	- What is the classification of possible cases that we would like to cover? (e.g. contradictions is one; are there other cases?)
+	
+	
+# Source of information
+	- What types of sources do we need to include in our products?
+	
+	- How many and which will we select for a running prototype?
