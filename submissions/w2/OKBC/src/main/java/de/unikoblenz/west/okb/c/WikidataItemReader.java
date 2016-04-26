@@ -2,6 +2,7 @@ package de.unikoblenz.west.okb.c;
 
 
 
+import com.cedarsoftware.util.io.JsonWriter;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -13,11 +14,7 @@ public class WikidataItemReader {
 	public static void main(String[] args) {
 		String u = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q2&format=json";
 		
-		System.out.println( u );
-		
-		
-		
-		
+				
 		try {
 
 			Client client = Client.create();
@@ -35,8 +32,10 @@ public class WikidataItemReader {
 
 			String output = response.getEntity(String.class);
 
-			System.out.println("Output from Server .... \n");
-			System.out.println(output);
+//			System.out.println("Output from Server .... \n");
+//			System.out.println(output);
+			
+			System.out.println(JsonWriter.formatJson(output.toString()));
 
 		  } catch (Exception e) {
 
