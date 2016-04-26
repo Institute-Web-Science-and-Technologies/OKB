@@ -62,7 +62,8 @@
 														
 														topic's main category (Property:P910) : Category:2016 Brussels bombings (Q23419268)
 														
-								Elections
+														estimated damage in USD
+								elections:
 								
 									Statements:
 									
@@ -78,28 +79,85 @@
 									
 									participating parties
 									
+									percentages of each partie
+									
 								sport events:
+									
+									Statements:
+																	
+									country (Property:P17)
+									
+									type of sport
+									
+									point in time (Property:P585)
 								
-								country (Property:P17)
-								point in time (Property:P585)
-								
-								
+									part of grater event (e.g. World Cup)
+									
+									participating teams, players
+									
+									scores
+									
+									referee
+									
+									location (e.g. Stadium Allianz Arena Q127429)
 									
 								
-								Epidemics
+								epidemics
+									
+									Statements:
+									
 									point in time (Property:P585)
+									
 									country (Property:P17)
+									
+									number of deaths (Property:P1120)
 									
 								Major accidents
-									point in time (Property:P585)
-									country (Property:P17)
 								
+									Statements:
+									
+									point in time (Property:P585)
+									
+									country (Property:P17)
+									
+									coordinate location (Property:P625) : 0°22'15.6''N,79°56'24.0''W
+									
+									number of injured (Property:P1339)
+									
+									number of deaths (Property:P1120)
+								
+									estimated damage in USD
+								
+								music festivals / concerts
+								
+									Statements:
+									
+									point in time (Property:P585)
+									
+									country (Property:P17)
+									
+									location
+									
+									artists / list of artists (with identifier Q...)
+									
+									number of visitors
 								
 # Multi-provenance facts
 	- What is the classification of possible cases that we would like to cover? (e.g. contradictions is one; are there other cases?)
-	
+		
+		Allow contradictions and rate the statements?
 	
 # Source of information
 	- What types of sources do we need to include in our products?
+	
+	Major news sites e.g.	http://www.nytimes.com/
+	available for free?		https://www.washingtonpost.com/
+							http://www.heraldnews.com/
+							http://www.thetimes.co.uk/
+							
+							http://www.zeit.de/index
+							http://www.faz.net/
+							http://www.welt.de/
+							http://www.sueddeutsche.de/
 	
 	- How many and which will we select for a running prototype?
