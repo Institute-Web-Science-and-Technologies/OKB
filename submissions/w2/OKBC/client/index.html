@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>OKB Curation Tool</title>
+
+        <meta charset="utf-8">
+        <meta name="author" content="OKB Team">
+        
+        <link rel="stylesheet" href="resources/css/mainpage.css">
+        
+        <script src="resources/js/wikidatareader.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <h1>OKB-C</h1>
+
+            <!-- Wikidata Item Search -->
+            <form name="search_form" action="" method="get">
+                <input type="text" name="search_query" placeholder="Enter the Item ID">
+                <input type="button" value="Search" onClick="executeSearchRequest(this.form)">
+            </form>
+        </header>
+
+        <main>
+            <section>
+                <h2>News articles</h2>
+            </section>
+
+            <section>
+                <h2>Wikidata item</h2>
+                <div id="item"></div>
+            </section>
+        </main>
+    </body>
+</html>
