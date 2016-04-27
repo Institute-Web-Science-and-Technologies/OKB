@@ -9,41 +9,31 @@ import com.sun.jersey.api.client.WebResource;
 
 public class WikidataItemReader {
 
-	
-	
-	public static void main(String[] args) {
-		String u = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q2&format=json";
-		
-				
+	public static String itemReader(String id){
+		String wdlink = "https://www.wikidata.org/w/api.php?action=wbgetentities&ids="+id+"&format=json";
+		String output1 = null, output2=null;
+
 		try {
-
 			Client client = Client.create();
-
 			WebResource webResource = client
-			   .resource(u);
-
+					.resource(wdlink);
 			ClientResponse response = webResource.accept("application/json")
-	                   .get(ClientResponse.class);
-
+					.get(ClientResponse.class);
 			if (response.getStatus() != 200) {
-			   throw new RuntimeException("Failed : HTTP error code : "
-				+ response.getStatus());
+				throw new RuntimeException("Failed : HTTP error code : "
+						+ response.getStatus());
 			}
+			output1 = response.getEntity(String.class);
+			output2 = JsonWriter.formatJson(output1.toString());
 
-			String output = response.getEntity(String.class);
-
-//			System.out.println("Output from Server .... \n");
-//			System.out.println(output);
-			
-			System.out.println(JsonWriter.formatJson(output.toString()));
-
-		  } catch (Exception e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
 
-		  }
-
-		
+		}
+		return output2;
 	}
+
+
 
 }
