@@ -1,4 +1,4 @@
-# Meetings slides: please share the links to oyur slides here
+# Meetings slides: please share the links to your slides here
 
 
 ## Meeting 28.04.2016
