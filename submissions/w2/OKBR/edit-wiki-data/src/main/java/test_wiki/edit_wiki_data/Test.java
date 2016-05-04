@@ -145,7 +145,7 @@ class Test {
       
     	String entity = "Q4115189";
     	String property = "P1082";
-    	String data = "{\"amount\":\"+27553280\",\"unit\":\"1\",\"upperBound\":\"+27553280\",\"lowerBound\":\"+27553280\"}";
+    	String data = "{\"amount\":\"+27553282\",\"unit\":\"1\",\"upperBound\":\"+27553282\",\"lowerBound\":\"+27553282\"}";
     	String qualiferData = "{\"P1082\":[{\"snaktype\":\"value\",\"property\":\"P1082\",\"hash\":\"48517f9080dabfa101fa5f13a4c11866852488b6\",\"datavalue\":{\"value\":{\"amount\":\"+837442\",\"unit\":\"1\",\"upperBound\":\"+837442\",\"lowerBound\":\"+837442\"}";
     	String referencesnaks = "{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21540096},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]}";
     	
