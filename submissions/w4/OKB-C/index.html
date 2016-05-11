@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>OKB Curation Tool</title>
+
+        <meta charset="utf-8">
+        <meta name="author" content="OKB Team">
+        
+        <link rel="stylesheet" href="resources/css/mainpage.css">
+        
+        <script src="thirdparty/js/mustache.min.js"></script>
+
+        <script src="resources/js/wditemmapper.js"></script>
+        <script src="resources/js/wditemprinter.js"></script>
+        <script src="resources/js/wdapihandler.js"></script>
+        <script src="resources/js/eventhandler.js"></script>
+		<script src="resources/js/wdsearch.js"></script>
+        <script src="resources/js/idlabelstore.js"></script>
+
+    </head>
+
+    <body>
+        <header>
+            <h1>OKB-C</h1>
+
+            <!-- Wikidata Item Search -->
+            <form name="search_form" action="" method="get">
+                <input type="text" name="searchQuery" placeholder="Enter the Item ID">
+                <input type="button" value="Search" onclick="handleSearchButtonClickEvent(this.form);">
+            </form>
+        </header>
+
+        <main>
+            <section>
+                <h2>News articles</h2>
+            </section>
+
+            <section>
+                <h2>Wikidata item</h2>
+                <div id="item"></div>
+                <!-- Template for Item objects -->
+                <script id="itemTemplate" type="x-tmpl-mustache">
+                    <h3>{{label}} ({{id}})</h3>
+                    <p>{{description}}</p>
+                    <h4>Aliases:</h4>
+                    <ul>
+                        {{#aliases}}
+                        <li>{{.}}</li>
+                        {{/aliases}}
+                    </ul>
+                    <h4>Claims:</h4>
+                    <ul>
+                        {{#claims}}
+                        <li>{{#printSnak}}{{mainsnak}}{{/printSnak}}<br>
+                            <h5>References:</h5>
+                            {{#references}}
+                              <ul>
+                              {{#snaks}}
+                              <li>{{#printSnak}}{{.}}{{/printSnak}}</li>
+                              {{/snaks}}
+                              </ul>
+                            {{/references}}
+                            <h5>Qualifiers:</h5>
+                            <ul>
+                            {{#qualifiers}}
+                            <li>{{#printSnak}}{{snak}}{{/printSnak}}</li>
+                            {{/qualifiers}}
+                            </ul>
+                            <br>
+                        </li>
+                        {{/claims}}
+                    </ul>
+                </script>
+				<script id="searchResultTemplate" type="x-tmpl-mustache">
+					<ul>
+					{{#search}}
+						<li onclick="executeItemRequest('{{id}}');">{{label}} ({{id}})</li>
+					{{/search}}
+                    {{^search}}
+                        No results for search query "{{searchinfo.search}}".
+                    {{/search}}
+					</ul>
+				</script>
+            </section>
+        </main>
+    </body>
+</html>
