@@ -6,7 +6,8 @@ package test_wiki.edit_wiki_data;
  */
 import java.io.*;
         import java.net.*;
-        import java.util.*;
+import java.sql.Statement;
+import java.util.*;
 
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -18,7 +19,7 @@ import org.json.JSONStringer;
  *
  */
 
-public class Test {
+public class EditWikiData {
 
 	/**
 	 * Sets Qualifier to a statement
@@ -217,17 +218,57 @@ public class Test {
 	        
 	}
 
+	/**
+	 * 
+	 * @param id : of event to retrieve statements
+	 * @return JSON string
+	 * @throws IOException
+	 */
+	public String getNewStatements (String id) throws IOException
+	{
+		 URL url = new URL("http://5e74b1d5.ngrok.io/event");
+	        Map<String,Object> params = new LinkedHashMap<>();
+	        params.put("id", id);
+	        //params.put("token", "+\\");
+
+	        StringBuilder postData = new StringBuilder();
+	        for (Map.Entry<String,Object> param : params.entrySet()) {
+	            if (postData.length() != 0) postData.append('&');
+	            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+	            postData.append('=');
+	            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+	        }
+	        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+
+	        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+	        conn.setRequestMethod("POST");
+	        conn.setRequestProperty("x-accept-version","2.0.0");
+	        conn.setRequestProperty("cache-control","no-cache");
+	        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+	        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+	        conn.setDoOutput(true);
+	        conn.getOutputStream().write(postDataBytes);
+
+	        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+	        String retJson="";
+	        for (int c; (c = in.read()) >= 0;)
+	             retJson+= (char)c;
+	        
+	       // JSONObject json = (JSONObject)new JSONObject(retJson);
+	        
+	        return retJson;
+	}
 	
     public static void main(String[] args) throws Exception {
       
-    	String entity = "Q4115189";
+ /*   	String entity = "Q4115189";
     	String property = "P1082";
     	String qualifierProperty = "P585";
     	String data = "{\"amount\":\"+27553287\",\"unit\":\"1\",\"upperBound\":\"+27553287\",\"lowerBound\":\"+27553287\"}";
     	String qualiferData = "{\"time\": \"+2010-00-00T00:00:00Z\",\"timezone\": 0,\"before\": 0,\"after\": 0,\"precision\": 9,\"calendarmodel\": \"http:\\/\\/www.wikidata.org\\/entity\\/Q1985727\"}";
     	String referencesnaks = "{\"P248\":[{\"snaktype\":\"value\",\"property\":\"P248\",\"datavalue\":{\"value\":{\"entity-type\":\"item\",\"numeric-id\":21540096},\"type\":\"wikibase-entityid\"},\"datatype\":\"wikibase-item\"}]}";
     	
-    	Test statement = new Test();
+    	EditWikiData statement = new EditWikiData();
     	String stId = statement.setStatement(entity, property, data);
     	String rankData = "{\"mainsnak\": {\"snaktype\": \"value\",   \"property\": \"P1082\",\"datavalue\": {\"value\": "+data+", \"type\": \"quantity\"},\"datatype\": \"quantity\"},\"type\": \"statement\", \"id\": \""+stId+"\", \"rank\": \"deprecated\"}";
 
@@ -239,7 +280,10 @@ public class Test {
         
         System.out.println(updateRank );
         
-        System.out.println(qualiferResult);
+        System.out.println(qualiferResult);*/
+    	EditWikiData statement = new EditWikiData();
+    	String newSt = statement.getNewStatements("23890868");
+    	System.out.println(newSt);
 
         
     }
