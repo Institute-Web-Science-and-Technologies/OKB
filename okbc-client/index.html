@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>OKB Curation Tool</title>
+
+        <meta charset="utf-8">
+        <meta name="author" content="OKB Team">
+        
+        <link rel="stylesheet" href="resources/css/mainpage.css">
+        
+        <script src="thirdparty/js/mustache.min.js"></script>
+
+        <script src="resources/js/wditemmapper.js"></script>
+        <script src="resources/js/wditemprinter.js"></script>
+        <script src="resources/js/wdapihandler.js"></script>
+        <script src="resources/js/searcheventhandler.js"></script>
+		<script src="resources/js/wdsearch.js"></script>
+        <script src="resources/js/idlabelstore.js"></script>
+        <script src="resources/js/curationeventhandler.js"></script>
+        <script src="resources/js/curation.js"></script>
+
+    </head>
+
+    <body>
+        <header>
+            <h1>OKB-C</h1>
+
+            <!-- Wikidata Item Search -->
+            <form id="search_form" name="search_form">
+                <input type="text" name="searchQuery" placeholder="Enter the search query">
+                <input type="button" value="Search" onclick="handleSearchClick(this.form);">
+            </form>
+        </header>
+
+        <main>
+            <section id="curation">
+                <h2>Curation form</h2>
+                Claim:
+                <form id="create_new_claim" name="create_new_claim">
+                    <input name="property" type="text" placeholder="Property ID (eg. P1)" required>
+                    <input name="value" type="text" placeholder="Value" required>
+                    <input type="button" value="Create" onclick="handleCreateNewClaimClick(this.form)">
+                    <br> Qualifiers: 
+                    <div id="new_qualifiers">
+                    </div>
+                    <input type="button" value="Add qualifier" onclick="addQualifierField(this.form)">
+                    <br> References:
+                    <div id="new_references">
+                    </div>
+                    <input type="button" value="Add reference" onclick="addReferenceField(this.form)">
+                </form>
+            </section>
+
+            <section id="wditem">
+                <h2>Wikidata item</h2>
+                <div id="item"></div>
+                <!-- Template for Item objects -->
+                <script id="itemTemplate" type="x-tmpl-mustache">
+                    <h3>{{label}} ({{id}})</h3>
+                    <p>{{description}}</p>
+                    <h4>Aliases:</h4>
+                    <ul>
+                        {{#aliases}}
+                        <li>{{.}}</li>
+                        {{/aliases}}
+                    </ul>
+                    <h4>Claims:</h4>
+                    <ul>
+                        {{#claims}}
+                        <li>{{#printSnak}}{{mainsnak}}{{/printSnak}}<br>
+                            <h5>References:</h5>
+                            {{#references}}
+                              <ul>
+                              {{#snaks}}
+                              <li>{{#printSnak}}{{.}}{{/printSnak}}</li>
+                              {{/snaks}}
+                              </ul>
+                            {{/references}}
+                            <h5>Qualifiers:</h5>
+                            <ul>
+                            {{#qualifiers}}
+                            <li>{{#printSnak}}{{snak}}{{/printSnak}}</li>
+                            {{/qualifiers}}
+                            </ul>
+                            <br>
+                        </li>
+                        {{/claims}}
+                    </ul>
+                </script>
+				<script id="searchResultTemplate" type="x-tmpl-mustache">
+                    Searching for "{{searchinfo.search}}".
+					<ul>
+					{{#search}}
+						<li onclick="executeItemRequest('{{id}}');">{{label}} ({{id}})</li>
+					{{/search}}
+                    {{^search}}
+                        No results.
+                    {{/search}}
+					</ul>
+				</script>
+            </section>
+        </main>
+    </body>
+</html>
