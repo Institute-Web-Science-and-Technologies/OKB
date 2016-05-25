@@ -1,11 +1,13 @@
 // UI EVENT FUNCTIONS
-var ITEM_DIV_ID = "item";
+var ITEM_ID = "item";
+var RESULTS_ID = "results";
 var currentItem;
 
 // TODO: doc
-function handleSearchClick(form) {
-    var search = form.searchQuery.value;
-    
+function handleSearchClick(textId) {
+    var text = document.getElementById(textId);
+    var search = text.value;
+    text.value = "";
     // Check if search is an entity ID.
     var entityIdRegExp = new RegExp("[QP][0-9]+");
     if (entityIdRegExp.test(search)) {
@@ -14,7 +16,6 @@ function handleSearchClick(form) {
     } else {
         executeSearchRequest(search);
     }
-    form.searchQuery.value = "";
 }
 
 /*
@@ -51,11 +52,18 @@ function handleItemRequest(data) {
         window.alert(err);
         return;
     }
-    currentItem = item;
-    setTimeout(function() { printItem(item, ITEM_DIV_ID);}, 1000);
+    setTimeout(function() { jumpToEventPage(item)}, 1000);
+}
+
+// TODO: doc
+function jumpToEventPage(item) {
+    localStorage.setItem("currentitem", JSON.stringify(item));
+    console.log(ID_LABEL_STORE);
+    localStorage.setItem("idlabelstore", JSON.stringify(ID_LABEL_STORE));
+    window.location = "event.html";
 }
 
 // TODO: doc
 function handleSearchRequest(data) {
-	printSearchResults(data, ITEM_DIV_ID);
+	printSearchResults(data, RESULTS_ID);
 }

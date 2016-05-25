@@ -1,105 +1,41 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+<head>
+    <title>OKB - Start</title>
 
-    <head>
-        <title>OKB Curation Tool</title>
+    <meta charset="utf8">
+    <meta name="author" content="Alex Baier">
 
-        <meta charset="utf-8">
-        <meta name="author" content="OKB Team">
-        
-        <link rel="stylesheet" href="resources/css/mainpage.css">
-        
-        <script src="thirdparty/js/mustache.min.js"></script>
-
-        <script src="resources/js/wditemmapper.js"></script>
-        <script src="resources/js/wditemprinter.js"></script>
-        <script src="resources/js/wdapihandler.js"></script>
-        <script src="resources/js/searcheventhandler.js"></script>
-		<script src="resources/js/wdsearch.js"></script>
-        <script src="resources/js/idlabelstore.js"></script>
-        <script src="resources/js/curationeventhandler.js"></script>
-        <script src="resources/js/curation.js"></script>
-
-    </head>
-
-    <body>
-        <header>
-            <h1>OKB-C</h1>
-
-            <!-- Wikidata Item Search -->
-            <form id="search_form" name="search_form">
-                <input type="text" name="searchQuery" placeholder="Enter the search query">
-                <input type="button" value="Search" onclick="handleSearchClick(this.form);">
-            </form>
-        </header>
-
-        <main>
-            <section id="curation">
-                <h2>Curation form</h2>
-                Claim:
-                <form id="create_new_claim" name="create_new_claim">
-                    <input name="property" type="text" placeholder="Property ID (eg. P1)" required>
-                    <input name="value" type="text" placeholder="Value" required>
-                    <input type="button" value="Create" onclick="handleCreateNewClaimClick(this.form)">
-                    <br> Qualifiers: 
-                    <div id="new_qualifiers">
-                    </div>
-                    <input type="button" value="Add qualifier" onclick="addQualifierField(this.form)">
-                    <br> References:
-                    <div id="new_references">
-                    </div>
-                    <input type="button" value="Add reference" onclick="addReferenceField(this.form)">
-                </form>
-            </section>
-
-            <section id="wditem">
-                <h2>Wikidata item</h2>
-                <div id="item"></div>
-                <!-- Template for Item objects -->
-                <script id="itemTemplate" type="x-tmpl-mustache">
-                    <h3>{{label}} ({{id}})</h3>
-                    <p>{{description}}</p>
-                    <h4>Aliases:</h4>
-                    <ul>
-                        {{#aliases}}
-                        <li>{{.}}</li>
-                        {{/aliases}}
-                    </ul>
-                    <h4>Claims:</h4>
-                    <ul>
-                        {{#claims}}
-                        <li>{{#printSnak}}{{mainsnak}}{{/printSnak}}<br>
-                            <h5>References:</h5>
-                            {{#references}}
-                              <ul>
-                              {{#snaks}}
-                              <li>{{#printSnak}}{{.}}{{/printSnak}}</li>
-                              {{/snaks}}
-                              </ul>
-                            {{/references}}
-                            <h5>Qualifiers:</h5>
-                            <ul>
-                            {{#qualifiers}}
-                            <li>{{#printSnak}}{{snak}}{{/printSnak}}</li>
-                            {{/qualifiers}}
-                            </ul>
-                            <br>
-                        </li>
-                        {{/claims}}
-                    </ul>
-                </script>
-				<script id="searchResultTemplate" type="x-tmpl-mustache">
-                    Searching for "{{searchinfo.search}}".
-					<ul>
-					{{#search}}
-						<li onclick="executeItemRequest('{{id}}');">{{label}} ({{id}})</li>
-					{{/search}}
-                    {{^search}}
-                        No results.
-                    {{/search}}
-					</ul>
-				</script>
-            </section>
-        </main>
-    </body>
+    <link rel="stylesheet" href="resources/css/header.css">
+    <link rel="stylesheet" href="resources/css/main.css">
+    <link rel="stylesheet" href="resources/css/footer.css">
+    <link rel="stylesheet" href="resources/css/start.css">
+</head>
+<body>
+    <header>
+        <a href="index.html"><img alt="OKB LOGO" src=""></a>
+        <h1>This is a slogan about OKB and curation.</h1>
+    </header>
+    <main>
+        <div id="description">
+            <p>
+            Ut sumo saperet patrioque vim, id ius discere bonorum nusquam. 
+            Exerci oblique noluisse sit et. Vim eu elit ignota, mel te dico fabellas antiopam, 
+            soleat vivendo erroribus mei ad. In sit prompta sententiae. Vidisse consectetuer 
+            ius no, ad feugiat eleifend pro. Cu duo tempor impedit mediocritatem, cibo nonumy 
+            luptatum nec ex, enim vidit vidisse id pro. Essent delectus iracundia qui te, ad sit 
+            falli lucilius.
+            </p>
+        </div>
+        <div id="loginoptions">
+            <button type="button">Login into Wikidata</button>
+            <button type="button" onclick="window.location='selection.html'">Continue without Login</button>
+        </div>
+    </main>
+    <footer>
+        <a href="about.html" hreflang="en">About</a>
+        <a href="copyright.html" hreflang="en">Copyright</a>
+        <a href="https://github.com/Institute-Web-Science-and-Technologies/OKB" hreflang="en">Code</a>
+    </footer>
+</body>
 </html>

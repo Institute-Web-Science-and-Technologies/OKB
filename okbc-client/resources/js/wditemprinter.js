@@ -56,7 +56,7 @@ function createHtmlRepresentationOfSnak(snak) {
 */
 // TODO: Change function to use a WikidataDatavalue object instead of the current undefined object.
 function createHtmlRepresentationOfData(datatype, datavalue) {
-    var result = datatype + ": ";
+    var result = "";
     // Check cases for different data types with snaktype=value.
     if (datatype == "commonsMedia") {
         result += '"' + datavalue.value + '"';
@@ -77,7 +77,7 @@ function createHtmlRepresentationOfData(datatype, datavalue) {
     } else if (datatype == "external-id") {
         result += datavalue.value;
     } else if (datatype == "url") {
-        result += "<a href=" + datavalue.value + ">link</a>";
+        result += "<a title=" + datavalue.value + " href=" + datavalue.value + ">" + datavalue.value.slice(0,64) + "...</a>";
     } else if (datatype == "monolingualtext") {
         result += datavalue.value.text;
     } else if (datatype == "wikibase-property") {

@@ -1,0 +1,29 @@
+#item {
+    width: 50%;
+    float: left;
+}
+
+#news {
+    width: 50%;
+    float: right;
+}
+
+#claims {
+    list-style-type: none;
+    overflow-y: scroll;
+    height: 65vh;
+}
+
+.claim {
+    border-style: dashed;
+    padding: 1%;
+    display: flex;
+
+}
+
+.reference {
+    list-style-type: none;
+}
+
+button {
+}

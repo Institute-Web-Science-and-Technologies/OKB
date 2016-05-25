@@ -124,6 +124,7 @@ function WikidataQualifier() {
 
 // TODO: doc
 function WikidataSnak() {
+    this.name = "WikidataSnak";
     this.propertyId;
     this.snaktype;
     this.datatype;
@@ -131,6 +132,10 @@ function WikidataSnak() {
 }
 // TODO: doc
 WikidataSnak.prototype.toString = function snakToString() {
+    return JSON.stringify(this);
+};
+// TODO: doc, this is a really problematic solution
+Object.prototype.toString = function snakToString() {
     return JSON.stringify(this);
 };
 
