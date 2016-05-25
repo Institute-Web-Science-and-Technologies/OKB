@@ -226,7 +226,7 @@ public class EditWikiData {
 	 */
 	public String getNewStatements (String id) throws IOException
 	{
-		 URL url = new URL("http://5e74b1d5.ngrok.io/event");
+		 URL url = new URL("http://f1efd13a.ngrok.io/event");
 	        Map<String,Object> params = new LinkedHashMap<>();
 	        params.put("id", id);
 	        //params.put("token", "+\\");
