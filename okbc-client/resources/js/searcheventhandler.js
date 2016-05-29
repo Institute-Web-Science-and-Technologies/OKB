@@ -1,7 +1,5 @@
 // UI EVENT FUNCTIONS
-var ITEM_ID = "item";
 var RESULTS_ID = "results";
-var currentItem;
 
 // TODO: doc
 function handleSearchClick(textId) {
@@ -42,24 +40,10 @@ function executeItemRequest(id) {
     executeApiRequest(request);
 }
 
-// TODO: doc, improve set timeout
+// TODO: doc, rename
 function handleItemRequest(data) {
-    var item;
-    try {
-        item = mapJsonToWikidataItem(data);
-    } catch(err) {
-        console.log(err);
-        window.alert(err);
-        return;
-    }
-    setTimeout(function() { jumpToEventPage(item)}, 1000);
-}
-
-// TODO: doc
-function jumpToEventPage(item) {
-    localStorage.setItem("currentitem", JSON.stringify(item));
-    console.log(ID_LABEL_STORE);
-    localStorage.setItem("idlabelstore", JSON.stringify(ID_LABEL_STORE));
+    sessionStorage.setItem("itemdata", JSON.stringify(data));
+    console.log(sessionStorage["itemdata"]);
     window.location = "event.html";
 }
 

@@ -48,17 +48,17 @@
             <ul id="claims">
                 {{#claims}}
                 <div class="claim">
-                    <li>{{#printSnak}}{{mainsnak}}{{/printSnak}}<br>
+                    <li>{{mainsnak}}<br>
                        <ul>
                         {{#qualifiers}}
-                        <li>{{#printSnak}}{{snak}}{{/printSnak}}</li>
+                        <li>{{snak}}</li>
                         {{/qualifiers}}
                         </ul>
                         <h5>References</h5>
                         {{#references}}
                           <ul class="reference">
                           {{#snaks}}
-                          <li>{{#printSnak}}{{.}}{{/printSnak}}</li>
+                          <li>{{.}}</li>
                           {{/snaks}}
                           </ul>
                         {{/references}}
@@ -78,4 +78,3 @@
     </footer>
 </body>
 </html>
-

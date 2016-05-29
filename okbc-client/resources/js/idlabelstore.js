@@ -96,9 +96,9 @@ Set.prototype.addIdsFromSnak = function addIdsFromSnak(snak) {
     this.add(snak.propertyId);
     if (snak.snaktype == "value") {
         if (snak.datatype == "wikibase-item") {
-            this.add("Q" + snak.datavalue.value["numeric-id"]);
+            this.add("Q" + snak.datavalue.numericid);
         } else if (snak.datatype == "wikibase-property") {
-            this.add("P" + snak.datavalue.value["numeric-id"]);
+            this.add("P" + snak.datavalue.numericid);
         }
     }
     return this;
@@ -122,7 +122,7 @@ Set.prototype.subtract = function subtract(s) {
 // TODO: doc
 function NotExistingIdError(id) {
     this.name = "NotExisitingIdError";
-    this.message = "there is no id " + id + " stored in ID_LABEL_STORE";
+    this.message = "there is no ID " + id + " stored in ID_LABEL_STORE";
     this.id = id;
 }
 NotExistingIdError.prototype = Error.prototype;

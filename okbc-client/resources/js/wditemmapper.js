@@ -41,49 +41,7 @@ function mapJsonToWikidataItem(data) {
     for (var pid in jsonItem.claims) {
         // Iterate over each claim in the specific property.
         for (var i = 0; i < jsonItem.claims[pid].length; i++) {
-            var jsonClaim = jsonItem.claims[pid][i];
-            var claim = new WikidataClaim();
-            claim.mainsnak.propertyId = pid;
-            claim.mainsnak.snaktype = jsonClaim.mainsnak.snaktype;
-            claim.mainsnak.datatype = jsonClaim.mainsnak.datatype;
-            if (claim.mainsnak.snaktype == "value") {
-                claim.mainsnak.datavalue = jsonClaim.mainsnak.datavalue;
-            }
-            if (jsonClaim.hasOwnProperty("references")) {
-                // Iterate over the references of the specific claim.            
-                for (var j = 0; j < jsonClaim.references.length; j++) {
-                    var jsonReference = jsonClaim.references[j];
-                    var reference = new WikidataReference();
-                    reference.snaksOrder = jsonReference["snaks-order"];
-                    for (var k = 0; k < reference.snaksOrder.length; k++) {
-                        var jsonSnak = jsonReference.snaks[reference.snaksOrder[k]][0];
-                        var snak = new WikidataSnak();
-                        snak.propertyId = jsonSnak.property;
-                        snak.snaktype = jsonSnak.snaktype;
-                        snak.datatype = jsonSnak.datatype;
-                        if (snak.snaktype == "value") {
-                            snak.datavalue = jsonSnak.datavalue;
-                        }
-                        // Add the created snak to the reference..
-                        reference.snaks.push(snak);
-                    }
-                    // Add the created reference to the claim.
-                    claim.references.push(reference);
-                }
-            }
-            // Iterate over the qualifiers of the specific claim.
-            for (var p in jsonClaim.qualifiers) {
-                var jsonQualifier = jsonClaim.qualifiers[p][0];
-                var qualifier = new WikidataQualifier();
-                qualifier.snak.propertyId = jsonQualifier.property;
-                qualifier.snak.snaktype = jsonQualifier.snaktype;
-                qualifier.snak.datatype = jsonQualifier.datatype;
-                if (qualifier.snak.snaktype == "value") {
-                    qualifier.snak.datavalue = jsonQualifier.datavalue;
-                }
-                // Add the created qualifier to the claim.
-                claim.qualifiers.push(qualifier);
-            }
+            var claim = mapJsonToWikidataClaim(jsonItem.claims[pid][i], pid);
             // Add the created claim to the item.
             item.claims.push(claim);
         }
@@ -91,6 +49,89 @@ function mapJsonToWikidataItem(data) {
     requestMissingIdLabelPairs(item);
 
     return item;
+}
+
+// TODO: doc
+function mapJsonToWikidataClaim(data, pid) {
+    var claim = new WikidataClaim();
+    claim.mainsnak.propertyId = pid;
+    claim.mainsnak.snaktype = data.mainsnak.snaktype;
+    claim.mainsnak.datatype = data.mainsnak.datatype;
+    if (claim.mainsnak.snaktype == "value") {
+        claim.mainsnak.datavalue = mapJsonToDatavalue(data.mainsnak.datavalue, claim.mainsnak.datatype);
+    }
+    if (data.hasOwnProperty("references")) {
+        // Iterate over the references of the specific claim.            
+        for (var j = 0; j < data.references.length; j++) {
+            var reference = mapJsonToWikidataReference(data.references[j]);
+            // Add the created reference to the claim.
+            claim.references.push(reference);
+        }
+    }
+    // Iterate over the qualifiers of the specific claim.
+    for (var p in data.qualifiers) {
+        var qualifier = mapJsonToWikidataQualifier(data.qualifiers[p][0]);
+        // Add the created qualifier to the claim.
+        claim.qualifiers.push(qualifier);
+    }
+    return claim;
+}
+
+// TODO: doc
+function mapJsonToWikidataReference(data) {
+    var reference = new WikidataReference();
+    reference.snaksOrder = data["snaks-order"];
+    for (var k = 0; k < reference.snaksOrder.length; k++) {
+        var snak = mapJsonToWikidataSnak(data.snaks[reference.snaksOrder[k]][0]);
+        // Add the created snak to the reference..
+        reference.snaks.push(snak);
+    }
+    return reference;
+}
+
+// TODO: doc
+function mapJsonToWikidataQualifier(data) {
+    var qualifier = new WikidataQualifier();
+    qualifier.snak = mapJsonToWikidataSnak(data);
+    return qualifier;
+}
+
+// TODO: doc
+function mapJsonToWikidataSnak(data) {
+    var snak = new WikidataSnak();
+    snak.propertyId = data.property;
+    snak.snaktype = data.snaktype;
+    snak.datatype = data.datatype;
+    if (snak.snaktype == "value") {
+        snak.datavalue = mapJsonToDatavalue(data.datavalue, snak.datatype);
+    }
+    return snak;
+}
+
+// TODO: doc
+function mapJsonToDatavalue(data, datatype) {
+    if (datatype == "wikibase-item") {
+        return new WikibaseItem(data.value["numeric-id"]);
+    } else if (datatype == "wikibase-property") {
+        return new WikibaseProperty(data.value["numeric-id"]);
+    } else if (datatype == "globe-coordinate") {
+        return new GlobeCoordinate(data.value.latitude, data.value.longitude);
+    } else if (datatype == "time") {
+        return new WikidataTime(data.value.time);
+    } else if (datatype == "quantity") {
+        return new Quantity(data.value.amount);
+    } else if (datatype == "string") {
+        return new WikidataString(data.value);
+    } else if (datatype == "external-id") {
+        return new ExternalId(data.value);
+    } else if (datatype == "monolingualtext") {
+        return new MonolingualText(data.value.text, data.value.language);
+    } else if (datatype == "commonsMedia") {
+        return new CommonsMedia(data.value);
+    } else if (datatype == "url") {
+        return new Url(data.value);
+    }
+    throw datatype + ' is not implemented';
 }
 
 // Wikidata classes
@@ -124,19 +165,115 @@ function WikidataQualifier() {
 
 // TODO: doc
 function WikidataSnak() {
-    this.name = "WikidataSnak";
     this.propertyId;
     this.snaktype;
     this.datatype;
     this.datavalue;
 }
-// TODO: doc
-WikidataSnak.prototype.toString = function snakToString() {
-    return JSON.stringify(this);
-};
-// TODO: doc, this is a really problematic solution
-Object.prototype.toString = function snakToString() {
-    return JSON.stringify(this);
+WikidataSnak.prototype.toString = function() {
+    var label;
+    try {
+        label = getLabelOfId(this.propertyId);
+    } catch (err) {
+        label = this.propertyId;
+    }
+    if (this.snaktype == "value") {
+        return label + ' = ' + this.datavalue;
+    } else {
+        return  label + ' is of snaktype ' + this.snaktype;
+    }
 };
 
-// TODO: add classes for data values.
+// TODO: doc
+function WikibaseItem(numericid) {
+    this.numericid = numericid;
+}
+WikibaseItem.prototype.toString = function() {
+    var label;
+    try {
+        label = getLabelOfId('Q' + this.numericid);
+    } catch (err) {
+        label = "Q" + this.numericid;
+    }
+    return label;
+};
+
+// TODO: doc
+function WikibaseProperty(numericid) {
+    this.numericid = numericid;
+}
+WikibaseProperty.prototype.toString = function() {
+    var label;
+    try {
+        label = getLabelOfId('P' + this.numericid);
+    } catch (err) {
+        label = "P" + this.numericid;
+    }
+    return label;
+};
+
+// TODO: doc
+function GlobeCoordinate(latitude, longitude) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+}
+GlobeCoordinate.prototype.toString = function() {
+    return this.latitude + 'N,' + this.longitude + 'E';
+};
+
+// TODO: doc
+function CommonsMedia(value) {
+    this.value = value;
+}
+CommonsMedia.prototype.toString = function() {
+    return this.value;
+};
+
+// TODO: doc
+function WikidataTime(time) {
+    this.time = time;
+}
+WikidataTime.prototype.toString = function() {
+    return this.time;
+}
+
+// TODO: doc
+function Quantity(amount) {
+    this.amount = amount;
+}
+Quantity.prototype.toString = function() {
+    return this.amount;
+}
+
+// TODO: doc
+function WikidataString(value) {
+    this.value = value;
+}
+WikidataString.prototype.toString = function() {
+    return this.value;
+};
+
+// TODO: doc
+function ExternalId(value) {
+    this.value = value;
+}
+ExternalId.prototype.toString = function() {
+   return this.value; 
+}
+
+// TODO: doc
+function Url(url) {
+    this.url = url;
+}
+Url.prototype.toString = function() {
+    return this.url;
+}
+
+// TODO: doc
+function MonolingualText(text, language) {
+    this.text = text;
+    this.language = language;
+}
+MonolingualText.prototype.toString = function() {
+    return this.text;
+}
