@@ -178,7 +178,7 @@ WikidataSnak.prototype.toString = function() {
         label = this.propertyId;
     }
     if (this.snaktype == "value") {
-        return label + ' = ' + this.datavalue;
+        return label + ': ' + this.datavalue;
     } else {
         return  label + ' is of snaktype ' + this.snaktype;
     }

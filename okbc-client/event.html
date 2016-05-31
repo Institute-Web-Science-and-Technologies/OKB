@@ -27,8 +27,12 @@
         <h1>This is a slogan about OKB and curation.</h1>
     </header>
     <main>
-        <div id="curation">
-            <button type="button">Create claim</button>
+        <div class="floatingForm" draggable="true">
+            <h5>create claim</h5>
+            <input type="text" id="propertyInput" placeholder="choose property" list="propertyList" />
+            <datalist id="propertyList">
+            </datalist>
+            <button type="button" onclick="chooseProperty('propertyInput');">Go</button>
         </div>
         <div id="item">
         </div>
@@ -36,34 +40,37 @@
         </div>
         <!-- Template for Item objects -->
         <script id="itemTemplate" type="x-tmpl-mustache">
-          <h3>{{label}} ({{id}})</h3>
-            <p>{{description}}</p>
-            <h4>Aliases:</h4>
-            <ul>
-                {{#aliases}}
-                <li>{{.}}</li>
-                {{/aliases}}
-            </ul>
+            <h3>{{label}} ({{id}})</h3>
+            <details>
+                <summary>aliases, description</summary>
+                <p>
+                    {{#aliases}}
+                        <span class="alias">{{.}}</span>
+                    {{/aliases}}
+                </p>
+                <p>{{description}}</p>
+            </details>
+
             <h4>Claims:</h4>
             <ul id="claims">
                 {{#claims}}
                 <div class="claim">
                     <li>{{mainsnak}}<br>
                        <ul>
-                        {{#qualifiers}}
-                        <li>{{snak}}</li>
-                        {{/qualifiers}}
+                            {{#qualifiers}}
+                            <li>{{snak}}</li>
+                            {{/qualifiers}}
                         </ul>
-                        <h5>References</h5>
-                        {{#references}}
-                          <ul class="reference">
-                          {{#snaks}}
-                          <li>{{.}}</li>
-                          {{/snaks}}
-                          </ul>
-                        {{/references}}
-                        <button type="button">Add reference</button>
-     
+                        <details>
+                            <summary>references ({{references.length}})</summary>
+                            {{#references}}
+                              <ul class="reference">
+                                  {{#snaks}}
+                                  <li>{{.}}</li>
+                                  {{/snaks}}
+                              </ul>
+                            {{/references}}
+                        </details>
                         <br>
                     </li>
                 </div>

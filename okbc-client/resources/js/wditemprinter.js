@@ -17,4 +17,3 @@ function printItem(item, elementId) {
     var outputTag = document.getElementById(elementId);
     outputTag.innerHTML = output;
 }
-
