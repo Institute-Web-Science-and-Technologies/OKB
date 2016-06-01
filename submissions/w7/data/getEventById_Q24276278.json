@@ -9,28 +9,28 @@
             "datatype" : "item",
             "value" : "Q40231",
             "references" : [],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P17",
             "snaktype" : "value",
             "datatype" : "item",
             "value" : "Q183",
             "references" : [],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P131",
             "snaktype" : "value",
             "datatype" : "item",
             "value" : "Q3104",
             "references" : [],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P585",
             "snaktype" : "value",
             "datatype" : "time",
             "value" : "25.05.2014",
             "references" : [],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P1867",
             "snaktype" : "value",
@@ -42,16 +42,16 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P1697",
             "snaktype" : "value",
@@ -63,16 +63,16 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
-            "qualifiers" : [],
+            "qualifiers" : []
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -84,14 +84,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -100,7 +100,7 @@
                     "datatype" : "quantity",
                     "value" : "10042"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -112,14 +112,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -128,7 +128,7 @@
                     "datatype" : "quantity",
                     "value" : "14716"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -140,14 +140,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -156,7 +156,7 @@
                     "datatype" : "quantity",
                     "value" : "5660"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -168,14 +168,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -184,7 +184,7 @@
                     "datatype" : "quantity",
                     "value" : "1720"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -196,14 +196,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -212,7 +212,7 @@
                     "datatype" : "quantity",
                     "value" : "1771"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -224,14 +224,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -240,7 +240,7 @@
                     "datatype" : "quantity",
                     "value" : "1697"
                 }
-            ],
+            ]
         }, {
             "propertyid" : "P726",
             "snaktype" : "value",
@@ -252,14 +252,14 @@
                         "propertyid" : "P854",
                         "snaktype" : "value",
                         "datatype" : "url",
-                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html",
+                        "value" : "http://www.wahlen.rlp.de/kw/wahlen/2014/kreistagswahlen/ergebnisse/1110000000.html"
                     }, {
                         "propertyid" : "P813",
                         "snaktype" : "value",
                         "datatype" : "time",
-                        "value" : "01.06.2016",
-                    },
-                ],
+                        "value" : "01.06.2016"
+                    }
+                ]
             ],
             "qualifiers" : [
                 {
@@ -268,7 +268,7 @@
                     "datatype" : "quantity",
                     "value" : "2054"
                 }
-            ],
-        },
+            ]
+        }
     ]
 }
