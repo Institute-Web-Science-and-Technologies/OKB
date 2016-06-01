@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Maven: com.cedarsoftware:json-io:4.4.0">
+    <archive path="/Users/wkoop/.m2/repository/com/cedarsoftware/json-io/4.4.0/json-io-4.4.0.jar" />
+  </library>
+  <library name="Maven: com.j256.ormlite:ormlite-core:4.48">
+    <archive path="/Users/wkoop/.m2/repository/com/j256/ormlite/ormlite-core/4.48/ormlite-core-4.48.jar" />
+  </library>
+  <library name="Maven: com.j256.ormlite:ormlite-jdbc:4.48">
+    <archive path="/Users/wkoop/.m2/repository/com/j256/ormlite/ormlite-jdbc/4.48/ormlite-jdbc-4.48.jar" />
+  </library>
+  <library name="Maven: com.sparkjava:spark-core:2.3">
+    <archive path="/Users/wkoop/.m2/repository/com/sparkjava/spark-core/2.3/spark-core-2.3.jar" />
+  </library>
+  <library name="Maven: com.sun.jersey:jersey-client:1.19.1">
+    <archive path="/Users/wkoop/.m2/repository/com/sun/jersey/jersey-client/1.19.1/jersey-client-1.19.1.jar" />
+  </library>
+  <library name="Maven: com.sun.jersey:jersey-core:1.19.1">
+    <archive path="/Users/wkoop/.m2/repository/com/sun/jersey/jersey-core/1.19.1/jersey-core-1.19.1.jar" />
+  </library>
+  <library name="Maven: javax.servlet:javax.servlet-api:3.1.0">
+    <archive path="/Users/wkoop/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar" />
+  </library>
+  <library name="Maven: javax.ws.rs:javax.ws.rs-api:2.0">
+    <archive path="/Users/wkoop/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.0/javax.ws.rs-api-2.0.jar" />
+  </library>
+  <library name="Maven: javax.ws.rs:jsr311-api:1.1.1">
+    <archive path="/Users/wkoop/.m2/repository/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1.jar" />
+  </library>
+  <library name="Maven: junit:junit:4.12">
+    <archive path="/Users/wkoop/.m2/repository/junit/junit/4.12/junit-4.12.jar" />
+  </library>
+  <library name="Maven: mysql:mysql-connector-java:6.0.2">
+    <archive path="/Users/wkoop/.m2/repository/mysql/mysql-connector-java/6.0.2/mysql-connector-java-6.0.2.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-http:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-http/9.3.2.v20150730/jetty-http-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-io:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-io/9.3.2.v20150730/jetty-io-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-security:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-security/9.3.2.v20150730/jetty-security-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-server:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-server/9.3.2.v20150730/jetty-server-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-servlet:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-servlet/9.3.2.v20150730/jetty-servlet-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-util:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-util/9.3.2.v20150730/jetty-util-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-webapp:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-webapp/9.3.2.v20150730/jetty-webapp-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty:jetty-xml:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/jetty-xml/9.3.2.v20150730/jetty-xml-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty.websocket:websocket-api:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/websocket/websocket-api/9.3.2.v20150730/websocket-api-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty.websocket:websocket-client:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/websocket/websocket-client/9.3.2.v20150730/websocket-client-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty.websocket:websocket-common:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/websocket/websocket-common/9.3.2.v20150730/websocket-common-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty.websocket:websocket-server:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/websocket/websocket-server/9.3.2.v20150730/websocket-server-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jetty.websocket:websocket-servlet:9.3.2.v20150730">
+    <archive path="/Users/wkoop/.m2/repository/org/eclipse/jetty/websocket/websocket-servlet/9.3.2.v20150730/websocket-servlet-9.3.2.v20150730.jar" />
+  </library>
+  <library name="Maven: org.hamcrest:hamcrest-core:1.3">
+    <archive path="/Users/wkoop/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar" />
+  </library>
+  <library name="Maven: org.slf4j:slf4j-api:1.7.12">
+    <archive path="/Users/wkoop/.m2/repository/org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12.jar" />
+  </library>
+  <library name="Maven: org.slf4j:slf4j-simple:1.7.12">
+    <archive path="/Users/wkoop/.m2/repository/org/slf4j/slf4j-simple/1.7.12/slf4j-simple-1.7.12.jar" />
+  </library>
+</eclipse-userlibraries>
+
