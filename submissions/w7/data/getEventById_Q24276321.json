@@ -1,0 +1,152 @@
+{
+"eventid" : "Q24276321",
+"label" : "2013 Flooding in Niederweiler",
+"categories" : [ "flood"],
+"claims" : [
+		{
+			"propertyid" : "P828",
+			"snaktype" : "value",
+			"datatype" : "item",
+			"value" : "Q7925",
+			"references" : [
+				[
+					{
+						"propertyid" : "P854",
+						"snaktype" : "value",
+						"datatype" : "url",
+						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
+},
+{
+						"propertyid" : "P813",
+						"snaktype" : "value",
+						"datatype" : "time",
+						"value" : "2016-06-01"
+}
+]
+			],
+			"qualifiers" : [
+				]
+},
+		{
+			"propertyid" : "P580",
+			"snaktype" : "value",
+			"datatype" : "time",
+			"value" : "2013-06-20",
+			"references" : [
+				[
+					{
+						"propertyid" : "P854",
+						"snaktype" : "value",
+						"datatype" : "url",
+						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
+},
+{
+						"propertyid" : "P813",
+						"snaktype" : "value",
+						"datatype" : "time",
+						"value" : "2016-06-01"
+}
+]
+			],
+
+			"qualifiers" : [
+			]
+},
+		{
+			"propertyid" : "P580",
+			"snaktype" : "value",
+			"datatype" : "time",
+			"value" : "2013-06-01",
+			"references" : [
+				[
+					{
+						"propertyid" : "P854",
+						"snaktype" : "value",
+						"datatype" : "url",
+						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
+},
+{
+						"propertyid" : "P813",
+						"snaktype" : "value",
+						"datatype" : "time",
+						"value" : "2016-06-01"
+}
+]
+			],
+			"qualifiers" : [
+			]
+},
+{
+			"propertyid" : "P582",
+			"snaktype" : "value",
+			"datatype" : "time",
+			"value" : "2013-06-01",
+			"references" : [
+				[
+					{
+						"propertyid" : "P854",
+						"snaktype" : "value",
+						"datatype" : "url",
+						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
+},
+{
+						"propertyid" : "P813",
+						"snaktype" : "value",
+						"datatype" : "time",
+						"value" : "2016-06-01"
+}
+]
+			],
+			"qualifiers" : [
+			]
+},
+{
+			"propertyid" : "P17",
+			"snaktype" : "value",
+			"datatype" : "item",
+			"value" : "Q183",
+			"references" : [
+				[
+					{
+						},
+]
+			],
+			"qualifiers" : [
+			]
+},
+{
+			"propertyid" : "P625",
+			"snaktype" : "value",
+			"datatype" : "globe coordinate",
+			"value" : "49° 54′ 37″ N, 7° 17′ 7″ E",
+			"references" : [
+				[
+					{
+						"propertyid" : "P854",
+						"snaktype" : "value",
+						"datatype" : "url",
+						"value" : "https://de.wikipedia.org/wiki/Niederweiler_(Hunsr%C3%BCck)"
+},
+
+]
+			],
+			"qualifiers" : [
+			]
+},
+{
+			"propertyid" : "P131",
+			"snaktype" : "value",
+			"datatype" : "item",
+			"value" : "Q8574",
+			"references" : [
+				[
+					{
+						},
+
+]
+			],
+			"qualifiers" : [
+			]
+},
+]
+}
