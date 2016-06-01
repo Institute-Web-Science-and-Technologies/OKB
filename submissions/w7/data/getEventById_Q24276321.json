@@ -1,7 +1,7 @@
 {
 "eventid" : "Q24276321",
 "label" : "2013 Flooding in Niederweiler",
-"categories" : [ "flood"],
+"categories" : ["flood"],
 "claims" : [
 		{
 			"propertyid" : "P828",
@@ -15,19 +15,16 @@
 						"snaktype" : "value",
 						"datatype" : "url",
 						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
-},
-{
+					}, {
 						"propertyid" : "P813",
 						"snaktype" : "value",
 						"datatype" : "time",
 						"value" : "2016-06-01"
-}
-]
-			],
-			"qualifiers" : [
+					},
 				]
-},
-		{
+			],
+			"qualifiers" : [],
+}, {
 			"propertyid" : "P580",
 			"snaktype" : "value",
 			"datatype" : "time",
@@ -39,19 +36,17 @@
 						"snaktype" : "value",
 						"datatype" : "url",
 						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
-},
-{
+					}, {
 						"propertyid" : "P813",
 						"snaktype" : "value",
 						"datatype" : "time",
 						"value" : "2016-06-01"
-}
-]
+					},
+				],
 			],
 
-			"qualifiers" : [
-			]
-},
+			"qualifiers" : [],
+	},
 		{
 			"propertyid" : "P580",
 			"snaktype" : "value",
@@ -64,19 +59,17 @@
 						"snaktype" : "value",
 						"datatype" : "url",
 						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
-},
-{
+					}, {
 						"propertyid" : "P813",
 						"snaktype" : "value",
 						"datatype" : "time",
 						"value" : "2016-06-01"
-}
-]
+					},
+				]
 			],
-			"qualifiers" : [
-			]
-},
-{
+			"qualifiers" : [],
+		},
+		{
 			"propertyid" : "P582",
 			"snaktype" : "value",
 			"datatype" : "time",
@@ -84,37 +77,28 @@
 			"references" : [
 				[
 					{
-						"propertyid" : "P854",
-						"snaktype" : "value",
-						"datatype" : "url",
-						"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
-},
-{
+					"propertyid" : "P854",
+					"snaktype" : "value",
+					"datatype" : "url",
+					"value" : "http://www.rhein-zeitung.de/region/lokales/hunsrueck_artikel,-Hochwasser-wird-in-Niederweiler-zur-Flut-_arid,612548.html"
+					}, {
 						"propertyid" : "P813",
 						"snaktype" : "value",
 						"datatype" : "time",
 						"value" : "2016-06-01"
-}
-]
+					},
+				]
 			],
-			"qualifiers" : [
-			]
-},
-{
+			"qualifiers" : [],
+		}, {
 			"propertyid" : "P17",
 			"snaktype" : "value",
 			"datatype" : "item",
 			"value" : "Q183",
-			"references" : [
-				[
-					{
-						},
-]
-			],
-			"qualifiers" : [
-			]
-},
-{
+			"references" : [],
+			"qualifiers" : [],
+			},
+		{
 			"propertyid" : "P625",
 			"snaktype" : "value",
 			"datatype" : "globe coordinate",
@@ -122,31 +106,21 @@
 			"references" : [
 				[
 					{
-						"propertyid" : "P854",
-						"snaktype" : "value",
-						"datatype" : "url",
-						"value" : "https://de.wikipedia.org/wiki/Niederweiler_(Hunsr%C3%BCck)"
-},
-
-]
+					"propertyid" : "P854",
+					"snaktype" : "value",
+					"datatype" : "url",
+					"value" : "https://de.wikipedia.org/wiki/Niederweiler_(Hunsr%C3%BCck)"
+					},
+				]
 			],
-			"qualifiers" : [
-			]
-},
-{
+			"qualifiers" : [],
+		}, {
 			"propertyid" : "P131",
 			"snaktype" : "value",
 			"datatype" : "item",
 			"value" : "Q8574",
-			"references" : [
-				[
-					{
-						},
-
-]
-			],
-			"qualifiers" : [
-			]
-},
+			"references" : [],
+			"qualifiers" : [],
+			},
 ]
 }
