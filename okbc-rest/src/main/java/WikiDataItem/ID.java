@@ -1,41 +1,19 @@
 package WikiDataItem;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
 import java.util.List;
 
 
-@DatabaseTable(tableName = "ID")
 public class ID {
-    @DatabaseField(generatedId = true)
-    private int pid;
 
-    @DatabaseField
+    private int iid;
     private int pageid;
-
-    @DatabaseField
     private int ns;
-
-    @DatabaseField
     private String title;
-
-    @DatabaseField
     private int lastrevid;
-
-    @DatabaseField
     private String modified;
-
-    @DatabaseField
     private String type;
-
-    @DatabaseField
     private String id;
-
-    @DatabaseField
     private List<LangVal> labels;
-
-    @DatabaseField
     private String response;
 
     public ID(int pageid, int ns, String title, int lastrevid, String modified, String type, String id, List<LangVal> labels, String response) {

@@ -1,23 +1,11 @@
 package WikiDataItem;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-@DatabaseTable(tableName = "Mainsnak")
 public class Mainsnak {
-    @DatabaseField(generatedId = true)
-    private int pid;
 
-    @DatabaseField
+    private int msid;
     private String snaktype;
-
-    @DatabaseField
     private String property;
-
-    @DatabaseField
     private Datavalue datavalue;
-
-    @DatabaseField
     private String datatype;
 
     public Mainsnak() {

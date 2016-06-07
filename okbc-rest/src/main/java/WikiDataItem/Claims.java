@@ -1,27 +1,13 @@
 package WikiDataItem;
 
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-@DatabaseTable(tableName = "Claims")
 public class Claims {
-    @DatabaseField(generatedId = true)
-    private int pid;
 
-    @DatabaseField
+    private int cid;
     private String claim;
-
-    @DatabaseField
     private Mainsnak mainsnak;
-
-    @DatabaseField
     private String type;
-
-    @DatabaseField
     private String id;
-
-    @DatabaseField
     private String rank;
 
     // @DatabaseField

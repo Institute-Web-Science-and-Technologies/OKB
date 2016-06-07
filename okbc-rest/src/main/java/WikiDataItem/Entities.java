@@ -1,25 +1,15 @@
 package WikiDataItem;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
 
-@DatabaseTable(tableName = "Entities")
 public class Entities {
-    @DatabaseField
+
+    private int eid;
     private ID id;
-
-    @DatabaseField
     private List<LangVal> descriptions;
-
-    @DatabaseField
     private List<Aliases> aliases;
-
-    @DatabaseField
     private List<Claims> claims;
-
-    @DatabaseField
     private List<Sitelinks> sitelinks;
 
 
@@ -36,7 +26,7 @@ public class Entities {
     }
 
     public String toString() {
-        String a = "Entities: {" + id+"}";
+        String a = "Entities: {" + id + "}";
         a += ", descriptions: {";
         for (LangVal i : descriptions)
             a += i.getShortcut() + ", " + i.getLanguage() + ", " + i.getValue() + ", ";

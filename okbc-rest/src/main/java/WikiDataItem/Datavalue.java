@@ -1,18 +1,9 @@
 package WikiDataItem;
 
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-@DatabaseTable(tableName = "Datavalue")
 public class Datavalue {
-    @DatabaseField(generatedId = true)
-    private int pid;
-
-    @DatabaseField
+    private int did;
     private Value value;
-
-    @DatabaseField
     private String type;
 
     public Datavalue() {

@@ -1,20 +1,10 @@
 package WikiDataItem;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-
-@DatabaseTable(tableName = "LangVal")
 public class LangVal {
-    @DatabaseField(generatedId = true)
-    private int pid;
 
-    @DatabaseField
+    private int lid;
     private String shortcut;
-
-    @DatabaseField
     private String language;
-
-    @DatabaseField
     private String value;
 
     public LangVal(String shortcut, String language, String value) {

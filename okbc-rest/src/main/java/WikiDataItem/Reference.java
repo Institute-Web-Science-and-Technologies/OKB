@@ -5,6 +5,7 @@ package WikiDataItem;
  */
 public class Reference {
 
+    private int rid;
     private String hash;
     private Snaks snaks;
     private String snaks_order;
