@@ -29,16 +29,16 @@
     margin-left: 2.5%;
 }
 
-.floatingForm {
+#curationForm {
     background-color: rgba(255, 255, 255, 1);
     display: block;
 }
 
-.floatingForm h5 {
+#curationForm h5 {
     margin: 0;
 }
 
-.floatingForm input{
+#curationForm input{
     padding: 0.4em 1em;
     border: 1px solid #dbdbdb;
 }

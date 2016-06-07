@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Curation</title>
+
+        <meta charset="utf8" />
+        <meta name="author" content="Alex Baier" />
+
+        <link rel="stylesheet" href="style.css" />
+
+        <script src="mustache.min.js"></script>
+
+        <script src="main.js"></script>
+    </head>
+    <body onload="init();">
+        <div id="curationForm">
+        </div>
+        <!-- Templates for the stages of claim curation -->
+        <script id="createClaimTemplate" type="x-tmpl-mustache">
+            <button onclick="startClaimCreation()">create claim</button><br />
+            <div id="suggestedProperties" class="radiolist">
+                <input type="radio" name="property" value="null" checked="true">own choice</input>
+                {{#properties}}
+                <br /> <input type="radio" name="property" value="{{.}}">{{.}}</input>
+                {{/properties}}
+            </div>
+        </script>
+        <script id="choosePropertyTemplate" type="x-tmpl-mustache">
+            <em class="instruction">choose a property</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em>
+            <div class="inputButtonPair">
+                <input type="text" placeholder="property" />
+                <button onclick="loadValueFormFromPropertyForm();">go</button>
+            </div>
+        </script>
+        <script id="enterValueTemplate" type="x-tmpl-mustache">
+            <em class="instruction">enter a value</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            <em class="data">{{propertyName}}:</em>
+            <div class="inputButtonPair">
+                <input id="value" type="{{type}}" placeholder="value" />
+                <button onclick="continueFromValueForm();">confirm</button>
+            </div>
+        </script>
+        <script id="multiClaimTypeTemplate" type="x-tmpl-mustache">
+            <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            <em class="instruction">there are other claims about "{{propertyName}}".</em> <br />
+            <em class="instruction">how is your new claim related to them?</em> <br />
+            <div class="centralized">
+                <div class="radiolist">
+                    <input type="radio" name="relation" value="collision" checked="true">collision</input>
+                    <br />
+                    <input type="radio" name="relation" value="opinion">another opinion</input>
+                    <br />
+                    <input type="radio" name="relation" value="recent">recent data</input>
+                </div>
+                <details>
+                    <summary>show related claims</summary>
+                    {{#claims}}
+                        + {{.}} <br />
+                    {{/claims}}
+                </details>
+                <button>confirm</button>
+            </div>
+        </script>
+        <script id="qualifiersToAddTemplate" type="x-tmpl-mustache">
+            
+        </script>
+    </body>
+</html>

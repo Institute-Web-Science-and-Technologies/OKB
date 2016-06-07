@@ -27,12 +27,12 @@
         <h1>This is a slogan about OKB and curation.</h1>
     </header>
     <main>
-        <div class="floatingForm" draggable="true">
+        <div id="curationForm" draggable="true">
             <h5>create claim</h5>
             <input type="text" id="propertyInput" placeholder="choose property" list="propertyList" />
             <datalist id="propertyList">
             </datalist>
-            <button type="button" onclick="chooseProperty('propertyInput');">Go</button>
+            <button type="button" id="goButton" onclick="chooseProperty('propertyInput');">Go</button>
         </div>
         <div id="item">
         </div>

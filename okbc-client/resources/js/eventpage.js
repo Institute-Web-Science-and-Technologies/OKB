@@ -23,17 +23,37 @@ function init() {
         window.alert(err);
         return;
     }
-    setTimeout(function () {printItem(currentEvent, "item");}, 1000);
+    setTimeout(function () {printItem(currentEvent, "item");}, 2000);
 }
 
 // TODO: doc
 function chooseProperty(propertyInputId) {
     var property = document.getElementById(propertyInputId).value;
     if (PROPERTIES.hasOwnProperty(property)) {
-        window.alert("Existing property: " + property);
+        //createCorrespondingInputField(property, "curationForm");
+        //var curation = document.getElementById("curationForm");
+        //var goButton = document.getElementById("goButton");
+        //curation.removeChild(goButton);
+        window.alert("Defined property chosen.");
     } else {
-        window.alert("Not existing property: " + property);
+        window.alert("Choose a valid property.");
     }
+}
+
+function createCorrespondingInputField(propertyLabel, divId) {
+    var curation = document.getElementById(divId);
+    var inputField = document.createElement("input");
+    inputField.id = "valueInput";
+    if (PROPERTIES[propertyLabel].type == DATATYPE.TIME) {
+        inputField.type = "datetime";
+    } else if (PROPERTIES[propertyLabel].type == DATATYPE.QUANTITY) {
+        inputField.type = "number";
+    } else if (PROPERTIES[propertyLabel].type == DATATYPE.URL) {
+        inputField.type = "url";
+    } else {
+        inputField.type = "text";
+    }
+    curation.appendChild(inputField);
 }
 
 // TODO: doc
