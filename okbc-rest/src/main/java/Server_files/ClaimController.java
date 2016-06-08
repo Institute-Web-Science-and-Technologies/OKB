@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import spark.Spark;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 
 public class ClaimController {
 
@@ -25,27 +26,53 @@ public class ClaimController {
 
             try {
                 result = mySQL.getDbCon().query("" +
-                        "SELECT * FROM okb_rest_api.claim WHERE claim.id=" + id+";");
+                        "SELECT * FROM okb_rest_api.Claims WHERE claim.id=" + id+";");
             } catch (Exception e){
                 e.printStackTrace();
             }
             return result;
         });
 
-        get("/getEventByLabel:id", (req, res) -> {
-            String id = req.params(":id");
+        get("/getEventsByLabel:label", (req, res) -> {
+            String label = req.params(":label");
             ResultSet result = null;
-
             try {
                 result = mySQL.getDbCon().query("" +
-                        "SELECT * FROM okb_rest_api.claim WHERE claim.id=" + id+";");
+                        "SELECT * FROM okb_rest_api.ID WHERE ID.Labels=" + label+";");
             } catch (Exception e){
                 e.printStackTrace();
             }
             return result;
         });
 
+        get("/getEventsByCategory:category", (req, res) -> {
+            String category = req.params(":category");
+            ResultSet result = null;
+            try {
+                result = mySQL.getDbCon().query("" +
+                        "SELECT * FROM okb_rest_api??? WHERE ???=" + category+";");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return result;
+        });
 
+        get("/getLatestEditedEvents", (req, res) -> {
+            ResultSet result = null;
+            LocalDateTime now = LocalDateTime.now();
+            int year, month, day;
+            year=now.getYear();
+            month=now.getMonth().getValue();
+            day=now.getDayOfMonth();
+            try {
+                result = mySQL.getDbCon().query("" +
+                        "SELECT * FROM okb_rest_api.ID WHERE ID.Modified>="
+                        + "'"+year+"-"+month+"-"+day+"';");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return result;
+        });
 
         get("/claims", (req, res) -> {
             ResultSet result = null;

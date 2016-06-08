@@ -6,6 +6,7 @@ import WikiDataItem.Entities;
 import com.mysql.jdbc.Driver;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 
 public class Main {
@@ -13,6 +14,14 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         String id2 = "Q104567";
         String output = WikidataItemReader.itemReader(id2);
+        LocalDateTime now = LocalDateTime.now();
+        int year, month, day;
+        year=now.getYear();
+        month=now.getMonth().getValue();
+        day=now.getDayOfMonth();
+        System.out.println(year+"-"+month+"-"+day);
+
+
         //System.out.println(output);
         /*
         Entities e = new Entities();
