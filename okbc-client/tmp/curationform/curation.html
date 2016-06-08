@@ -16,8 +16,8 @@
         <div id="curationForm">
         </div>
         <!-- Templates for the stages of claim curation -->
-        <script id="createClaimTemplate" type="x-tmpl-mustache">
-            <button onclick="startClaimCreation()">create claim</button><br />
+        <script id="startCurationTemplate" type="x-tmpl-mustache">
+            <button onclick="processStartCurationForm()">create claim</button><br />
             <div id="suggestedProperties" class="radiolist">
                 <input type="radio" name="property" value="null" checked="true">own choice</input>
                 {{#properties}}
@@ -30,7 +30,7 @@
             <em class="cancel" onclick="resetCurationForm();">cancel</em>
             <div class="inputButtonPair">
                 <input type="text" placeholder="property" />
-                <button onclick="loadValueFormFromPropertyForm();">go</button>
+                <button onclick="processChoosePropertyForm();">go</button>
             </div>
         </script>
         <script id="enterValueTemplate" type="x-tmpl-mustache">
@@ -39,10 +39,10 @@
             <em class="data">{{propertyName}}:</em>
             <div class="inputButtonPair">
                 <input id="value" type="{{type}}" placeholder="value" />
-                <button onclick="continueFromValueForm();">confirm</button>
+                <button onclick="processEnterValueForm();">confirm</button>
             </div>
         </script>
-        <script id="multiClaimTypeTemplate" type="x-tmpl-mustache">
+        <script id="chooseClaimTypeTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             <em class="instruction">there are other claims about "{{propertyName}}".</em> <br />
@@ -55,17 +55,57 @@
                     <br />
                     <input type="radio" name="relation" value="recent">recent data</input>
                 </div>
+                <br />
                 <details>
                     <summary>show related claims</summary>
                     {{#claims}}
-                        + {{.}} <br />
-                    {{/claims}}
+                    - {{.}} <br />
+                    {{/claims}}    
                 </details>
-                <button>confirm</button>
+                <button onclick="processChooseClaimTypeForm();">confirm</button>
             </div>
         </script>
         <script id="qualifiersToAddTemplate" type="x-tmpl-mustache">
-            
+            <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            {{#claimType}}
+                <em class="data smalltext">relation to other claims: {{.}}</em>
+            {{/claimType}}
+            <details>
+                <summary>qualifiers</summary>
+                {{#qualifiers}}
+                    - {{.}}
+                {{/qualifiers}}
+            </details>
+            <em class="instruction">do you have any qualifiers to add?</em> <br />
+            <button onclick="processQualifiersToAddForm(true);">yes</button>
+            <button onclick="processQualifiersToAddForm(false);">no</button>
+        </script>
+        <script id="createSourceInformationTemplate" type="x-tmpl-mustache">
+            <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            {{#claimType}}
+                <em class="data smalltext">relation to other claims: {{.}}</em>
+            {{/claimType}}
+            <details>
+                <summary>qualifiers</summary>
+                {{#qualifiers}}
+                    - {{.}}
+                {{/qualifiers}}
+            </details>
+            <em class="instruction">enter the URL of your source of information</em>
+            <br /> <input id="url" type="url" /> <br />
+            <em class="instruction">rate how reliable your source is</em> <br />
+            <input id="rating" type="range" step=1 min=0 max=100 onchange="updateTextRating(this.value);"/> 
+            <em id="textRating" class="data">50</em><em class="data">%</em><br />
+            <em class="instruction">what else can you tell us about your source</em> <br />
+            <label class="data">publication date: </label>
+            <input id="pubdate" type="date" /> <br />
+            <label class="data">retrieval date: </label>
+            <input id="retdate" type="date" /> <br />
+            <label class="data">authors: </label>
+            <input id="authors" type="text" /> <br />
+            <button>confirm</button>
         </script>
     </body>
 </html>

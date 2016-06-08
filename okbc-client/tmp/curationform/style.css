@@ -25,6 +25,13 @@ button:active {
 
 summary {
     font-style: italic;
+    color: rgb(188, 188, 188);
+}
+
+label {
+    text-align: right;
+    display: inline-block;
+    width: 8em;
 }
 
 #curationForm {
@@ -44,6 +51,10 @@ summary {
 
 .data {
     font-weight: bold;
+}
+
+.smalltext {
+    font-size: 0.75em;
 }
 
 .cancel {

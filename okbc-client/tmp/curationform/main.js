@@ -1,10 +1,12 @@
 // TODO: renaming of functions
 
 var TEMPLATE = {
-    CREATE_CLAIM: undefined,
+    START_CURATION: undefined,
     CHOOSE_PROPERTY: undefined,
     ENTER_VALUE: undefined,
-    MULTI_CLAIM_TYPE: undefined
+    CHOOSE_CLAIM_TYPE: undefined,
+    QUALIFIERS_TO_ADD: undefined,
+    CREATE_SOURCE_INFORMATION: undefined
 };
 
 var CURATION_FORM;
@@ -31,32 +33,50 @@ var activeItem = {};
 
 function init() {
     CURATION_FORM = document.getElementById('curationForm');
-    parseTemplatesOfCurationHtml();
-    loadInitialCurationForm();
+    loadCurationTemplates();
+    loadStartCurationForm();
 }
 
-function parseTemplatesOfCurationHtml() {
-    TEMPLATE.CREATE_CLAIM = document.getElementById('createClaimTemplate').innerHTML;
-    Mustache.parse(TEMPLATE.CREATE_CLAIM);
+function loadCurationTemplates() {
+    TEMPLATE.START_CURATION = 
+        document.getElementById('startCurationTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.START_CURATION);
 
-    TEMPLATE.CHOOSE_PROPERTY = document.getElementById('choosePropertyTemplate').innerHTML;
+    TEMPLATE.CHOOSE_PROPERTY = 
+        document.getElementById('choosePropertyTemplate').innerHTML;
     Mustache.parse(TEMPLATE.CHOOSE_PROPERTY);
 
-    TEMPLATE.ENTER_VALUE = document.getElementById('enterValueTemplate').innerHTML;
+    TEMPLATE.ENTER_VALUE = 
+        document.getElementById('enterValueTemplate').innerHTML;
     Mustache.parse(TEMPLATE.ENTER_VALUE);
 
-    TEMPLATE.MULTI_CLAIM_TYPE = document.getElementById('multiClaimTypeTemplate').innerHTML;
-    Mustache.parse(TEMPLATE.MULTI_CLAIM_TYPE);
+    TEMPLATE.CHOOSE_CLAIM_TYPE = 
+        document.getElementById('chooseClaimTypeTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.CHOOSE_CLAIM_TYPE);
+    
+    TEMPLATE.QUALIFIERS_TO_ADD = 
+        document.getElementById('qualifiersToAddTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.QUALIFIERS_TO_ADD);
+    
+    TEMPLATE.CREATE_SOURCE_INFORMATION =
+        document.getElementById('createSourceInformationTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.CREATE_SOURCE_INFORMATION);
 }
 
-function loadInitialCurationForm() {
-    // Reset curatingData.
-    curatingData = {};
+function loadStartCurationForm() {
     var args = {'properties' : getSuggestedProperties("someItemId")};
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.CREATE_CLAIM, args);
+    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.START_CURATION, args);
 }
 
-function startClaimCreation() {
+function resetCurationForm() {
+    if (window.confirm('this will reset your progress')) {
+        // Reset curatingData.
+        curatingData = {};
+        loadStartCurationForm();
+    }
+}
+
+function processStartCurationForm() {
     var choices = document.getElementById('suggestedProperties').getElementsByTagName('input');
     var chosenProperty;
     for (var i = 0; i < choices.length; i++) {
@@ -66,34 +86,28 @@ function startClaimCreation() {
         }
     }
     if (chosenProperty == 'null') {
-        loadPropertyForm();
+        loadChoosePropertyForm();
     } else {
-        loadValueForm(chosenProperty);
+        loadEnterValueForm(chosenProperty);
     }
 }
 
-function resetCurationForm() {
-    //if (window.confirm('this will reset your progress')) {
-        loadInitialCurationForm();
-    //}
-}
-
-function loadPropertyForm() {
+function loadChoosePropertyForm() {
     var args = {};
     CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.CHOOSE_PROPERTY, args);
 }
 
-function loadValueFormFromPropertyForm() {
-    var property = CURATION_FORM.getElementsByTagName('input')[0].value;
+function processChoosePropertyForm() {
+    var property = document.getElementById('curationForm').getElementsByTagName('input')[0].value;
     if (isValidProperty(property)) {
-        loadValueForm(property);
+        loadEnterValueForm(property);
     } else {
         property.value = '';
         window.alert('invalid property. please try again');
     }
 }
 
-function loadValueForm(property) {
+function loadEnterValueForm(property) {
     // Add the name of the property of the claim to the data.
     curatingData.propertyName = property;
 
@@ -102,17 +116,71 @@ function loadValueForm(property) {
     CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.ENTER_VALUE, args);
 }
 
-function continueFromValueForm() {
+function processEnterValueForm() {
     // Add the value of the claim to the data.
     curatingData.value = document.getElementById('value').value;
 
     if (isFirstClaimOfProperty(curatingData.propertyName, activeItem)) {
-        var claims = getClaimsWithProperty(curatingData.propertyName, activeItem);
-        var args = {'propertyName': curatingData.propertyName, 'value': curatingData.value, 'claims': claims};
-        CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.MULTI_CLAIM_TYPE, args);
+        loadQualifiersToAddForm();       
     } else {
-        // TODO
+        loadChooseClaimTypeForm();
     }
+}
+
+function loadChooseClaimTypeForm() {
+    var claims = getClaimsWithProperty(curatingData.propertyName, activeItem);
+    var args = {
+        'propertyName': curatingData.propertyName, 
+        'value': curatingData.value, 
+        'claims': claims
+    };
+    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.CHOOSE_CLAIM_TYPE, args);
+}
+
+function processChooseClaimTypeForm() {
+    var choices = document.getElementById('curationForm').getElementsByTagName('input');
+    for (var i = 0; i < choices.length; i++) {
+        if (choices[i].checked){
+            curatingData.multiClaimType = choices[i].value;
+            break;
+        }
+    }
+    loadQualifiersToAddForm();
+}
+
+function loadQualifiersToAddForm() {
+    var args = {
+        'propertyName': curatingData.propertyName, 
+        'value': curatingData.value,
+        'claimType': curatingData.multiClaimType,
+        'qualifiers': curatingData.qualifiers
+    };
+    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.QUALIFIERS_TO_ADD, args);
+}
+
+function processQualifiersToAddForm(hasToAdd) {
+    if (hasToAdd) {
+        // TODO
+    } else {
+        loadCreateSourceInformationForm();
+    }
+}
+
+function loadCreateSourceInformationForm() {
+    var args = {
+        'propertyName': curatingData.propertyName, 
+        'value': curatingData.value,
+        'claimType': curatingData.multiClaimType,
+        'qualifiers': curatingData.qualifiers
+    }
+    CURATION_FORM.innerHTML = 
+        Mustache.render(TEMPLATE.CREATE_SOURCE_INFORMATION, args);
+}
+
+
+// Make the page a bit more dynamic
+function updateTextRating(value) {
+    document.getElementById('textRating').innerHTML = value;
 }
 
 // STUBS
@@ -129,7 +197,7 @@ function isValidProperty(property) {
 }
 
 function isFirstClaimOfProperty(property, item) {
-    return true;
+    return false;
 }
 
 function getClaimsWithProperty(property, item) {
