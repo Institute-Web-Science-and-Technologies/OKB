@@ -6,7 +6,8 @@ var TEMPLATE = {
     ENTER_VALUE: undefined,
     CHOOSE_CLAIM_TYPE: undefined,
     QUALIFIERS_TO_ADD: undefined,
-    CREATE_SOURCE_INFORMATION: undefined
+    CREATE_SOURCE_INFORMATION: undefined,
+    CREATE_QUALIFIER: undefined
 };
 
 var CURATION_FORM;
@@ -61,6 +62,10 @@ function loadCurationTemplates() {
     TEMPLATE.CREATE_SOURCE_INFORMATION =
         document.getElementById('createSourceInformationTemplate').innerHTML;
     Mustache.parse(TEMPLATE.CREATE_SOURCE_INFORMATION);
+
+    TEMPLATE.CREATE_QUALIFIER =
+        document.getElementById('createQualifierTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.CREATE_QUALIFIER);
 }
 
 function loadStartCurationForm() {
@@ -160,9 +165,28 @@ function loadQualifiersToAddForm() {
 
 function processQualifiersToAddForm(hasToAdd) {
     if (hasToAdd) {
-        // TODO
+        loadCreateQualifierForm();
     } else {
         loadCreateSourceInformationForm();
+    }
+}
+
+function loadCreateQualifierForm() {
+    var args = {
+        'propertyName': curatingData.propertyName, 
+        'value': curatingData.value,
+        'claimType': curatingData.multiClaimType,
+        'qualifiers': curatingData.qualifiers
+    };
+    CURATION_FORM.innerHTML =
+        Mustache.render(TEMPLATE.CREATE_QUALIFIER, args);
+}
+
+function processCreateQualifierForm(isFinalStep) {
+    if (isFinalStep) {
+        // TODO
+    } else {
+        // TODO
     }
 }
 
@@ -179,8 +203,12 @@ function loadCreateSourceInformationForm() {
 
 
 // Make the page a bit more dynamic
-function updateTextRating(value) {
-    document.getElementById('textRating').innerHTML = value;
+function updateReliabilityRating(value) {
+    document.getElementById('reliabilityValue').innerHTML = value;
+}
+
+function updateNeutralityRating(value) {
+    document.getElementById('neutralityValue').innerHTML = value;
 }
 
 // STUBS

@@ -93,11 +93,14 @@
                     - {{.}}
                 {{/qualifiers}}
             </details>
-            <em class="instruction">enter the URL of your source of information</em>
+            <em class="instruction">enter the url of the article</em>
             <br /> <input id="url" type="url" /> <br />
-            <em class="instruction">rate how reliable your source is</em> <br />
-            <input id="rating" type="range" step=1 min=0 max=100 onchange="updateTextRating(this.value);"/> 
-            <em id="textRating" class="data">50</em><em class="data">%</em><br />
+            <em class="instruction">rate from 0% to 100%. how reliable is the information in your chosen article?</em> <br />
+            <input id="reliabilityRating" type="range" step=1 min=0 max=100 onchange="updateReliabilityRating(this.value);"/> 
+            <em id="reliabilityValue" class="data">50</em><em class="data">%</em><br />
+            <em class="instruction">rate from 0% to 100%. how neutral is the article? does it take a side or a certain political view?</em> <br />
+            <input id="neutralityRating" type="range" step=1 min=0 max=100 onchange="updateNeutralityRating(this.value);"/>
+            <em id="neutralityValue" class="data">50</em><em class="data">%</em><br />
             <em class="instruction">what else can you tell us about your source</em> <br />
             <label class="data">publication date: </label>
             <input id="pubdate" type="date" /> <br />
@@ -106,6 +109,25 @@
             <label class="data">authors: </label>
             <input id="authors" type="text" /> <br />
             <button>confirm</button>
+        </script>
+        <script id="createQualifierTemplate" type="x-tmpl-mustache">
+            <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            {{#claimType}}
+                <em class="data smalltext">relation to other claims: {{.}}</em>
+            {{/claimType}}
+            <details>
+                <summary>qualifiers</summary>
+                {{#qualifiers}}
+                    - {{.}}
+                {{/qualifiers}}
+            </details>
+            <em class="instruction">enter the property of your qualifier</em> <br />
+            <input id="qualifierProperty" type="text" /> 
+            <button id="createQualifierButton" onclick="processCreateQualifierForm(false);">continue</button> <br />
+            <em id="addQualifierValueInstruction" class="instruction" hidden="true">enter the value of your qualifier</em> <br />
+            <input id="qualifierValue" type="text" hidden="true" />
+            <button onclick="processCreateQualifierForm(true);">confirm</button>
         </script>
     </body>
 </html>
