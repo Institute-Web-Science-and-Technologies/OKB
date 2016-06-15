@@ -74,7 +74,7 @@
             <details>
                 <summary>qualifiers</summary>
                 {{#qualifiers}}
-                    - {{.}}
+                    - {{.}} <br />
                 {{/qualifiers}}
             </details>
             <em class="instruction">do you have any qualifiers to add?</em> <br />
@@ -90,7 +90,7 @@
             <details>
                 <summary>qualifiers</summary>
                 {{#qualifiers}}
-                    - {{.}}
+                    - {{.}} <br />
                 {{/qualifiers}}
             </details>
             <em class="instruction">enter the url of the article</em>
@@ -108,7 +108,7 @@
             <input id="retdate" type="date" /> <br />
             <label class="data">authors: </label>
             <input id="authors" type="text" /> <br />
-            <button>confirm</button>
+            <button onclick="processCreateSourceInformationForm();">confirm</button>
         </script>
         <script id="createQualifierTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
@@ -119,15 +119,38 @@
             <details>
                 <summary>qualifiers</summary>
                 {{#qualifiers}}
-                    - {{.}}
+                    - {{.}} <br />
                 {{/qualifiers}}
             </details>
             <em class="instruction">enter the property of your qualifier</em> <br />
-            <input id="qualifierProperty" type="text" /> 
-            <button id="createQualifierButton" onclick="processCreateQualifierForm(false);">continue</button> <br />
-            <em id="addQualifierValueInstruction" class="instruction" hidden="true">enter the value of your qualifier</em> <br />
-            <input id="qualifierValue" type="text" hidden="true" />
-            <button onclick="processCreateQualifierForm(true);">confirm</button>
+            <input id="qualifierProperty" type="text" /> <br />
+            <em class="instruction">enter the value of your qualifier</em> <br />
+            <input id="qualifierValue" type="text" />
+            <button onclick="processCreateQualifierForm();">confirm</button>
+        </script>
+        <script id="showOverviewTemplate" type="x-tmpl-mustache">
+            <em class="instruction">you are done. take a last look at your claim and submit it.</em>
+            <br /><em class="data">{{propertyName}}: {{value}}</em>
+            <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
+            {{#claimType}}
+                <em class="data smalltext">relation to other claims: {{.}}</em>
+            {{/claimType}}
+            <details>
+                <summary>qualifiers</summary>
+                {{#qualifiers}}
+                    - {{.}} <br />
+                {{/qualifiers}}
+            </details>
+            <details>
+                <summary>reference</summary>
+                url: <a>{{url}}</a> <br />
+                publication: {{pubdate}} <br />
+                retrieval: {{retdate}} <br />
+                reliabilty: {{reliability}} <br />
+                neutrality: {{neutrality}} <br />
+                authors: {{#authors}}{{.}}.{{/authors}}
+            </details>
+            <button>submit claim</button>
         </script>
     </body>
 </html>

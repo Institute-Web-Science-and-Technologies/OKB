@@ -7,7 +7,8 @@ var TEMPLATE = {
     CHOOSE_CLAIM_TYPE: undefined,
     QUALIFIERS_TO_ADD: undefined,
     CREATE_SOURCE_INFORMATION: undefined,
-    CREATE_QUALIFIER: undefined
+    CREATE_QUALIFIER: undefined,
+    SHOW_OVERVIEW: undefined
 };
 
 var CURATION_FORM;
@@ -21,10 +22,11 @@ var curatingData = {
     'qualifiers': [],
     'source': {
         'url': undefined,
-        'userRating': undefined,
+        'reliabilityRating': undefined,
+        'neutralityRating': undefined,
         'publicationDate': undefined,
         'retrievalDate': undefined,
-        'author': undefined
+        'authors': []
         // custom key-value pairs can be added by the user.
     }
 };
@@ -66,6 +68,10 @@ function loadCurationTemplates() {
     TEMPLATE.CREATE_QUALIFIER =
         document.getElementById('createQualifierTemplate').innerHTML;
     Mustache.parse(TEMPLATE.CREATE_QUALIFIER);
+
+    TEMPLATE.SHOW_OVERVIEW =
+        document.getElementById('showOverviewTemplate').innerHTML;
+    Mustache.parse(TEMPLATE.SHOW_OVERVIEW);
 }
 
 function loadStartCurationForm() {
@@ -183,11 +189,24 @@ function loadCreateQualifierForm() {
 }
 
 function processCreateQualifierForm(isFinalStep) {
-    if (isFinalStep) {
-        // TODO
-    } else {
-        // TODO
+    var propertyInput = document.getElementById('qualifierProperty');
+    var property = propertyInput.value;
+    if (!isValidProperty(property)) {
+        propertInput.value = '';
+        window.alert('invalid property. please try again');
+        return;
     }
+    var valueInput = document.getElementById('qualifierValue');
+    var value = valueInput.value;
+    if (!isValidValue(value, property)) {
+        valueInput.value = '';
+        window.alert('entered value is not valid. please try again');
+        return;
+    }
+    // save qualifier in curatingData
+    curatingData.qualifiers.push(new PropertyValue(property, value));
+
+    loadQualifiersToAddForm();
 }
 
 function loadCreateSourceInformationForm() {
@@ -201,6 +220,46 @@ function loadCreateSourceInformationForm() {
         Mustache.render(TEMPLATE.CREATE_SOURCE_INFORMATION, args);
 }
 
+function processCreateSourceInformationForm() {
+    var url = document.getElementById('url').value;
+    var reliabilityRating = document.getElementById('reliabilityRating').value;
+    var neutralityRating = document.getElementById('neutralityRating').value;
+    var publicationDate = document.getElementById('pubdate').value;
+    var retrievalDate = document.getElementById('retdate').value;
+    var authors = document.getElementById('authors').value;
+    // TODO: validate input.
+    // TODO: transform input into normalized form.
+    curatingData.source.url = url;
+    curatingData.source.reliabiltyRating = normalizeRating(reliabilityRating);
+    curatingData.source.neutralityRating = normalizeRating(neutralityRating);
+    curatingData.source.publicationDate = normalizeDate(publicationDate);
+    curatingData.source.retrievalDate = normalizeDate(retrievalDate);
+    curatingData.source.authors = normalizeAuthors(authors);
+
+    loadOverviewForm();
+}
+
+function loadOverviewForm() {
+    args = {
+        'propertyName': curatingData.propertyName, 
+        'value': curatingData.value,
+        'claimType': curatingData.multiClaimType,
+        'qualifiers': curatingData.qualifiers,
+        'url': curatingData.source.url,
+        'pubdate': curatingData.source.publicationDate,
+        'retdate': curatingData.source.retrievalDate,
+        'reliability': curatingData.source.reliabiltyRating,
+        'neutrality': curatingData.source.neutralityRating,
+        'authors': curatingData.source.authors
+    };
+    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.SHOW_OVERVIEW, args);
+}
+
+function processOverviewForm() {
+    // TODO: submit curation data to server.
+    // add it to the current item representation etc.
+    // reset curation form
+}
 
 // Make the page a bit more dynamic
 function updateReliabilityRating(value) {
@@ -210,6 +269,15 @@ function updateReliabilityRating(value) {
 function updateNeutralityRating(value) {
     document.getElementById('neutralityValue').innerHTML = value;
 }
+
+// Helper classes
+function PropertyValue(property, value) {
+    this.property = property;
+    this.value = value;
+}
+PropertyValue.prototype.toString = function() {
+    return this.property + ': ' + this.value;
+};
 
 // STUBS
 function getSuggestedProperties(itemId) {
@@ -224,10 +292,26 @@ function isValidProperty(property) {
     return property != '';
 }
 
+function isValidValue(value) {
+    return true;
+}
+
 function isFirstClaimOfProperty(property, item) {
     return false;
 }
 
 function getClaimsWithProperty(property, item) {
     return [property + ': something', property + ': bread'];
+}
+
+function normalizeRating(rating) {
+    return rating/100;
+}
+
+function normalizeDate(date) {
+    return date;
+}
+
+function normalizeAuthors(authors) {
+    return [authors];
 }
