@@ -9,6 +9,8 @@ import java.util.List;
  * Created by wkoop on 14.05.16.
  */
 public class WikidataJsonParser {
+    /*
+
 
     //Parses WikiData Json to Java Object
     public static Entities parser(String in) throws Exception {
@@ -295,11 +297,11 @@ public class WikidataJsonParser {
             } else {
 
             }
-            */
+
 
         }
         return sl;
     }
 
-
+*/
 }

@@ -1,55 +1,95 @@
 package WikiDataItem;
 
+import java.time.LocalDateTime;
+
 /**
- * Created by wkoop on 16.05.16.
+ * Created by wkoop on 13.06.2016.
  */
 public class Reference {
-
-    private int rid;
-    private String hash;
-    private Snaks snaks;
-    private String snaks_order;
+    private String url;
+    private String title;
+    private LocalDateTime publicationDate;
+    private LocalDateTime retrievalDate;
+    private String authors;
+    private String articleType;
+    private float trustRating;
+    private float neutralityRating;
 
     public Reference() {
     }
 
-    public Reference(String hash, Snaks snaks, String snaks_order) {
-        this.hash = hash;
-        this.snaks = snaks;
-        this.snaks_order = snaks_order;
+    public Reference(String url, String title, LocalDateTime publicationDate, LocalDateTime retrievalDate, String authors, String articleType, float trustRating, float neutralityRating) {
+        this.url = url;
+        this.title = title;
+        this.publicationDate = publicationDate;
+        this.retrievalDate = retrievalDate;
+        this.authors = authors;
+        this.articleType = articleType;
+        this.trustRating = trustRating;
+        this.neutralityRating = neutralityRating;
     }
 
-    public String toString() {
-        String a = "Reference: {";
-        a += hash + ", ";
-        a += snaks.toString() + ", ";
-        a += snaks_order + "}";
-
-        return a;
+    public String getUrl() {
+        return url;
     }
 
-    public String getHash() {
-        return hash;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public String getTitle() {
+        return title;
     }
 
-    public Snaks getSnaks() {
-        return snaks;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setSnaks(Snaks snaks) {
-        this.snaks = snaks;
+    public LocalDateTime getPublicationDate() {
+        return publicationDate;
     }
 
-    public String getSnaks_order() {
-        return snaks_order;
+    public void setPublicationDate(LocalDateTime publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
-    public void setSnaks_order(String snaks_order) {
-        this.snaks_order = snaks_order;
+    public LocalDateTime getRetrievalDate() {
+        return retrievalDate;
     }
 
+    public void setRetrievalDate(LocalDateTime retrievalDate) {
+        this.retrievalDate = retrievalDate;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
+    }
+
+    public String getArticleType() {
+        return articleType;
+    }
+
+    public void setArticleType(String articleType) {
+        this.articleType = articleType;
+    }
+
+    public float getTrustRating() {
+        return trustRating;
+    }
+
+    public void setTrustRating(float trustRating) {
+        this.trustRating = trustRating;
+    }
+
+    public float getNeutralityRating() {
+        return neutralityRating;
+    }
+
+    public void setNeutralityRating(float neutralityRating) {
+        this.neutralityRating = neutralityRating;
+    }
 }

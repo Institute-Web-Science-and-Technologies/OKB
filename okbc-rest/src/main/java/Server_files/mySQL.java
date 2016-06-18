@@ -12,11 +12,11 @@ public class mySQL {
     private Statement statement;
 
     public mySQL() {
-        String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3305/";
+        String url = "jdbc:mysql://localhost:3305/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
-        String userName = "wkoop";
-        String password = "cu&qG7gq8d-3jPVa";
+        String userName = "root";
+        String password = "51_curation/7ioF";
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection) DriverManager.getConnection(url + dbName, userName, password);

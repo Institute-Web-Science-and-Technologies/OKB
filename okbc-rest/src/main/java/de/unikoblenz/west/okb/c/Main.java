@@ -2,11 +2,8 @@ package de.unikoblenz.west.okb.c;
 
 import Server_files.ClaimController;
 import Server_files.mySQL;
-import WikiDataItem.Entities;
-import com.mysql.jdbc.Driver;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 
 public class Main {
@@ -14,6 +11,8 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         String id2 = "Q104567";
         String output = WikidataItemReader.itemReader(id2);
+
+        /*
         LocalDateTime now = LocalDateTime.now();
         int year, month, day;
         year=now.getYear();
@@ -23,7 +22,7 @@ public class Main {
 
 
         //System.out.println(output);
-        /*
+
         Entities e = new Entities();
         try {
             e = WikidataJsonParser.parser(output);
