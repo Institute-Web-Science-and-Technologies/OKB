@@ -1,0 +1,69 @@
+{
+    "eventid": "Q23365300",
+    "label": "2016 Brussels bombings",
+    "categories": "harmful event",
+    "location": "Belgium",
+    "sub-category": ["catestrophe", "man made catestrophe", "terrorist attack"], 
+    "statements": [
+        {
+            "propertyid": "P1339",
+            "label": "number of injured",
+            "datatype": "quantity",
+            "claims": [
+                {
+                    "snaktype": "value",
+                    "value": "330",
+                    "qualifiers": [],
+                    "sources": [
+                        {
+                            "url": "http://edition.cnn.com/2016/03/24/europe/brussels-investigation/",
+                            "publicationdate": "25.03.2016",
+                            "retrievaldate": "26.03.2016",
+                            "authors": ["Mick Krever", "Catherine E. Shoichet", "Greg Botelho"],
+                            "trustrating": "0.9",
+                            "article-type" : "security",
+                            "title":"Brussels attack investigation",
+                            "neutralityRating": "0.7",
+							"userid": "20"
+                        }
+                    ]
+                },
+                {
+                    "snaktype": "value",
+                    "value": "122",
+                    "qualifiers": [],
+                    "sources": [
+                        {
+                            "url": "http://really-untrustworthy-newspage.com/brussels-bombing/",
+                            "publicationdate": "25.05.2016",
+                            "retrievaldate": "30.05.2016",
+                            "authors": [],
+                            "trustrating": "0.1",
+                            "article-type" : "security",
+                            "title":"Brussels bombing response",
+                            "neutralityRating": "0.1",
+							"userid": "20"
+                        }
+                    ],
+                    "multiclaimtype": "conflict"
+                }, {
+                    "snaktype": "value",
+                    "value": "300",
+                    "qualifiers": [],
+                    "sources": [
+                        {
+                            "url": "https://en.wikipedia.org/wiki/2016_Brussels_bombings#Victims",
+                            "retrievaldate": "07.06.2016",
+                            "authors": []
+                            "trustrating": "0.8",
+                            "article-type" : "wiki",
+                            "title":"2016 Brussels boming",
+                            "neutralityRating": "0.5",
+							"userid": "20"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

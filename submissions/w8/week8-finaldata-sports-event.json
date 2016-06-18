@@ -1,0 +1,53 @@
+{
+    "eventid": "Q23892541",
+    "label": "2016 French Open",
+    "categories": "public event",
+    "location": "France",
+    "sub-category": ["sports event", "season", "tennis"], 
+    "statements": [
+        {
+            "propertyid": "P1346"
+            "label": "winner",
+            "datatype": "string",
+            "claims": [
+                {
+                    "snaktype": "value",
+                    "value": "Novak Djokovic",
+                    "qualifiers": [],
+                    "sources": [
+                        {
+                            "url": "http://bbc.com",
+                            "publicationdate": "05.06.2016",
+                            "retrievaldate": "06.06.2016",
+                            "authors": ["Mick Krever"],
+                            "trustrating": "0.9",
+                            "article-type" : "sports",
+                            "title":"Djokovic win 2016 French open",
+                            "neutralityRating": "",
+			    "userid": "20"
+                        }
+                    ]
+                },
+                {
+                    "snaktype": "value",
+                    "value": "Andy Murray",
+                    "qualifiers": [],
+                    "sources": [
+                        {
+                            "url": "http://fox.com",
+                            "publicationdate": "06.06.2016",
+                            "retrievaldate": "07.06.2016",
+                            "authors": [],
+                            "trustrating": "0.1",
+                            "article-type" : "sports",
+                            "title":"Murray beats Djokovic",
+                            "neutralityRating": "",
+			    "userid": "20"
+                        }
+                    ],
+                    "multiclaimtype": "conflict"
+                },
+            ]
+        }
+    ]
+}
