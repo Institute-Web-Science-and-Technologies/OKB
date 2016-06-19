@@ -39,6 +39,7 @@ public class ClaimController {
                                 "AND Statement1.Claimid = Claim.Clid\n" +
                                 "AND Claim.Refid = Reference.Refid\n" +
                                 "AND Claim.Qualifierid = Qualifier.PropertyId" +
+                                "Limit 15" +
                                 ";");
                 ret = convertResultSetIntoJSON(result);
             } catch (Exception e){
@@ -78,7 +79,8 @@ public class ClaimController {
 
         //returns all values for one specific event
         //is called by: localhost.com:4567/getEventById/321
-        // the last number is the id to be searched for. If the id doesn't exist you'll get: []
+        // the last number is the id to be searched for.
+        // If the id doesn't exist you'll get: []
         get("/getEventById/:id", (req, res) -> {
             String id = req.params(":id");
             ResultSet result = null;
@@ -86,21 +88,21 @@ public class ClaimController {
             try{
                 result = mySQL.getDbCon().query(
                         "SELECT Events.EventId, Events.Label, Events.Location, Events.PropertyID, " +
-                                "Statement1.Label, Statement1.Datatype, Statement1.Ctid, Categories.Category, " +
-                                "Statement1.Claimid, Claim.Clvalue, Claim.Snaktype, Claim.Userid, Claim.Ranking, " +
-                                "Claim.Refid, Reference.Url, Reference.Title, Reference.PublicationDate, " +
-                                "Reference.RetrievalDate, Reference.Authors, Reference.ArticleType, Reference.TrustRating, " +
-                                "Reference.NeutralityRating, " +
-                                "Claim.Qualifierid, Qualifier.Label, Qualifier.Datatype, Qualifier.Qvalue\n " +
-                                "FROM OKBCDB.Events, OKBCDB.Statement1, OKBCDB.Categories, OKBCDB.Claim, " +
-                                "OKBCDB.Reference, OKBCDB.Qualifier\n" +
-                                "WHERE Events.PropertyID = Statement1.PropertyID\n" +
-                                "AND Statement1.Ctid = Categories.Ctid\n" +
-                                "AND Statement1.Claimid = Claim.Clid\n" +
-                                "AND Claim.Refid = Reference.Refid\n" +
-                                "AND Claim.Qualifierid = Qualifier.PropertyId\n" +
-                                "AND Events.EventId = "+id +
-                                ";");
+                        "Statement1.Label, Statement1.Datatype, Statement1.Ctid, Categories.Category, " +
+                        "Statement1.Claimid, Claim.Clvalue, Claim.Snaktype, Claim.Userid, Claim.Ranking, " +
+                        "Claim.Refid, Reference.Url, Reference.Title, Reference.PublicationDate, " +
+                        "Reference.RetrievalDate, Reference.Authors, Reference.ArticleType, Reference.TrustRating, " +
+                        "Reference.NeutralityRating, " +
+                        "Claim.Qualifierid, Qualifier.Label, Qualifier.Datatype, Qualifier.Qvalue\n " +
+                        "FROM OKBCDB.Events, OKBCDB.Statement1, OKBCDB.Categories, OKBCDB.Claim, " +
+                        "OKBCDB.Reference, OKBCDB.Qualifier\n" +
+                        "WHERE Events.PropertyID = Statement1.PropertyID\n" +
+                        "AND Statement1.Ctid = Categories.Ctid\n" +
+                        "AND Statement1.Claimid = Claim.Clid\n" +
+                        "AND Claim.Refid = Reference.Refid\n" +
+                        "AND Claim.Qualifierid = Qualifier.PropertyId\n" +
+                        "AND Events.EventId = "+id +
+                        ";");
                 ret = convertResultSetIntoJSON(result);
             } catch (Exception e){
                 e.printStackTrace();
@@ -115,6 +117,35 @@ public class ClaimController {
             try{
                 result = mySQL.getDbCon().query(
                         "SELECT Events.EventId, Events.Label, Events.Location, Events.PropertyID, " +
+                        "Statement1.Label, Statement1.Datatype, Statement1.Ctid, Categories.Category, " +
+                        "Statement1.Claimid, Claim.Clvalue, Claim.Snaktype, Claim.Userid, Claim.Ranking, " +
+                        "Claim.Refid, Reference.Url, Reference.Title, Reference.PublicationDate, " +
+                        "Reference.RetrievalDate, Reference.Authors, Reference.ArticleType, Reference.TrustRating, " +
+                        "Reference.NeutralityRating, " +
+                        "Claim.Qualifierid, Qualifier.Label, Qualifier.Datatype, Qualifier.Qvalue\n " +
+                        "FROM OKBCDB.Events, OKBCDB.Statement1, OKBCDB.Categories, OKBCDB.Claim, " +
+                        "OKBCDB.Reference, OKBCDB.Qualifier\n" +
+                        "WHERE Events.PropertyID = Statement1.PropertyID\n" +
+                        "AND Statement1.Ctid = Categories.Ctid\n" +
+                        "AND Statement1.Claimid = Claim.Clid\n" +
+                        "AND Claim.Refid = Reference.Refid\n" +
+                        "AND Claim.Qualifierid = Qualifier.PropertyId\n" +
+                        "AND Events.Label = \""+  label +
+                        "\";");
+                ret = convertResultSetIntoJSON(result);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return ret;
+        });
+
+        get("/getEventsByCategory/:category", (req, res) -> {
+            String category = req.params(":category");
+            ResultSet result = null;
+            String ret = "";
+            try {
+                result = mySQL.getDbCon().query(
+                        "SELECT Events.EventId, Events.Label, Events.Location, Events.PropertyID, " +
                                 "Statement1.Label, Statement1.Datatype, Statement1.Ctid, Categories.Category, " +
                                 "Statement1.Claimid, Claim.Clvalue, Claim.Snaktype, Claim.Userid, Claim.Ranking, " +
                                 "Claim.Refid, Reference.Url, Reference.Title, Reference.PublicationDate, " +
@@ -128,25 +159,14 @@ public class ClaimController {
                                 "AND Statement1.Claimid = Claim.Clid\n" +
                                 "AND Claim.Refid = Reference.Refid\n" +
                                 "AND Claim.Qualifierid = Qualifier.PropertyId\n" +
-                                "AND Events.Label = "+label +
+                                "AND Categories.Category = \""+  category +"\"\n"+
+                                "LIMIT 10" +
                                 ";");
                 ret = convertResultSetIntoJSON(result);
             } catch (Exception e){
                 e.printStackTrace();
             }
             return ret;
-        });
-
-        get("/getEventsByCategory:category", (req, res) -> {
-            String category = req.params(":category");
-            ResultSet result = null;
-            try {
-                result = mySQL.getDbCon().query("" +
-                        "SELECT * FROM okb_rest_api??? WHERE ???=" + category+";");
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            return result;
         });
 
         get("/getLatestEditedEvents", (req, res) -> {
@@ -156,48 +176,35 @@ public class ClaimController {
             year=now.getYear();
             month=now.getMonth().getValue();
             day=now.getDayOfMonth();
+            String ret  ="";
+
             try {
-                result = mySQL.getDbCon().query("" +
-                        "SELECT * FROM okb_rest_api.ID WHERE ID.Modified>="
-                        + "'"+year+"-"+month+"-"+day+"';");
+                result = mySQL.getDbCon().query(
+                        "SELECT Events.EventId, Events.Label, Events.Location, Events.PropertyID, " +
+                                "Statement1.Label, Statement1.Datatype, Statement1.Ctid, Categories.Category, " +
+                                "Statement1.Claimid, Claim.Clvalue, Claim.Snaktype, Claim.Userid, Claim.Ranking, " +
+                                "Claim.Refid, Reference.Url, Reference.Title, Reference.PublicationDate, " +
+                                "Reference.RetrievalDate, Reference.Authors, Reference.ArticleType, Reference.TrustRating, " +
+                                "Reference.NeutralityRating, " +
+                                "Claim.Qualifierid, Qualifier.Label, Qualifier.Datatype, Qualifier.Qvalue\n " +
+                                "FROM OKBCDB.Events, OKBCDB.Statement1, OKBCDB.Categories, OKBCDB.Claim, " +
+                                "OKBCDB.Reference, OKBCDB.Qualifier\n" +
+                                "WHERE Events.PropertyID = Statement1.PropertyID\n" +
+                                "AND Statement1.Ctid = Categories.Ctid\n" +
+                                "AND Statement1.Claimid = Claim.Clid\n" +
+                                "AND Claim.Refid = Reference.Refid\n" +
+                                "AND Claim.Qualifierid = Qualifier.PropertyId\n" +
+                                "ORDER BY Reference.PublicationDate DESC\n" +
+                                "LIMIT 10" +
+                                ";");
+                ret = convertResultSetIntoJSON(result);
             } catch (Exception e){
                 e.printStackTrace();
             }
-            return result;
-        });
-
-        get("/claims", (req, res) -> {
-            ResultSet result = null;
-            String js="";
-            try {
-                result = mySQL.getDbCon().query("" +
-                        "SELECT * FROM okb_rest_api.claim;");
-                js=convertResultSetIntoJSON(result);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return js;
-        });
-
-        /*
-        post("/claims/post", (req, res) -> {
-            String id = req.params("id");
-            String type = req.queryParams("type");
-            System.out.println(id + type);
-            return ClaimService.createClaims(id, type);
+            return ret;
         });
 
 
-        put("/claims/:id", (req,res)->claimService.updateClaim(
-                req.params(":id"),
-                req.queryParams("name"),
-                req.queryParams("email")
-        ));
-    */
-
-
-    }
     public static String convertResultSetIntoJSON(ResultSet resultSet) throws Exception {
         JSONArray jsonArray = new JSONArray();
         while (resultSet.next()) {

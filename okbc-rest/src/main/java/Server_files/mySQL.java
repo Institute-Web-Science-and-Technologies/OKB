@@ -12,10 +12,10 @@ public class mySQL {
     private Statement statement;
 
     public mySQL() {
-        String url = "jdbc:mysql://localhost:3305/";
+        String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
-        String userName = "root";
+        String userName = "cstein1";
         String password = "51_curation/7ioF";
         try {
             Class.forName(driver).newInstance();
