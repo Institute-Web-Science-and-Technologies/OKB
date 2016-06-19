@@ -66,18 +66,21 @@ function getAllIdsFrom(item) {
     var ids = new Set();
     // Get all IDs, which occur in the item.
     ids.add(item.id);
-    for (var i = 0; i < item.claims.length; i++) {
-        var claim = item.claims[i];
-        ids.addIdsFromSnak(claim.mainsnak);
-        for (var j = 0; j < claim.references.length; j++) {
-            var reference = claim.references[j];
-            for (var k = 0; k < reference.snaks.length; k++) {
-                ids.addIdsFromSnak(reference.snaks[k]);
+    for (var c = 0; c < item.statements.length; c++) {
+        var claims = item.statements[c].claims;
+        for (var i = 0; i < claims.length; i++) {
+            var claim = claims[i];
+            ids.addIdsFromSnak(claim.mainsnak);
+            for (var j = 0; j < claim.references.length; j++) {
+                var reference = claim.references[j];
+                for (var k = 0; k < reference.snaks.length; k++) {
+                    ids.addIdsFromSnak(reference.snaks[k]);
+                }
             }
-        }
-        for (var j = 0; j < claim.qualifiers.length; j++) {
-            var qualifier = claim.qualifiers[j];
-            ids.addIdsFromSnak(qualifier.snak);
+            for (var j = 0; j < claim.qualifiers.length; j++) {
+                var qualifier = claim.qualifiers[j];
+                ids.addIdsFromSnak(qualifier.snak);
+            }
         }
     }
     return ids;

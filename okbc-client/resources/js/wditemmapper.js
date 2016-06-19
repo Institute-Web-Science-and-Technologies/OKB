@@ -13,7 +13,7 @@
 * @throws
 */
 function mapJsonToWikidataItem(data) {
-    console.log("map data to item");
+    console.log("map json data to item");
     console.log(data);
 
     if (data.hasOwnProperty("error")) {
@@ -39,12 +39,16 @@ function mapJsonToWikidataItem(data) {
     }
     // Iterate over each property of the item.
     for (var pid in jsonItem.claims) {
+        var statement = new WikidataStatement();
+        statement.propertyId = pid;
+        
         // Iterate over each claim in the specific property.
         for (var i = 0; i < jsonItem.claims[pid].length; i++) {
             var claim = mapJsonToWikidataClaim(jsonItem.claims[pid][i], pid);
-            // Add the created claim to the item.
-            item.claims.push(claim);
+            // Add the created claim to the statement.
+            statement.claims.push(claim);
         }
+        item.statements.push(statement);
     }
     requestMissingIdLabelPairs(item);
 
@@ -141,6 +145,11 @@ function WikidataItem() {
     this.label;
     this.description;
     this.aliases = [];
+    this.statements = [];
+}
+
+function WikidataStatement() {
+    this.propertyId;
     this.claims = [];
 }
 
@@ -170,19 +179,6 @@ function WikidataSnak() {
     this.datatype;
     this.datavalue;
 }
-WikidataSnak.prototype.toString = function() {
-    var label;
-    try {
-        label = getLabelOfId(this.propertyId);
-    } catch (err) {
-        label = this.propertyId;
-    }
-    if (this.snaktype == "value") {
-        return label + ': ' + this.datavalue;
-    } else {
-        return  label + ' is of snaktype ' + this.snaktype;
-    }
-};
 
 // TODO: doc
 function WikibaseItem(numericid) {

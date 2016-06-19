@@ -15,6 +15,7 @@ function init() {
     }
     var data = JSON.parse(sessionStorage["itemdata"]);
     var item;
+
     try {
         item = mapJsonToWikidataItem(data);
         currentEvent = item;

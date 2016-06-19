@@ -10,6 +10,19 @@
 function printItem(item, elementId) {
     console.log("print item in " + elementId);
     console.log(item);
+    // Add function to replace propertyIds with labels.
+    item.labelIt = function() {
+        return function(text, render) {
+            var pid = render(text);
+            var label;
+            try {
+                label = getLabelOfId(pid);
+            } catch (err) {
+                label = pid;
+            }
+            return label;
+        }
+    };
     // Generate HTML string for pretty printing of item.
     var template = document.getElementById("itemTemplate").innerHTML;
     var output = Mustache.render(template, item);
