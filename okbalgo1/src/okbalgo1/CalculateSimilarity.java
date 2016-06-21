@@ -47,13 +47,13 @@ public class CalculateSimilarity {
 		 B.zMult(logTrustVector, logConfidenceVector);
 		 //confidenceVector.assign(Functions.chain(Functions.mi, Functions.chain(Functions.exp,Functions.mult(-1)));
 			for( int i= 0; i< logConfidenceVector.size() ; i++){
-				double val = 1- Math.exp( (-1 * logConfidenceVector.get(i)) );
+				double val = 1/1+ Math.exp( (-0.7*logConfidenceVector.get(i)) ); // here we can try adding Subtlety (dampening factor) from paper
 				this.confidenceVector.setQuick(i, val);
 			}
 			temp = this.trustVector.copy();
 			this.A.zMult(confidenceVector, trustVector);
 			for( int i= 0; i< trustVector.size() ; i++){
-				logTrustVector.set(i, -1 * Math.log10( ( 1 - trustVector.get( i ))));
+				logTrustVector.set(i, -1 * Math.log10( ( 1 - temp.get( i ))));
 			}
 	}
 	public boolean shouldStop(double alpha){
