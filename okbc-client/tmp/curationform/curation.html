@@ -44,6 +44,7 @@
         </script>
         <script id="chooseClaimTypeTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="back" onclick="loadEnterValueForm(curatingData.propertyName);">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             <em class="instruction">there are other claims about "{{propertyName}}".</em> <br />
             <em class="instruction">how is your new claim related to them?</em> <br />
@@ -67,6 +68,7 @@
         </script>
         <script id="qualifiersToAddTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="back" onclick="loadChooseClaimTypeForm();">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             {{#claimType}}
                 <em class="data smalltext">relation to other claims: {{.}}</em>
@@ -83,6 +85,7 @@
         </script>
         <script id="createSourceInformationTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="back" onclick="loadQualifiersToAddForm();">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             {{#claimType}}
                 <em class="data smalltext">relation to other claims: {{.}}</em>
@@ -112,6 +115,7 @@
         </script>
         <script id="createQualifierTemplate" type="x-tmpl-mustache">
             <em class="data">{{propertyName}}: {{value}}</em>
+            <em class="back" onclick="loadQualifiersToAddForm();">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             {{#claimType}}
                 <em class="data smalltext">relation to other claims: {{.}}</em>
@@ -131,6 +135,7 @@
         <script id="showOverviewTemplate" type="x-tmpl-mustache">
             <em class="instruction">you are done. take a last look at your claim and submit it.</em>
             <br /><em class="data">{{propertyName}}: {{value}}</em>
+            <em class="back" onclick="loadCreateSourceInformationForm();">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
             {{#claimType}}
                 <em class="data smalltext">relation to other claims: {{.}}</em>

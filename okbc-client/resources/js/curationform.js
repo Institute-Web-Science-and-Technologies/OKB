@@ -1,3 +1,10 @@
+/*
+* curationform.js contains loading and processing of the curation form.
+* mustache.js templating is used for loading the multiple steps.
+* Resulting data is hold in the object "curatingData".
+* The data is deleted, if somehow the function "resetCurationForm" is called.
+*/
+
 // TODO: renaming of functions
 
 var TEMPLATE = {
@@ -34,7 +41,7 @@ var curatingData = {
 // STUB
 var activeItem = {};
 
-function init() {
+function initCurationForm() {
     CURATION_FORM = document.getElementById('curationForm');
     loadCurationTemplates();
     loadStartCurationForm();
@@ -206,7 +213,7 @@ function processCreateQualifierForm(isFinalStep) {
     var propertyInput = document.getElementById('qualifierProperty');
     var property = propertyInput.value;
     if (!isValidProperty(property)) {
-        propertInput.value = '';
+        propertyInput.value = '';
         window.alert('invalid property. please try again');
         return;
     }
@@ -292,28 +299,3 @@ function PropertyValue(property, value) {
 PropertyValue.prototype.toString = function() {
     return this.property + ': ' + this.value;
 };
-
-// STUBS
-function getSuggestedProperties(itemId) {
-    return ['number of deaths', 'point in time', 'instance of', 'number of injured'];
-}
-
-function isFirstClaimOfProperty(property, item) {
-    return false;
-}
-
-function getClaimsWithProperty(property, item) {
-    return [property + ': something', property + ': bread'];
-}
-
-function normalizeRating(rating) {
-    return rating/100;
-}
-
-function normalizeDate(date) {
-    return date;
-}
-
-function normalizeAuthors(authors) {
-    return [authors];
-}
