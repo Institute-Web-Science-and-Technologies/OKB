@@ -81,17 +81,29 @@ public class CalculateSimilarity {
 		if( alpha > dotProduct){
 			return true;
 		}
-			else return false;
+			else
+				{
+				System.out.println(trustVector);
+				System.out.println(confidenceVector);
+
+					return false;
+				}
 	}
 	public static void main (String args[]) {
-		double value[][] = {{1.0, 0.0, 0.0, 1.0,1.0}, { 1.0, 0.0, 0.0, 0, 0.0}, {1.0, 0,1.0, 1.0, 1.0},
-				{1.0,0.0,0.0,0.0,1.0}};
+		//double value[][] = {{1.0, 0.0, 0.0, 1.0,1.0}, { 1.0, 0.0, 0.0, 0, 0.0}, {1.0, 0,1.0, 1.0, 1.0},
+		//		{1.0,0.0,0.0,0.0,1.0}};
+		
+		//double value [][]= {{1.0,0,0,0,0},{0,1.0,0,0,0},{1.0,0,0,0,1.0},{1.0,0,0,0,1.0},{0,0,0,1.0,0},{1.0,0,1.0,0,0},{0,0,1.0,0,0},{1.0,1.0,0,0,0},{0,0,1.0,0,0},{0,0,1.0,0,0},{1.0,0,0,0,0},{0,1.0,0,0,0}};
+		
+		//considering same facts as 1 in matrix
+		double value [][]= {{1.0,0,0,0,0},{0,1.0,0,0,0},{1.0,0,0,0,1.0},{0,0,0,1.0,0},{1.0,0,1.0,0,0},{0,0,1.0,0,0},{0,0,1.0,0,0},{1.0,0,0,0,0},{0,1.0,0,0,0}};
+
 		CalculateSimilarity calc = new CalculateSimilarity(value);
 		boolean result;
 		do{
 		calc.calculateConfidenceVectors();
-		}while(calc.shouldStop(0.95));
-System.out.println("hia");		
+		}while(calc.shouldStop(0.99));
+System.out.println("finished");	
 	}
 
 }
