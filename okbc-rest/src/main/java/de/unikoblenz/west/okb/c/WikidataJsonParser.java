@@ -1,7 +1,6 @@
 package de.unikoblenz.west.okb.c;
 
 import WikiDataItem.*;
-
 import java.util.ArrayList;
 import java.util.List;
 

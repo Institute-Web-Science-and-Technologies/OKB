@@ -8,7 +8,7 @@ import com.sun.jersey.api.client.WebResource;
 
 public class WikidataItemReader {
 
-    //function who takes an id. The output is the Wikidata Item in Json Format
+    //function who takes an Wikidata id. The output is the Wikidata Item in Json Format
     public static String itemReader(String id) {
 
         //wikidata Link with varibel id using the Wikidata api wbgetentities
