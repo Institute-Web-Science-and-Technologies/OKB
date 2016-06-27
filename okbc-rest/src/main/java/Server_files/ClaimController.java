@@ -1,5 +1,8 @@
 package Server_files;
 
+import static Server_files.ResultSetToJson.ResultSetoutput;
+import static Server_files.ResultSetToJson.convertResultSetIntoJSON;
+
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
@@ -12,21 +15,27 @@ import java.util.Set;
 
 public class ClaimController {
 
-    private String sqlgetrequest ="SELECT events.eventid, events.label, events.location, \n" +
-            "  okbstatement.propertyid, okbstatement.label, okbstatement.datatype, \n" +
-            "  claim.clid, claim.clvalue, claim.snaktype, claim.userid, claim.ranking,\n" +
-            "  reference.refid, reference.url, reference.title, reference.publicationdate,\n" +
-            "  reference.retrievaldate, reference.authors, reference.articletype, reference.trustrating,\n" +
-            "  reference.neutralityrating, \n" +
-            "  qualifier.propertyid, qualifier.label, qualifier.datatype,\n" +
-            "  categories.ctid, categories.category\n" +
-            "  FROM OKBCDB.events, OKBCDB.okbstatement, OKBCDB.categories, OKBCDB.claim,\n" +
-            "  OKBCDB.reference, OKBCDB.qualifier\n" +
-            "  WHERE events.eventid = okbstatement.eventid\n" +
-            "  AND claim.propertyid = okbstatement.propertyid\n" +
-            "  AND claim.clid = reference.claimid\n" +
-            "  AND qualifier.claimid = claim.clid\n" +
-            "  AND okbstatement.propertyid = categories.propertyid\n";
+    private String sqlgetrequest ="SELECT GROUP_CONCAT(DISTINCT \"\\\"Q\", events.eventid, \"\\\"\") as '\\\"eventid\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"\", events.label, \"\\\"\") as '\\\"label\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"\", events.location, \"\\\"\") as '\\\"location\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \" \\\"\", categories.category, \"\\\"\") as '\\\"category\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"propertyid\\\": \\\"P\", okbstatement.propertyid, \"\\\", \\\"label\\\": \\\"\", okbstatement.label, \"\\\", \\\"datatype\\\": \\\"\", \n" +
+            "\tokbstatement.datatype, \"\\\"\") as '\\\"statements\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"snaktype\\\": \\\"\", claim.snaktype,\"\\\", \\\"value\\\": \\\"\",claim.clvalue,\"\\\",\\\"ranking\\\": \\\"\", \n" +
+            "\tclaim.ranking, \"\\\"\") as '\\\"claims\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"propertyid\\\": \\\"\", qualifier.propertyid,\"\\\", \\\"label\\\":\\\"\", qualifier.label, \"\\\", \\\"datatype\\\": \\\"\",\n" +
+            "\tqualifier.datatype,\"\\\", \\\"value\\\": \\\"\", qualifier.qvalue, \"\\\"\") as '\\\"qualifiers\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"url\\\": \\\"\", reference.url,\"\\\", \\\"publicationdate\\\": \\\"\", reference.publicationdate,\"\\\", \\\"retrievaldate\\\": \\\"\", \n" +
+            "\treference.retrievaldate,\"\\\", \\\"trustrating\\\": \\\"\", reference.trustrating,\"\\\", \\\"articletype\\\": \\\"\", reference.articletype,\"\\\", \\\"title\\\": \\\"\", \n" +
+            "\treference.title,\"\\\", \\\"neutralityrating\\\": \\\"\", reference.neutralityrating, \"\\\"\") as '\\\"sources\\\": ', \n" +
+            "GROUP_CONCAT(DISTINCT \"\\\"\", authors.author, \"\\\"\") as '\\\"authors\\\": ' \n" +
+            "from okbcdb.events \n" +
+            "LEFT JOIN okbcdb.categories ON events.eventid = categories.eventid \n" +
+            "LEFT JOIN okbcdb.okbstatement ON events.eventid = okbstatement.eventid \n" +
+            "LEFT JOIN okbcdb.claim ON okbstatement.propertyid = claim.propertyid \n" +
+            "LEFT JOIN okbcdb.reference ON reference.claimid = claim.clid \n" +
+            "LEFT JOIN okbcdb.qualifier ON qualifier.claimid = claim.clid \n" +
+            "LEFT JOIN okbcdb.authors ON authors.refid = reference.refid \n";
 
     public ClaimController() {
         get("/test", (req, res) -> {
@@ -38,7 +47,6 @@ public class ClaimController {
             return ret;
         });
 
-
         //returns all events for all events in jsonformat
         //is called by: localhost.com:4567/getEvents
         get("/getEvents", (req, res) -> {
@@ -46,8 +54,10 @@ public class ClaimController {
             String ret = "";
             try {
                 result = mySQL.getDbCon().query(
-                        sqlgetrequest + ";");
-                ret = convertResultSetIntoJSON(result);
+                        sqlgetrequest +
+                                "GROUP BY events.eventid \n" +
+                                "ORDER BY events.eventid ASC\n;");
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -63,14 +73,39 @@ public class ClaimController {
             String id = req.queryParams("id");
             ResultSet result = null;
             String ret = "";
+            //if(ret=="") return sqlgetrequest;
             try {
                 result = mySQL.getDbCon().query(
-                        sqlgetrequest + "AND events.eventid = " + id + ";");
-                ret = convertResultSetIntoJSON(result);
+                        sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
+                                "GROUP BY events.eventid \n" +
+                                "ORDER BY events.eventid ASC\n;");
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return ret;
+        });
+
+        //returns all events for one specific event
+        //is called by: localhost.com:4567/getEventById?id=321
+        // the last number is the id to be searched for.
+        // If the id doesn't exist you'll get: []
+        get("/getEventById2", (req, res) -> {
+            Set<String> a = req.queryParams();
+            String id = req.queryParams("id");
+            ResultSet result = null;
+            String ret = "";
+            //if(ret=="") return sqlgetrequest;
+            try {
+                result = mySQL.getDbCon().query(
+                        sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
+                                "GROUP BY events.eventid \n" +
+                                "ORDER BY events.eventid ASC\n;");
+                ret = ResultSetoutput(result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result.toString();
         });
 
         //returns all events with the given label
@@ -253,30 +288,4 @@ public class ClaimController {
         });
     }
 
-    public static String convertResultSetIntoJSON(ResultSet resultSet) throws Exception {
-        JSONArray jsonArray = new JSONArray();
-        while (resultSet.next()) {
-            int total_rows = resultSet.getMetaData().getColumnCount();
-            JSONObject obj = new JSONObject();
-            for (int i = 0; i < total_rows; i++) {
-                String columnName = resultSet.getMetaData().getColumnLabel(i + 1).toLowerCase();
-                Object columnValue = resultSet.getObject(i + 1);
-                // if value in DB is null, then we set it to default value
-                if (columnValue == null){
-                    columnValue = "null";
-                }
-                /*
-                Next if block is a hack. In case when in db we have values like price and price1 there's a bug in jdbc -
-                both this names are getting stored as price in ResulSet. Therefore when we store second column value,
-                we overwrite original value of price. To avoid that, i simply add 1 to be consistent with DB.
-                 */
-                if (obj.has(columnName)){
-                    columnName += "1";
-                }
-                obj.put(columnName, columnValue);
-            }
-            jsonArray.put(obj);
-        }
-        return jsonArray.toString();
-    }
 }
