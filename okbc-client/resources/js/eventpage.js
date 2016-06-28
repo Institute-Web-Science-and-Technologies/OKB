@@ -2,7 +2,6 @@ var currentEvent;
 
 // TODO: doc, improve timeout, save id label store in localStorage
 function init() {
-    initCurationForm();
     if (!sessionStorage["itemdata"]) {
         window.location = "selection.html";
         return;
@@ -18,6 +17,8 @@ function init() {
         window.alert(err);
         return;
     }
+    initCurationForm();
     setTimeout(function () {printItem(currentEvent, "item");}, 2000);
+    
 }
 

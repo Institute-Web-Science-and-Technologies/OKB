@@ -1,10 +1,13 @@
-#item {
-    width: 50%;
+#curation {
+    width: 30%;
     float: left;
 }
 
-#news {
-    width: 50%;
+#curationForm {
+}
+
+#item {
+    width: 70%;
     float: right;
 }
 

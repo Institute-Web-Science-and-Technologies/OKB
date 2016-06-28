@@ -98,6 +98,27 @@ function createWikidataSearchRequest(search, callbackFunc) {
 }
 
 /*
+* createWikidataGetSuggestionsRequest takes a Wikidata entity ID and a callback function
+* as arguments. It returns a URL, which represents a get suggestions Wikidata API request.
+* The suggestions, which are returned as the argument of the callback, are based on
+* the specified entity.
+*
+* @param entityId a Wikidata entity ID
+* @param callbackFunc a single argument function handling the response data.
+* @return a URL string describing a Wikidata API call to get property suggestions 
+*   for a specified entity. 
+*/
+function createWikidataGetSuggestionsRequest(entityId, callbackFunc) {
+    console.log("create wikidata get suggestions request");
+    var params = 
+        { action : 'wbsgetsuggestions'
+        , entity : entityId
+        , format: 'json'
+        };
+    return createWikidataRequest(params, callbackFunc);
+}
+
+/*
 * createWikidataRequest creates a Wikidata API request URL string, where
 * params are arguments for the call and the callbackFunc is the callback function,
 * which will handle the response.

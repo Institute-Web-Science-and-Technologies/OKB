@@ -1,0 +1,1 @@
+var CURATING_DATA_POST_URL = 'http://jsonplaceholder.typicode.com/posts';

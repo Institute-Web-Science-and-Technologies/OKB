@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="resources/css/event.css">
 
     <script src="thirdparty/js/mustache.min.js"></script>
+    <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
 
+    <script src="resources/js/config.js"></script>
     <script src="resources/js/wdapihandler.js"></script>
     <script src="resources/js/idlabelstore.js"></script>
     <script src="resources/js/wditemmapper.js"></script>
@@ -28,23 +30,67 @@
         <h1>This is a slogan about OKB and curation.</h1>
     </header>
     <main>
-        <div id="curationForm">
+        <div id="curation">
+            <datalist id="propertyOptions">
+            </datalist>
+            <script id="propertyInputOptionsTemplate" type="x-tmpl-mustache">
+                {{#options}}
+                <option value="{{.}}" />
+                {{/options}}
+            </script>
+            <div id="curationForm">
+            </div>
+            <div id="curatedClaims">
+            </div>
+            <script id="listCuratedClaimsTemplate" type="x-tmpl-mustache">
+                <h4>user-curated claims</h4>
+                <ul>
+                    {{#claims}}
+                    <li>
+                        {{propertyName}}: {{value}} <br />
+                        <em class="data smalltext">curated by {{user}}</em> <br/>
+                        {{#claimType}}
+                        <em class="data smalltext">relation to other claims: {{.}}</em> <br />
+                        {{/claimType}}
+                        <details>
+                            <summary>qualifiers</summary>
+                            {{#qualifiers}}
+                                - {{.}} <br />
+                            {{/qualifiers}}
+                        </details>
+                        <details>
+                            <summary>reference</summary>
+                            url: <a>{{source.url}}</a> <br />
+                            publication: {{source.publicationDate}} <br />
+                            retrieval: {{source.retrievalDate}} <br />
+                            reliabilty: {{source.reliabilityRating}} <br />
+                            neutrality: {{source.neutralityRating}} <br />
+                            authors: {{#source.authors}}{{.}}.{{/source.authors}}
+                        </details>
+                    </li>
+                    {{/claims}}
+                </ul>
+            </script>
         </div>
         <!-- Templates for the stages of claim curation -->
         <script id="startCurationTemplate" type="x-tmpl-mustache">
             <button onclick="processStartCurationForm()">create claim</button><br />
             <div id="suggestedProperties" class="radiolist">
                 <input type="radio" name="property" value="null" checked="true">own choice</input>
-                {{#properties}}
-                <br /> <input type="radio" name="property" value="{{.}}">{{.}}</input>
-                {{/properties}}
+                <div id="additionalSuggestedProperties">
+                </div>
             </div>
+        </script>
+        <script id="additionalSuggestedPropertiesTemplate" type="x-tmpl-mustache">
+            {{#properties}}
+            <br /> <input type="radio" name="property" value="{{.}}">{{.}}</input>
+            {{/properties}}
         </script>
         <script id="choosePropertyTemplate" type="x-tmpl-mustache">
             <em class="instruction">choose a property</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em>
             <div class="inputButtonPair">
-                <input type="text" placeholder="property" />
+                <input id="property" type="text" placeholder="property" list="propertyOptions" />
                 <button onclick="processChoosePropertyForm();">go</button>
             </div>
         </script>
@@ -113,11 +159,11 @@
             </details>
             <em class="instruction">enter the url of the article</em>
             <br /> <input id="url" type="url" /> <br />
-            <em class="instruction">rate from 0% to 100%. how reliable is the information in your chosen article?</em> <br />
-            <input id="reliabilityRating" type="range" step=1 min=0 max=100 onchange="updateReliabilityRating(this.value);"/> 
+            <em class="instruction">how reliable is the information in your chosen article?<br />rate from 0% to 100%.</em> <br />
+            <input id="reliabilityRating" type="range" step=1 min=0 max=100 onchange="$('#reliabilityValue').html(this.value);"/> 
             <em id="reliabilityValue" class="data">50</em><em class="data">%</em><br />
-            <em class="instruction">rate from 0% to 100%. how neutral is the article? does it take a side or a certain political view?</em> <br />
-            <input id="neutralityRating" type="range" step=1 min=0 max=100 onchange="updateNeutralityRating(this.value);"/>
+            <em class="instruction">how neutral is the article?<br />does it take a side or a certain political view?<br />rate from 0% to 100%.</em> <br />
+            <input id="neutralityRating" type="range" step=1 min=0 max=100 onchange="$('#neutralityValue').html(this.value);"/>
             <em id="neutralityValue" class="data">50</em><em class="data">%</em><br />
             <em class="instruction">what else can you tell us about your source</em> <br />
             <label class="data">publication date: </label>
@@ -142,13 +188,13 @@
                 {{/qualifiers}}
             </details>
             <em class="instruction">enter the property of your qualifier</em> <br />
-            <input id="qualifierProperty" type="text" /> <br />
+            <input id="qualifierProperty" type="text" list="propertyOptions" /> <br />
             <em class="instruction">enter the value of your qualifier</em> <br />
             <input id="qualifierValue" type="text" />
             <button onclick="processCreateQualifierForm();">confirm</button>
         </script>
         <script id="showOverviewTemplate" type="x-tmpl-mustache">
-            <em class="instruction">you are done. take a last look at your claim and submit it.</em>
+            <em class="instruction">you are done.<br /> take a last look at your claim and submit it.</em>
             <br /><em class="data">{{propertyName}}: {{value}}</em>
             <em class="back" onclick="loadCreateSourceInformationForm();">back</em>
             <em class="cancel" onclick="resetCurationForm();">cancel</em> <br />
@@ -170,11 +216,9 @@
                 neutrality: {{neutrality}} <br />
                 authors: {{#authors}}{{.}}.{{/authors}}
             </details>
-            <button>submit claim</button>
+            <button onclick="processOverviewForm();">submit claim</button>
         </script>
         <div id="item">
-        </div>
-        <div id="news">
         </div>
         <!-- Template for Item objects -->
         <script id="itemTemplate" type="x-tmpl-mustache">

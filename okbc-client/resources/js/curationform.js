@@ -5,8 +5,6 @@
 * The data is deleted, if somehow the function "resetCurationForm" is called.
 */
 
-// TODO: renaming of functions
-
 var TEMPLATE = {
     START_CURATION: undefined,
     CHOOSE_PROPERTY: undefined,
@@ -15,13 +13,15 @@ var TEMPLATE = {
     QUALIFIERS_TO_ADD: undefined,
     CREATE_SOURCE_INFORMATION: undefined,
     CREATE_QUALIFIER: undefined,
-    SHOW_OVERVIEW: undefined
+    SHOW_OVERVIEW: undefined,
+    ADDITIONAL_SUGGESTED_PROPERTIES: undefined
 };
 
-var CURATION_FORM;
-
-// holds the data, which is created while curating
+/*
+* curatingData is a container for the data, which is created in the curation process.
+*/
 var curatingData = {
+    'eventId' : undefined,
     'user': undefined,
     'propertyName': undefined,
     'value': undefined,
@@ -38,85 +38,78 @@ var curatingData = {
     }
 };
 
-// STUB
-var activeItem = {};
-
 function initCurationForm() {
-    CURATION_FORM = document.getElementById('curationForm');
     loadCurationTemplates();
+    loadPropertyOptionDatalist();
     loadStartCurationForm();
 }
 
 function loadCurationTemplates() {
-    TEMPLATE.START_CURATION = 
-        document.getElementById('startCurationTemplate').innerHTML;
+    TEMPLATE.START_CURATION = $('#startCurationTemplate').html();
     Mustache.parse(TEMPLATE.START_CURATION);
 
-    TEMPLATE.CHOOSE_PROPERTY = 
-        document.getElementById('choosePropertyTemplate').innerHTML;
+    TEMPLATE.CHOOSE_PROPERTY = $('#choosePropertyTemplate').html();
     Mustache.parse(TEMPLATE.CHOOSE_PROPERTY);
 
-    TEMPLATE.ENTER_VALUE = 
-        document.getElementById('enterValueTemplate').innerHTML;
+    TEMPLATE.ENTER_VALUE = $('#enterValueTemplate').html();
     Mustache.parse(TEMPLATE.ENTER_VALUE);
 
-    TEMPLATE.CHOOSE_CLAIM_TYPE = 
-        document.getElementById('chooseClaimTypeTemplate').innerHTML;
+    TEMPLATE.CHOOSE_CLAIM_TYPE = $('#chooseClaimTypeTemplate').html();
     Mustache.parse(TEMPLATE.CHOOSE_CLAIM_TYPE);
     
-    TEMPLATE.QUALIFIERS_TO_ADD = 
-        document.getElementById('qualifiersToAddTemplate').innerHTML;
+    TEMPLATE.QUALIFIERS_TO_ADD = $('#qualifiersToAddTemplate').html();
     Mustache.parse(TEMPLATE.QUALIFIERS_TO_ADD);
     
-    TEMPLATE.CREATE_SOURCE_INFORMATION =
-        document.getElementById('createSourceInformationTemplate').innerHTML;
+    TEMPLATE.CREATE_SOURCE_INFORMATION = $('#createSourceInformationTemplate').html();
     Mustache.parse(TEMPLATE.CREATE_SOURCE_INFORMATION);
 
-    TEMPLATE.CREATE_QUALIFIER =
-        document.getElementById('createQualifierTemplate').innerHTML;
+    TEMPLATE.CREATE_QUALIFIER = $('#createQualifierTemplate').html();
     Mustache.parse(TEMPLATE.CREATE_QUALIFIER);
 
-    TEMPLATE.SHOW_OVERVIEW =
-        document.getElementById('showOverviewTemplate').innerHTML;
+    TEMPLATE.SHOW_OVERVIEW = $('#showOverviewTemplate').html();
     Mustache.parse(TEMPLATE.SHOW_OVERVIEW);
+
+    TEMPLATE.ADDITIONAL_SUGGESTED_PROPERTIES = $('#additionalSuggestedPropertiesTemplate').html();
+    Mustache.parse(TEMPLATE.ADDITIONAL_SUGGESTED_PROPERTIES);
+
+    TEMPLATE.PROPERTY_INPUT_OPTIONS = $('#propertyInputOptionsTemplate').html();
+    Mustache.parse(TEMPLATE.PROPERTY_INPUT_OPTIONS);
+}
+
+function loadPropertyOptionDatalist() {
+    var args = {'options': Object.keys(PROPERTIES)};
+    $('#propertyOptions').html(Mustache.render(TEMPLATE.PROPERTY_INPUT_OPTIONS, args));
 }
 
 function loadStartCurationForm() {
-    var args = {'properties' : getSuggestedProperties("someItemId")};
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.START_CURATION, args);
+    var args = {'properties' : getSuggestedProperties(currentEvent.id)};
+    $('#curationForm').html(Mustache.render(TEMPLATE.START_CURATION, args));
+    loadSuggestedProperties();
 }
 
 function resetCurationForm() {
-    if (window.confirm('this will reset your progress')) {
-        // Reset curatingData.
-        curatingData = {
-            'user': undefined,
-            'propertyName': undefined,
-            'value': undefined,
-            'multiClaimType': undefined,
-            'qualifiers': [],
-            'source': {
-                'url': undefined,
-                'reliabilityRating': undefined,
-                'neutralityRating': undefined,
-                'publicationDate': undefined,
-                'retrievalDate': undefined,
-                'authors': []
-            }
-        };
-        loadStartCurationForm();
-    }
+    // Reset curatingData.
+    curatingData = {
+        'eventId' : undefined,
+        'user': undefined,
+        'propertyName': undefined,
+        'value': undefined,
+        'multiClaimType': undefined,
+        'qualifiers': [],
+        'source': {
+            'url': undefined,
+            'reliabilityRating': undefined,
+            'neutralityRating': undefined,
+            'publicationDate': undefined,
+            'retrievalDate': undefined,
+            'authors': []
+        }
+    };
+    loadStartCurationForm();
 }
 
 function processStartCurationForm() {
-    var choices = document.getElementById('suggestedProperties').getElementsByTagName('input');
-    var chosenProperty;
-    for (var i = 0; i < choices.length; i++) {
-        if (choices[i].checked) {
-            chosenProperty = choices[i].value;
-            break;
-        }
-    }
+    var chosenProperty = $('input[name=property]:checked').val();
     if (chosenProperty == 'null') {
         loadChoosePropertyForm();
     } else {
@@ -126,15 +119,15 @@ function processStartCurationForm() {
 
 function loadChoosePropertyForm() {
     var args = {};
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.CHOOSE_PROPERTY, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.CHOOSE_PROPERTY, args));
 }
 
 function processChoosePropertyForm() {
-    var property = document.getElementById('curationForm').getElementsByTagName('input')[0].value;
-    if (isValidProperty(property)) {
-        loadEnterValueForm(property);
+    var property = $('#property');
+    if (isValidProperty(property.val())) {
+        loadEnterValueForm(property.val());
     } else {
-        property.value = '';
+        property.val('');
         window.alert('invalid property. please try again');
     }
 }
@@ -145,14 +138,20 @@ function loadEnterValueForm(property) {
 
     var type = getInputTypeForProperty(property);
     var args = {'propertyName': property, 'type': type};
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.ENTER_VALUE, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.ENTER_VALUE, args));
 }
 
 function processEnterValueForm() {
-    // Add the value of the claim to the data.
-    curatingData.value = document.getElementById('value').value;
+    var valueInput = $('#value');
+    // Check if value is valid. If not alert the user and return.
+    if (!isValidValue(valueInput.val(), curatingData.propertyName)) {
+        window.alert('invalid value. please try again.');
+        valueInput.val('');
+        return;
+    }
 
-    if (isFirstClaimOfProperty(curatingData.propertyName, activeItem)) {
+    // Add the value of the claim to the data.
+    if (isFirstClaimOfProperty(curatingData.propertyName, currentEvent)) {
         loadQualifiersToAddForm();       
     } else {
         loadChooseClaimTypeForm();
@@ -160,23 +159,17 @@ function processEnterValueForm() {
 }
 
 function loadChooseClaimTypeForm() {
-    var claims = getClaimsWithProperty(curatingData.propertyName, activeItem);
+    var claims = getClaimsWithProperty(curatingData.propertyName, currentEvent);
     var args = {
         'propertyName': curatingData.propertyName, 
         'value': curatingData.value, 
         'claims': claims
     };
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.CHOOSE_CLAIM_TYPE, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.CHOOSE_CLAIM_TYPE, args));
 }
 
 function processChooseClaimTypeForm() {
-    var choices = document.getElementById('curationForm').getElementsByTagName('input');
-    for (var i = 0; i < choices.length; i++) {
-        if (choices[i].checked){
-            curatingData.multiClaimType = choices[i].value;
-            break;
-        }
-    }
+    curatingData.multiClaimType = $('input[name=relation]:checked').val();
     loadQualifiersToAddForm();
 }
 
@@ -187,7 +180,7 @@ function loadQualifiersToAddForm() {
         'claimType': curatingData.multiClaimType,
         'qualifiers': curatingData.qualifiers
     };
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.QUALIFIERS_TO_ADD, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.QUALIFIERS_TO_ADD, args));
 }
 
 function processQualifiersToAddForm(hasToAdd) {
@@ -205,22 +198,21 @@ function loadCreateQualifierForm() {
         'claimType': curatingData.multiClaimType,
         'qualifiers': curatingData.qualifiers
     };
-    CURATION_FORM.innerHTML =
-        Mustache.render(TEMPLATE.CREATE_QUALIFIER, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.CREATE_QUALIFIER, args));
 }
 
 function processCreateQualifierForm(isFinalStep) {
-    var propertyInput = document.getElementById('qualifierProperty');
-    var property = propertyInput.value;
+    var propertyInput = $('#qualifierProperty');
+    var property = propertyInput.val();
     if (!isValidProperty(property)) {
-        propertyInput.value = '';
+        propertyInput.val('');
         window.alert('invalid property. please try again');
         return;
     }
-    var valueInput = document.getElementById('qualifierValue');
-    var value = valueInput.value;
+    var valueInput = $('#qualifierValue');
+    var value = valueInput.val();
     if (!isValidValue(value, property)) {
-        valueInput.value = '';
+        valueInput.val('');
         window.alert('entered value is not valid. please try again');
         return;
     }
@@ -237,17 +229,16 @@ function loadCreateSourceInformationForm() {
         'claimType': curatingData.multiClaimType,
         'qualifiers': curatingData.qualifiers
     }
-    CURATION_FORM.innerHTML = 
-        Mustache.render(TEMPLATE.CREATE_SOURCE_INFORMATION, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.CREATE_SOURCE_INFORMATION, args));
 }
 
 function processCreateSourceInformationForm() {
-    var url = document.getElementById('url').value;
-    var reliabilityRating = document.getElementById('reliabilityRating').value;
-    var neutralityRating = document.getElementById('neutralityRating').value;
-    var publicationDate = document.getElementById('pubdate').value;
-    var retrievalDate = document.getElementById('retdate').value;
-    var authors = document.getElementById('authors').value;
+    var url = $('#url').val();
+    var reliabilityRating = $('#reliabilityRating').val();
+    var neutralityRating = $('#neutralityRating').val();
+    var publicationDate = $('#pubdate').val();
+    var retrievalDate = $('#retdate').val();
+    var authors = $('#authors').val();
     // TODO: validate input.
     // TODO: transform input into normalized form.
     curatingData.source.url = url;
@@ -273,22 +264,35 @@ function loadOverviewForm() {
         'neutrality': curatingData.source.neutralityRating,
         'authors': curatingData.source.authors
     };
-    CURATION_FORM.innerHTML = Mustache.render(TEMPLATE.SHOW_OVERVIEW, args);
+    $('#curationForm').html(Mustache.render(TEMPLATE.SHOW_OVERVIEW, args));
 }
 
 function processOverviewForm() {
-    // TODO: submit curation data to server.
-    // add it to the current item representation etc.
-    // reset curation form
+    // Add event ID to the curating data.
+    curatingData.eventId = currentEvent.id;
+    // Submit curation data to server.
+    $.post(CURATING_DATA_POST_URL, curatingData, function(data){console.log('POST success');});
+    // TODO: add it to the current item representation etc.
+    resetCurationForm();
+    
 }
 
-// Make the page a bit more dynamic
-function updateReliabilityRating(value) {
-    document.getElementById('reliabilityValue').innerHTML = value;
+function loadSuggestedProperties() {
+    var request = createWikidataGetSuggestionsRequest(currentEvent.id, printSuggestedProperties);
+    executeApiRequest(request);
 }
 
-function updateNeutralityRating(value) {
-    document.getElementById('neutralityValue').innerHTML = value;
+function printSuggestedProperties(data) {
+    var properties = [];
+    for (var i = 0; i < data.search.length; i++) {
+        // Only get acknowledged properties.
+        if (isValidProperty(data.search[i].label)) {
+            properties.push(data.search[i].label);
+        }
+        storeIdLabelPair(data.search[i].id, data.search[i].label);
+    }
+    var args = {'properties': properties};
+    $('#additionalSuggestedProperties').html(Mustache.render(TEMPLATE.ADDITIONAL_SUGGESTED_PROPERTIES, args));
 }
 
 // Helper classes
