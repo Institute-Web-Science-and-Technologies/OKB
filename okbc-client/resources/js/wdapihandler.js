@@ -136,3 +136,9 @@ function createWikidataRequest(params, callbackFunc) {
     }
     return encodeURI(request);
 }
+
+// TODO: doc
+function createOkbEventByIdRequest(eventId, callbackFunc) {
+    var request = OKB_EVENT_BASE_URL + '/getEventById?id=' + eventId;
+    return request;
+}

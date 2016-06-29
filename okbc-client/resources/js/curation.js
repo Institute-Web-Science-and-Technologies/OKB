@@ -34,6 +34,7 @@ var PROPERTIES = {
     "has cause": {id: "P828", type: DATATYPE.ITEM},
     "instance of":  {id: "P31", type: DATATYPE.ITEM},
     "location": {id: "P276", type: DATATYPE.ITEM},
+    "located in the administrative territorial entity": {id: "P131", type: DATATYPE.ITEM},
     "losses": {id: "P1356", type: DATATYPE.QUANTITY},
     "number of deaths": {id: "P1120", type: DATATYPE.QUANTITY},
     "number of injured": {id: "P1339", type: DATATYPE.QUANTITY},
@@ -43,8 +44,9 @@ var PROPERTIES = {
     "number of points/goals scored": {id: "P1351", type: DATATYPE.QUANTITY},
     "participant": {id: "P710", type: DATATYPE.ITEM},
     "participating teams": {id: "P1923", type: DATATYPE.ITEM},
+    "part of": {id: "P361", type: DATATYPE.ITEM},
     "point in time": {id: "P585", type: DATATYPE.TIME},
-    "publication data": {id: "P577", type: DATATYPE.TIME},
+    "publication date": {id: "P577", type: DATATYPE.TIME},
     "reference URL": {id: "P854", type: DATATYPE.URL},
     "retrieved": {id: "P813", type: DATATYPE.TIME},
     "sport": {id: "P641", type: DATATYPE.ITEM},
@@ -72,6 +74,8 @@ function isValidProperty(propertyName) {
     return PROPERTIES.hasOwnProperty(propertyName);
 }
 
+// TODO: doc
+// TODO: add check for url, item, coordinate, ... .
 function isValidValue(value, propertyName) {
     if (PROPERTIES[propertyName].type == DATATYPE.QUANTITY) {
         return !isNaN(value);
@@ -83,26 +87,46 @@ function isValidValue(value, propertyName) {
     return true;
 }
 
-function getSuggestedProperties(itemId) {
-    return ['number of deaths', 'point in time', 'instance of', 'number of injured'];
+// TODO: doc
+function isFirstClaimOfProperty(propertyName, item, claims) {
+    for (var i = 0; i < claims.length; i++) {
+        if (claims[i].propertyName == propertyName) {
+            return false;
+        }
+    }
+    for (var i = 0; i < item.statements.length; i++) {
+        if (item.statements[i].propertyId == PROPERTIES[propertyName].id) {
+            return false;
+        }
+    }
+    return true;
 }
 
-function isFirstClaimOfProperty(property, item) {
-    return false;
+// TODO: doc
+function getClaimsWithProperty(propertyName, item, claims) {
+    var result = [];
+    for (var i = 0; i < claims.length; i++) {
+        if (claims[i].propertyName == propertyName) {
+            result.push(propertyName + ': ' + claims[i].value);
+        }
+    }
+    for (var i = 0; i < item.statements.length; i++) {
+        if (item.statements[i].propertyId == PROPERTIES[propertyName].id) {
+            for (var j = 0; j < item.statements[i].claims.length; j++) {
+                var claim = item.statements[i].claims[j];
+                result.push(propertyName + ': ' + claim.mainsnak.datavalue);
+            }
+        }
+    }
+    return result;
 }
 
-function getClaimsWithProperty(property, item) {
-    return [property + ': something', property + ': bread'];
-}
-
+// TODO: doc
 function normalizeRating(rating) {
     return rating/100;
 }
 
-function normalizeDate(date) {
-    return date;
-}
-
+// TODO: doc
 function normalizeAuthors(authors) {
-    return [authors];
+    return authors.split(',').map(function(x) {return x.trim();});
 }

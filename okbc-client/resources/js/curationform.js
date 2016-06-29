@@ -18,7 +18,8 @@ var TEMPLATE = {
     CREATE_SOURCE_INFORMATION: undefined,
     CREATE_QUALIFIER: undefined,
     SHOW_OVERVIEW: undefined,
-    ADDITIONAL_SUGGESTED_PROPERTIES: undefined
+    ADDITIONAL_SUGGESTED_PROPERTIES: undefined,
+    LIST_CURATED_CLAIMS: undefined
 };
 
 /*
@@ -26,7 +27,7 @@ var TEMPLATE = {
 */
 var curatingData = {
     'eventId' : undefined,
-    'user': undefined,
+    'user': 'unregistered',
     'propertyName': undefined,
     'value': undefined,
     'multiClaimType': undefined,
@@ -42,9 +43,15 @@ var curatingData = {
     }
 };
 
+/*
+* Stores the curated claims of the current event.
+*/
+var curatedClaims = [];
+
 function initCurationForm() {
     loadCurationTemplates();
     loadPropertyOptionDatalist();
+    loadCuratedClaims();
     loadStartCurationForm();
 }
 
@@ -82,6 +89,9 @@ function loadCurationTemplates() {
 
     TEMPLATE.PROPERTY_INPUT_OPTIONS = $('#propertyInputOptionsTemplate').html();
     Mustache.parse(TEMPLATE.PROPERTY_INPUT_OPTIONS);
+
+    TEMPLATE.LIST_CURATED_CLAIMS = $('#listCuratedClaimsTemplate').html();
+    Mustache.parse(TEMPLATE.LIST_CURATED_CLAIMS);
 }
 
 /*
@@ -97,9 +107,10 @@ function loadPropertyOptionDatalist() {
 * loadStartCurationForm loads the initial form of the curation process.
 */
 function loadStartCurationForm() {
-    var args = {'properties' : getSuggestedProperties(currentEvent.id)};
+    var args = {};
     $('#curationForm').html(Mustache.render(TEMPLATE.START_CURATION, args));
     loadSuggestedProperties();
+    loadCuratedClaims();
 }
 
 /*
@@ -194,7 +205,7 @@ function processEnterValueForm() {
     // Add the value of the claim to the data.
     curatingData.value = valueInput.val();
     
-    if (isFirstClaimOfProperty(curatingData.propertyName, currentEvent)) {
+    if (isFirstClaimOfProperty(curatingData.propertyName, currentEvent, curatedClaims)) {
         loadQualifiersToAddForm();       
     } else {
         loadChooseClaimTypeForm();
@@ -203,7 +214,7 @@ function processEnterValueForm() {
 
 // TODO: doc
 function loadChooseClaimTypeForm() {
-    var claims = getClaimsWithProperty(curatingData.propertyName, currentEvent);
+    var claims = getClaimsWithProperty(curatingData.propertyName, currentEvent, curatedClaims);
     var args = {
         'propertyName': curatingData.propertyName, 
         'value': curatingData.value, 
@@ -291,12 +302,24 @@ function processCreateSourceInformationForm() {
     var retrievalDate = $('#retdate').val();
     var authors = $('#authors').val();
     // TODO: validate input.
+    if (!isValidValue(url, 'reference URL')) {
+        window.alert('article url: an invalid url was entered');
+        return;
+    }
+    if (!isValidValue(publicationDate, 'publication date')) {
+        window.alert('publication date: an invalid date value was entered');
+        return;
+    }
+    if (!isValidValue(retrievalDate, 'retrieved')) {
+        window.alert('retrieval date: an invalid date value was entered');
+        return;
+    }
     // TODO: transform input into normalized form.
     curatingData.source.url = url;
-    curatingData.source.reliabiltyRating = normalizeRating(reliabilityRating);
+    curatingData.source.reliabilityRating = normalizeRating(reliabilityRating);
     curatingData.source.neutralityRating = normalizeRating(neutralityRating);
-    curatingData.source.publicationDate = normalizeDate(publicationDate);
-    curatingData.source.retrievalDate = normalizeDate(retrievalDate);
+    curatingData.source.publicationDate = publicationDate;
+    curatingData.source.retrievalDate = retrievalDate;
     curatingData.source.authors = normalizeAuthors(authors);
 
     loadOverviewForm();
@@ -312,7 +335,7 @@ function loadOverviewForm() {
         'url': curatingData.source.url,
         'pubdate': curatingData.source.publicationDate,
         'retdate': curatingData.source.retrievalDate,
-        'reliability': curatingData.source.reliabiltyRating,
+        'reliability': curatingData.source.reliabilityRating,
         'neutrality': curatingData.source.neutralityRating,
         'authors': curatingData.source.authors
     };
@@ -323,11 +346,11 @@ function loadOverviewForm() {
 function processOverviewForm() {
     // Add event ID to the curating data.
     curatingData.eventId = currentEvent.id;
+    // Push a copy of curatedData into curatedClaims.
+    curatedClaims.push(jQuery.extend(true, {}, curatingData));
     // Submit curation data to server.
     $.post(CURATING_DATA_POST_URL, curatingData, function(data){console.log('POST success');});
-    // TODO: add it to the current item representation etc.
     resetCurationForm();
-    
 }
 
 // TODO: doc
@@ -348,6 +371,28 @@ function printSuggestedProperties(data) {
     }
     var args = {'properties': properties};
     $('#additionalSuggestedProperties').html(Mustache.render(TEMPLATE.ADDITIONAL_SUGGESTED_PROPERTIES, args));
+}
+
+// TODO: doc
+function loadCuratedClaims() {
+    // TODO: GET request to server.
+    printCuratedClaims({});
+}
+
+// TODO: doc
+function printCuratedClaims(data) {
+    var args = {'claims': curatedClaims};
+    $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS, args));
+}
+
+// TODO: doc
+function setTypeOfQualifierValueInput(property) {
+    var type = 'text';
+    if (isValidProperty(property)) {
+        type = getInputTypeForProperty(property);
+    }
+    console.log('set type qualifier value input to ' + type);
+    $('#qualifierValue').prop('type', type);
 }
 
 // Helper classes

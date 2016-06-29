@@ -1,14 +1,23 @@
 #curation {
-    width: 30%;
+    width: 40%;
     float: left;
 }
 
-#curationForm {
+#item {
+    width: 60%;
+    float: right;
 }
 
-#item {
-    width: 70%;
-    float: right;
+#curationForm {
+    display: inline-block;
+}
+
+#curatedClaims {
+    display: block;
+}
+
+#curatedClaims ul {
+    list-style-type: none;
 }
 
 .statement {
@@ -27,4 +36,9 @@
 .reference {
     list-style-type: none;
     padding: 0;
+}
+
+input[type=url] {
+    color: rgb(0, 0, 255);
+    text-decoration: underline;
 }

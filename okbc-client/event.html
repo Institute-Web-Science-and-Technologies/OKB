@@ -76,14 +76,15 @@
         <script id="startCurationTemplate" type="x-tmpl-mustache">
             <button onclick="processStartCurationForm()">create claim</button><br />
             <div id="suggestedProperties" class="radiolist">
-                <input type="radio" name="property" value="null" checked="true">own choice</input>
+                <input type="radio" name="property" value="null" checked="true">own choice</input> <br /> 
+                <em class="instruction">missing properties</em>
                 <div id="additionalSuggestedProperties">
                 </div>
             </div>
         </script>
         <script id="additionalSuggestedPropertiesTemplate" type="x-tmpl-mustache">
             {{#properties}}
-            <br /> <input type="radio" name="property" value="{{.}}">{{.}}</input>
+             <input type="radio" name="property" value="{{.}}">{{.}}</input><br />
             {{/properties}}
         </script>
         <script id="choosePropertyTemplate" type="x-tmpl-mustache">
@@ -188,7 +189,7 @@
                 {{/qualifiers}}
             </details>
             <em class="instruction">enter the property of your qualifier</em> <br />
-            <input id="qualifierProperty" type="text" list="propertyOptions" /> <br />
+            <input id="qualifierProperty" type="text" list="propertyOptions" onblur="setTypeOfQualifierValueInput(this.value);"/> <br />
             <em class="instruction">enter the value of your qualifier</em> <br />
             <input id="qualifierValue" type="text" />
             <button onclick="processCreateQualifierForm();">confirm</button>
@@ -212,9 +213,9 @@
                 url: <a>{{url}}</a> <br />
                 publication: {{pubdate}} <br />
                 retrieval: {{retdate}} <br />
-                reliabilty: {{reliability}} <br />
+                reliability: {{reliability}} <br />
                 neutrality: {{neutrality}} <br />
-                authors: {{#authors}}{{.}}.{{/authors}}
+                authors: {{#authors}}{{.}}. {{/authors}}
             </details>
             <button onclick="processOverviewForm();">submit claim</button>
         </script>
