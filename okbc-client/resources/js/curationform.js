@@ -5,6 +5,10 @@
 * The data is deleted, if somehow the function "resetCurationForm" is called.
 */
 
+/*
+* TEMPLATE is a container for all mustache.js templates used in the curation.
+* Each attribute of TEMPLATE is a string containing a mustache-template.
+*/
 var TEMPLATE = {
     START_CURATION: undefined,
     CHOOSE_PROPERTY: undefined,
@@ -44,6 +48,10 @@ function initCurationForm() {
     loadStartCurationForm();
 }
 
+/*
+* loadCurationTemplates intitializes the TEMPLATE container.
+* Each template is parsed to achieve better performance.
+*/
 function loadCurationTemplates() {
     TEMPLATE.START_CURATION = $('#startCurationTemplate').html();
     Mustache.parse(TEMPLATE.START_CURATION);
@@ -76,17 +84,27 @@ function loadCurationTemplates() {
     Mustache.parse(TEMPLATE.PROPERTY_INPUT_OPTIONS);
 }
 
+/*
+* loadPropertyOptionDatalist fills the datalist with ID 'propertyOptions' 
+* with all properties defined in PROPERTIES.
+*/
 function loadPropertyOptionDatalist() {
     var args = {'options': Object.keys(PROPERTIES)};
     $('#propertyOptions').html(Mustache.render(TEMPLATE.PROPERTY_INPUT_OPTIONS, args));
 }
 
+/*
+* loadStartCurationForm loads the initial form of the curation process.
+*/
 function loadStartCurationForm() {
     var args = {'properties' : getSuggestedProperties(currentEvent.id)};
     $('#curationForm').html(Mustache.render(TEMPLATE.START_CURATION, args));
     loadSuggestedProperties();
 }
 
+/*
+* resetCurationForm resets the progress of curation and loads the intial curation form.
+*/
 function resetCurationForm() {
     // Reset curatingData.
     curatingData = {
@@ -108,6 +126,10 @@ function resetCurationForm() {
     loadStartCurationForm();
 }
 
+/*
+* processStartCurationForm should only be called, if the START_CURATION form is active.
+* It loads either the CHOOSE_PROPERTY form or the ENTER_VALUE form depending on the user decision.
+*/
 function processStartCurationForm() {
     var chosenProperty = $('input[name=property]:checked').val();
     if (chosenProperty == 'null') {
@@ -117,11 +139,18 @@ function processStartCurationForm() {
     }
 }
 
+// TODO: doc
 function loadChoosePropertyForm() {
     var args = {};
     $('#curationForm').html(Mustache.render(TEMPLATE.CHOOSE_PROPERTY, args));
 }
 
+/*
+* processChoosePropertyForm checks, whether the user entered property is valid.
+* If it is not valid, the user is alerted of this fact and gets another try at entering a property.
+* If it is valid, the ENTER_VALUE form is loaded.
+* This function can only be called if the CHOOSE_PROPERTY form is active.
+*/
 function processChoosePropertyForm() {
     var property = $('#property');
     if (isValidProperty(property.val())) {
@@ -132,6 +161,11 @@ function processChoosePropertyForm() {
     }
 }
 
+/*
+* loadEnterValueForm stores the given property label in curatingData
+* and loads the ENTER_VALUE form.
+* @param property a string containing the label of a Wikidata property.
+*/
 function loadEnterValueForm(property) {
     // Add the name of the property of the claim to the data.
     curatingData.propertyName = property;
@@ -141,6 +175,13 @@ function loadEnterValueForm(property) {
     $('#curationForm').html(Mustache.render(TEMPLATE.ENTER_VALUE, args));
 }
 
+/*
+* processEnterValueForm validates the value input of the user.
+* If it is not valid, the user is notified of this and gets another try.
+* Otherwise the depending on the number of claims with the same property,
+* the QUALIFIERS_TO_ADD or the CHOOSE_CLAIM_TYPE form are loaded.
+* This function should only be called, if the ENTER_VALUE form is active.
+*/
 function processEnterValueForm() {
     var valueInput = $('#value');
     // Check if value is valid. If not alert the user and return.
@@ -151,6 +192,8 @@ function processEnterValueForm() {
     }
 
     // Add the value of the claim to the data.
+    curatingData.value = valueInput.val();
+    
     if (isFirstClaimOfProperty(curatingData.propertyName, currentEvent)) {
         loadQualifiersToAddForm();       
     } else {
@@ -158,6 +201,7 @@ function processEnterValueForm() {
     }
 }
 
+// TODO: doc
 function loadChooseClaimTypeForm() {
     var claims = getClaimsWithProperty(curatingData.propertyName, currentEvent);
     var args = {
@@ -168,11 +212,13 @@ function loadChooseClaimTypeForm() {
     $('#curationForm').html(Mustache.render(TEMPLATE.CHOOSE_CLAIM_TYPE, args));
 }
 
+// TODO: doc
 function processChooseClaimTypeForm() {
     curatingData.multiClaimType = $('input[name=relation]:checked').val();
     loadQualifiersToAddForm();
 }
 
+// TODO: doc
 function loadQualifiersToAddForm() {
     var args = {
         'propertyName': curatingData.propertyName, 
@@ -183,6 +229,7 @@ function loadQualifiersToAddForm() {
     $('#curationForm').html(Mustache.render(TEMPLATE.QUALIFIERS_TO_ADD, args));
 }
 
+// TODO: doc
 function processQualifiersToAddForm(hasToAdd) {
     if (hasToAdd) {
         loadCreateQualifierForm();
@@ -191,6 +238,7 @@ function processQualifiersToAddForm(hasToAdd) {
     }
 }
 
+// TODO: doc
 function loadCreateQualifierForm() {
     var args = {
         'propertyName': curatingData.propertyName, 
@@ -201,6 +249,7 @@ function loadCreateQualifierForm() {
     $('#curationForm').html(Mustache.render(TEMPLATE.CREATE_QUALIFIER, args));
 }
 
+// TODO: doc
 function processCreateQualifierForm(isFinalStep) {
     var propertyInput = $('#qualifierProperty');
     var property = propertyInput.val();
@@ -222,6 +271,7 @@ function processCreateQualifierForm(isFinalStep) {
     loadQualifiersToAddForm();
 }
 
+// TODO: doc
 function loadCreateSourceInformationForm() {
     var args = {
         'propertyName': curatingData.propertyName, 
@@ -232,6 +282,7 @@ function loadCreateSourceInformationForm() {
     $('#curationForm').html(Mustache.render(TEMPLATE.CREATE_SOURCE_INFORMATION, args));
 }
 
+// TODO: doc
 function processCreateSourceInformationForm() {
     var url = $('#url').val();
     var reliabilityRating = $('#reliabilityRating').val();
@@ -251,6 +302,7 @@ function processCreateSourceInformationForm() {
     loadOverviewForm();
 }
 
+// TODO: doc
 function loadOverviewForm() {
     args = {
         'propertyName': curatingData.propertyName, 
@@ -267,6 +319,7 @@ function loadOverviewForm() {
     $('#curationForm').html(Mustache.render(TEMPLATE.SHOW_OVERVIEW, args));
 }
 
+// TODO: doc
 function processOverviewForm() {
     // Add event ID to the curating data.
     curatingData.eventId = currentEvent.id;
@@ -277,11 +330,13 @@ function processOverviewForm() {
     
 }
 
+// TODO: doc
 function loadSuggestedProperties() {
     var request = createWikidataGetSuggestionsRequest(currentEvent.id, printSuggestedProperties);
     executeApiRequest(request);
 }
 
+// TODO: doc
 function printSuggestedProperties(data) {
     var properties = [];
     for (var i = 0; i < data.search.length; i++) {
@@ -296,6 +351,9 @@ function printSuggestedProperties(data) {
 }
 
 // Helper classes
+/*
+* PropertyValue is a simple data capsule for storing a property-value pair.
+*/
 function PropertyValue(property, value) {
     this.property = property;
     this.value = value;
