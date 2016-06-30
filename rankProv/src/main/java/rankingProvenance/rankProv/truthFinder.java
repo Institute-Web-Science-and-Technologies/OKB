@@ -24,6 +24,7 @@ public class truthFinder {
     public void setFactId(Integer factId) {
         this.factId = factId;
     }
-
+    
+    
 
 }
