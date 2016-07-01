@@ -8,44 +8,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class events {
+public class claims {
+  Integer id;
+  String snakType;
+  String qualifiers;
+  public Integer getId() {
+    return id;
+  }
+  public void setId(Integer id) {
+    this.id = id;
+  }
+  public String getSnakType() {
+    return snakType;
+  }
+  public void setSnakType(String snakType) {
+    this.snakType = snakType;
+  }
+  public String getQualifiers() {
+    return qualifiers;
+  }
+  public void setQualifiers(String qualifiers) {
+    this.qualifiers = qualifiers;
+  }
   
-  Integer eventID;
-  String label;
-  String categories;
-  String location;
-  
-  public Integer getEventID() {
-    return eventID;
-  }
-  public void setEventID(Integer eventID) {
-    this.eventID = eventID;
-  }
-  public String getLabel() {
-    return label;
-  }
-  public void setLabel(String label) {
-    this.label = label;
-  }
-  public String getCategories() {
-    return categories;
-  }
-  public void setCategories(String categories) {
-    this.categories = categories;
-  }
-  public String getLocation() {
-    return location;
-  }
-  public void setLocation(String location) {
-    this.location = location;
-  }
 
-  
   public boolean save() throws SQLException
   {
-   
-    
-    int i =  mySql.getDbCon().insert("INSERT INTO EVENTS (`eventId`,`label`, `categories`, `location`) VALUES ("+this.eventID+",'"+this.label+"','"+this.categories+"','"+this.location+"') ");
+  
+    int i =  mySql.getDbCon().insert("INSERT INTO claims (`id`,`snaktype`, `qualifiers`) VALUES ("+this.id+",'"+this.snakType+"','"+this.qualifiers+"') ");
     if(i>0)
       return true;
     else
@@ -55,7 +45,7 @@ public class events {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from events WHERE eventId="+id);
+    ResultSet rs = mySql.getDbCon().query("Select * from claims WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -73,5 +63,4 @@ public class events {
     return data;
     
   }
-  
 }

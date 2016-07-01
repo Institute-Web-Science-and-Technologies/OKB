@@ -8,44 +8,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class events {
-  
-  Integer eventID;
+public class statements {
+  Integer id;
+  Integer propertyId;
   String label;
-  String categories;
-  String location;
   
-  public Integer getEventID() {
-    return eventID;
+  public Integer getId() {
+    return id;
   }
-  public void setEventID(Integer eventID) {
-    this.eventID = eventID;
+
+  public void setId(Integer id) {
+    this.id = id;
   }
+
+  public Integer getPropertyId() {
+    return propertyId;
+  }
+
+  public void setPropertyId(Integer propertyId) {
+    this.propertyId = propertyId;
+  }
+
   public String getLabel() {
     return label;
   }
+
   public void setLabel(String label) {
     this.label = label;
   }
-  public String getCategories() {
-    return categories;
-  }
-  public void setCategories(String categories) {
-    this.categories = categories;
-  }
-  public String getLocation() {
-    return location;
-  }
-  public void setLocation(String location) {
-    this.location = location;
-  }
 
-  
   public boolean save() throws SQLException
   {
    
     
-    int i =  mySql.getDbCon().insert("INSERT INTO EVENTS (`eventId`,`label`, `categories`, `location`) VALUES ("+this.eventID+",'"+this.label+"','"+this.categories+"','"+this.location+"') ");
+    int i =  mySql.getDbCon().insert("INSERT INTO statements (`id`,`propertyId`, `label`) VALUES ("+this.id+",'"+this.propertyId+"','"+this.label+"') ");
     if(i>0)
       return true;
     else
@@ -55,7 +51,7 @@ public class events {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from events WHERE eventId="+id);
+    ResultSet rs = mySql.getDbCon().query("Select * from statements WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -73,5 +69,6 @@ public class events {
     return data;
     
   }
+  
   
 }
