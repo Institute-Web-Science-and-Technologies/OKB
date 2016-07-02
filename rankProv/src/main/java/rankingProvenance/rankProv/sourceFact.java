@@ -8,42 +8,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class claims {
+public class sourceFact {
+
   Integer id;
-  String value;
-  String snakType;
-  String qualifiers;
+  String Source;
+  String fact;
+  Integer statementId;
   
-  public String getValue() {
-    return value;
-  }
-  public void setValue(String value) {
-    this.value = value;
-  }
+
   public Integer getId() {
     return id;
   }
   public void setId(Integer id) {
     this.id = id;
   }
-  public String getSnakType() {
-    return snakType;
+  public String getSource() {
+    return Source;
   }
-  public void setSnakType(String snakType) {
-    this.snakType = snakType;
+  public void setSource(String source) {
+    Source = source;
   }
-  public String getQualifiers() {
-    return qualifiers;
+  public String getFact() {
+    return fact;
   }
-  public void setQualifiers(String qualifiers) {
-    this.qualifiers = qualifiers;
+  public void setFact(String fact) {
+    this.fact = fact;
   }
   
-
+  public Integer getStatementId() {
+    return statementId;
+  }
+  public void setStatementId(Integer statementId) {
+    this.statementId = statementId;
+  }
+  
   public boolean save() throws SQLException
   {
   
-    int i =  mySql.getDbCon().insert("INSERT INTO claims (`id`,`snaktype`,`value`, `qualifiers`) VALUES ("+this.id+",'"+this.snakType+"','"+this.value+"','"+this.qualifiers+"') ");
+    int i =  mySql.getDbCon().insert("INSERT INTO sourcefact (`id`,`source`,`fact`,`statementId`) VALUES ("+this.id+",'"+this.Source+"','"+this.fact+"','"+this.statementId+"') ");
     if(i>0)
       return true;
     else
@@ -53,7 +55,7 @@ public class claims {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from claims WHERE id="+id);
+    ResultSet rs = mySql.getDbCon().query("Select * from sourcefact WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -69,6 +71,5 @@ public class claims {
         data.add(row);
     }
     return data;
-    
   }
 }

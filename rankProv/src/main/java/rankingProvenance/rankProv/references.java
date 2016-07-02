@@ -19,7 +19,7 @@ public class references {
   float  trustRating;
   String articleType;
   String title;
-  String neutralityRating;
+  float neutralityRating;
   
   public Integer getId() {
     return id;
@@ -71,17 +71,17 @@ public class references {
   public void setTitle(String title) {
     this.title = title;
   }
-  public String getNeutralityRating() {
+  public float getNeutralityRating() {
     return neutralityRating;
   }
-  public void setNeutralityRating(String neutralityRating) {
+  public void setNeutralityRating(float neutralityRating) {
     this.neutralityRating = neutralityRating;
   }
   
   public boolean save() throws SQLException
   {
   
-    int i =  mySql.getDbCon().insert("INSERT INTO references (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"','"+this.trustRating+"','"+this.articleType+"','"+this.title+"','"+this.neutralityRating+"') ");
+    int i =  mySql.getDbCon().insert("INSERT INTO `references` (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"',"+this.trustRating+",'"+this.articleType+"','"+this.title+"',"+this.neutralityRating+") ");
     if(i>0)
       return true;
     else
