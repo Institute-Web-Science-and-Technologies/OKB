@@ -11,9 +11,10 @@
     <link rel="stylesheet" href="resources/css/footer.css">
     <link rel="stylesheet" href="resources/css/selection.css">
 
+    <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
     <script src="thirdparty/js/mustache.min.js"></script>
 
-    <script src="resources/js/searcheventhandler.js"></script>
+    <script src="resources/js/selectionform.js"></script>
     <script src="resources/js/wdsearch.js"></script>
     <script src="resources/js/wdapihandler.js"></script>
     <script src="resources/js/idlabelstore.js"></script>
@@ -45,25 +46,18 @@
             <div class="searchoption" id="categorysearch">
                 Find events by category <br>
                 <select id="categoryselect">
-                    <option value="Q8065">natural disaster</option>
-                    <option value="Q7944">earthquake</option>
-                    <option value="Q8070">tsunami</option>
-                    <option value="Q81054">storm</option>
-                    <option value="Q167903">landslide</option>
-                    <option value="Q180684">conflict</option>
-                    <option value="Q198">war</option>
-                    <option value="Q124757">riot</option>
-                    <option value="Q175331">demonstration</option>
-                    <option value="Q5710433">terrorist attack</option>
-                    <option value="Q40231">election</option>
-                    <option value="Q1197685">public holiday</option>
-                    <option value="Q182832">concert</option>
                     <option value="Q744913">aviation accident</option>
-                    <option value="Q9687">traffic accident</option>
+                    <option value="Q175331">demonstration</option>
+                    <option value="Q7944">earthquake</option>
+                    <option value="Q40231">election</option>
+                    <option value="Q167903">landslide</option>
+                    <option value="Q124757">riot</option>
                     <option value="Q1539532">sports season</option>
-                    <option value="Q20731002">sports match</option>
+                    <option value="Q5710433">terrorist attack</option>
+                    <option value="Q9687">traffic accident</option>
+                    <option value="Q8070">tsunami</option>
                 </select>
-                <button type="button">Go</button>
+                <button onclick="handleCategorySelect();">Go</button>
             </div>
         </div>
         <div id="results">

@@ -25,17 +25,6 @@ function executeApiRequest(request) {
     headTag.removeChild(scriptTag);
 }
 
-function executeSparqlRequest(request, callbackFunc) {
-    console.log("execute SPARQL request " + request);
-    var scriptTag = document.createElement('script');
-    scriptTag.type = "application/json";
-    scriptTag.classname = "sparqlrequest";
-    scriptTag.src = request;
-    var headTag = document.getElementsByTagName('head')[0];
-    headTag.appendChild(scriptTag);
-    
-}
-
 /*
 * createWikidataItemRequest takes a single Wikidata entity ID and a callback function.
 * It returns a URL, which represents a wbgetentities call to the Wikidata API.
@@ -135,6 +124,21 @@ function createWikidataRequest(params, callbackFunc) {
         request += "&" + key + "=" + params[key];
     }
     return encodeURI(request);
+}
+
+function executeEventsByInstanceOfRequest(instanceId, callbackFunc) {
+    var sparqlEndpoint = 'https://query.wikidata.org/sparql';
+    var query = `
+        SELECT ?item ?itemLabel
+        WHERE
+        {
+            ?item wdt:P31 wd:INSTANCEID .
+            ?item wdt:P585 ?date .
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
+        } ORDER BY DESC(?date)
+    `.replace('INSTANCEID', instanceId);
+    
+    $.get(sparqlEndpoint, {'query': query, 'format': 'json'}, callbackFunc, 'text');
 }
 
 // TODO: doc

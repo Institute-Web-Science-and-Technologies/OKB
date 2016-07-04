@@ -51,3 +51,25 @@ function handleItemRequest(data) {
 function handleSearchRequest(data) {
 	printSearchResults(data, RESULTS_ID);
 }
+
+// TODO: doc
+function handleCategorySelect() {
+    var categoryId = $('#categoryselect').val();
+    executeEventsByInstanceOfRequest(categoryId, handleEventsByInstanceOfRequest);
+}
+
+// TODO: doc
+function handleEventsByInstanceOfRequest(data) {
+    var dataObj = JSON.parse(data);
+    var idLabelPairs = [];
+
+    var listNode = $('#result');
+    for (var i = 0; i < dataObj.results.bindings.length; i++) {
+        var binding = dataObj.results.bindings[i];
+        var id = binding.item.value.replace('http://www.wikidata.org/entity/', '');
+        var label = binding.itemLabel.value;
+        idLabelPairs.push({'id': id, 'label': label});
+    }
+    var output = Mustache.render($('#searchResultTemplate').html(), {'search': idLabelPairs})
+    $('#results').html(output);
+}
