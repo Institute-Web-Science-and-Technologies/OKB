@@ -30,7 +30,9 @@ function mapJsonToWikidataItem(data) {
     var item = new WikidataItem();
     item.id = jsonItem.id;
     item.label = jsonItem.labels.en.value;
-    item.description = jsonItem.descriptions.en.value;
+    if (jsonItem.descriptions.hasOwnProperty("en")) {
+        item.description = jsonItem.descriptions.en.value;
+    }
     if (jsonItem.aliases.hasOwnProperty("en")) {
         // Iterate over each alias of the item.
         for (var i = 0; i < jsonItem.aliases.en.length; i++) {
