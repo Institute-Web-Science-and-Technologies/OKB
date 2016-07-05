@@ -1,9 +1,7 @@
 {
     "eventid": "Q23365300",
     "label": "2016 Brussels bombings",
-    "categories": "harmful event",
-    "location": "Belgium",
-    "sub-category": ["catestrophe", "man made catestrophe", "terrorist attack"], 
+    "categories": ["suicide bombing", "mass murder", "terrorist attack"], 
     "statements": [
         {
             "propertyid": "P1339",
@@ -13,24 +11,25 @@
                 {
                     "snaktype": "value",
                     "value": "330",
+    		    "userid": "20",
                     "qualifiers": [],
                     "sources": [
                         {
                             "url": "http://edition.cnn.com/2016/03/24/europe/brussels-investigation/",
-                            "publicationdate": "25.03.2016",
-                            "retrievaldate": "26.03.2016",
+                            "publicationdate": "2016-03-25",
+                            "retrievaldate": "2016-03-25",
                             "authors": ["Mick Krever", "Catherine E. Shoichet", "Greg Botelho"],
                             "trustrating": "0.9",
-                            "article-type" : "security",
+                            "articletype" : "security",
                             "title":"Brussels attack investigation",
-                            "neutralityRating": "0.7",
-							"userid": "20"
+                            "neutralityrating": "0.7",
                         }
                     ]
                 },
                 {
                     "snaktype": "value",
                     "value": "122",
+    		    "userid": "20",
                     "qualifiers": [],
                     "sources": [
                         {
@@ -39,16 +38,16 @@
                             "retrievaldate": "30.05.2016",
                             "authors": [],
                             "trustrating": "0.1",
-                            "article-type" : "security",
+                            "articletype" : "security",
                             "title":"Brussels bombing response",
-                            "neutralityRating": "0.1",
-							"userid": "20"
+                            "neutralityrating": "0.1",
                         }
                     ],
                     "multiclaimtype": "conflict"
                 }, {
                     "snaktype": "value",
                     "value": "300",
+    		    "userid": "20",
                     "qualifiers": [],
                     "sources": [
                         {
@@ -56,10 +55,9 @@
                             "retrievaldate": "07.06.2016",
                             "authors": []
                             "trustrating": "0.8",
-                            "article-type" : "wiki",
+                            "articletype" : "wiki",
                             "title":"2016 Brussels boming",
-                            "neutralityRating": "0.5",
-							"userid": "20"
+                            "neutralityrating": "0.5",
                         }
                     ]
                 }
