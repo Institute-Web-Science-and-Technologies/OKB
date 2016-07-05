@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Event",
+  "description": "an event and its user-curated claims",
+  "type": "object",
+  "properties": {
+    "eventid": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "statements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "propertyid": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "datatype": {
+            "type": "string"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "snaktype": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "userid": {
+                  "type": "string"
+                },
+                "qualifiers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "propertyid": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "propertyid",
+                      "value"
+                    ]
+                  }
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "url": {
+                        "type": "string"
+                      },
+                      "publicationdate": {
+                        "type": "string"
+                      },
+                      "retrievaldate": {
+                        "type": "string"
+                      },
+                      "authors": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "trustrating": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "neutralityrating": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "articletype": {
+                        "type": "string"
+                      },
+                      "articletitle": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "url",
+                      "publicationdate",
+                      "retrievaldate",
+                      "authors",
+                      "trustrating",
+                      "neutralityrating"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "value",
+                "qualifiers",
+                "sources"
+              ]
+            }
+          }
+        },
+        "required": [
+          "propertyid",
+          "datatype",
+          "claims"
+        ]
+      }
+    }
+  },
+  "required": [
+    "eventid",
+    "categories",
+    "statements"
+  ]
+}
