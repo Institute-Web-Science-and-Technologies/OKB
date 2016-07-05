@@ -29,7 +29,7 @@ function mapJsonToWikidataItem(data) {
     }
     var item = new WikidataItem();
     item.id = jsonItem.id;
-    if (jsonItem.labels.hasOwnProperty("en") {
+    if (jsonItem.labels.hasOwnProperty("en")) {
         item.label = jsonItem.labels.en.value;
     } else {
         // If there is no label for the item, use the id instead.
