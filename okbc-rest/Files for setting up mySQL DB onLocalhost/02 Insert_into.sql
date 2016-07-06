@@ -18,13 +18,13 @@ INSERT INTO OKBCDB.okbstatement (propertyid, label, datatype, eventid)
 VALUES (1339, "number of injured", "quantity", 23365300);
 
 INSERT INTO OKBCDB.okbstatement (propertyid, label, datatype, eventid)
-VALUES (1346, "winner", "string", 23892541);
+VALUES (1346, "winner", "MonolingualText", 23892541);
 
 INSERT INTO OKBCDB.okbstatement (propertyid, label, datatype, eventid)
-VALUES (4324, "zh-hans", "wikibase-item", 323);
+VALUES (4324, "zh-hans", "item", 323);
 
 INSERT INTO OKBCDB.okbstatement (propertyid, label, datatype, eventid)
-VALUES (4325, "zh-hant", "String", 325);
+VALUES (4325, "zh-hant", "MonolingualText", 325);
 
 
 INSERT INTO OKBCDB.claim (clid, snaktype, clvalue, ranking, propertyid)
@@ -52,7 +52,7 @@ VALUES (144, "http://bbc.com", "Djokovic win 2016 French Open", '2016-06-05', '2
 INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, articletype, trustrating, neutralityrating, userid, claimid)
 VALUES (145, "https://en.wikipedia.org/wiki/2016_Brussels_bombings#Victims", "2016 Brussels Bombing", '0000-00-00', '2016-06-07', "wiki", 0.8, 0.5, 20, 3);
 
-INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, authors, articletype, trustrating, neutralityrating, userid, claimid)
+INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, articletype, trustrating, neutralityrating, userid, claimid)
 VALUES (146, "http://www.wikidata.org/entity/Q146", "Cat", '0516-05-05', '2016-05-06', "wikibase-entityid", 1, 2, 34, 4);
 
 INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, articletype, trustrating, neutralityrating, userid, claimid)

@@ -8,13 +8,18 @@ import java.util.Enumeration;
 public class Qualifier {
     private int propertyId;
     private String label;
-    private Enumeration<Datatype> datatype;
+    private Datatype datatype;
     private String value;
+
+    public String toString(){
+        return "{\"propertyid\": \"P"+propertyId+"\", \"label\": \""+label
+                +"\", \"datatype\": \""+datatype+"\", \"value\": \""+value+"\"}";
+    }
 
     public Qualifier() {
     }
 
-    public Qualifier(int propertyId, String label, Enumeration<Datatype> datatype, String value) {
+    public Qualifier(int propertyId, String label, Datatype datatype, String value) {
         this.propertyId = propertyId;
         this.label = label;
         this.datatype = datatype;
@@ -37,11 +42,11 @@ public class Qualifier {
         this.label = label;
     }
 
-    public Enumeration<Datatype> getDatatype() {
+    public Datatype getDatatype() {
         return datatype;
     }
 
-    public void setDatatype(Enumeration<Datatype> datatype) {
+    public void setDatatype(Datatype datatype) {
         this.datatype = datatype;
     }
 

@@ -6,16 +6,36 @@ import java.util.List;
  * Created by wkoop on 08.06.2016.
  */
 public class Event {
-    private int eventid;
+    private String eventid;
     private String label;
     private List<String> categories;
     private String location;
     private List<Statement> statements;
 
+
+    public String toString(){
+        String result = "";
+        result+="{\"eventid\": \""+eventid+"\", " +
+                "\"label\": \""+label+"\", " +
+                "\"categories\": [";
+        for(int i=0; i<categories.size(); i++){
+            if(i==categories.size()-1)
+                result+="\""+categories.get(i)+"\"";
+            else
+                result +="\""+categories.get(i)+"\""+(", ");
+        }
+        result+="], \"location\": \""+location+"\", \n";
+        result+="\"statements\": [";
+        for(Statement st : statements)
+            result+=st.toString();
+        result+="}";
+        return result;
+    }
+
     public Event() {
     }
 
-    public Event(int eventid, String label, List<String> categories, String location, List<Statement> statements) {
+    public Event(String eventid, String label, List<String> categories, String location, List<Statement> statements) {
         this.eventid = eventid;
         this.label = label;
         this.categories = categories;
@@ -31,11 +51,11 @@ public class Event {
         this.statements = statements;
     }
 
-    public int getEventid() {
+    public String getEventid() {
         return eventid;
     }
 
-    public void setEventid(int eventid) {
+    public void setEventid(String eventid) {
         this.eventid = eventid;
     }
 

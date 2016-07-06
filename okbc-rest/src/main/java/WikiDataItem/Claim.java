@@ -9,9 +9,9 @@ import java.util.List;
 public class Claim {
 
     private String value;
-    private Enumeration<Snaktype> snaktype;
+    private Snaktype snaktype;
     private String userid;
-    private Enumeration<Rank> ranking;
+    private Rank ranking;
     private List<Qualifier> qualifier;
     private List<Reference> references;
 
@@ -19,13 +19,43 @@ public class Claim {
     }
 
 
-    public Claim(String value, Enumeration<Snaktype> snaktype, String userid, Enumeration<Rank> ranking, List<Qualifier> qualifier, List<Reference> references) {
+    public Claim(String value, Snaktype snaktype, String userid, Rank ranking, List<Qualifier> qualifier, List<Reference> references) {
         this.value = value;
         this.snaktype = snaktype;
         this.userid = userid;
         this.ranking = ranking;
         this.qualifier = qualifier;
         this.references = references;
+    }
+
+    public String toString(){
+        String result = "{\"value\": \""+value + "\", \"snaktype\": \""+snaktype+
+                "\", \"ranking\": \""+ranking+"\", " +
+                "\"qualifier\": [";
+        if(qualifier==null) ;
+        else {
+            for (int i = 0; i < qualifier.size(); i++) {
+                if (i == qualifier.size() - 1) {
+                    result += qualifier.get(i).toString();
+                    break;
+                }
+                result += qualifier.get(i).toString() + ", ";
+            }
+        }
+        result +="], \"sources\": [";
+        if(references==null) ;
+        else {
+            for (int i = 0; i < references.size(); i++) {
+                if (i == references.size() - 1) {
+                    result += references.get(i).toString();
+                    break;
+                }
+                result += references.get(i).toString() + ", ";
+            }
+        }
+        result+= "]}";
+
+        return result;
     }
 
     public List<Reference> getReferences() {
@@ -44,11 +74,11 @@ public class Claim {
         this.value = value;
     }
 
-    public Enumeration<Snaktype> getSnaktype() {
+    public Snaktype getSnaktype() {
         return snaktype;
     }
 
-    public void setSnaktype(Enumeration<Snaktype> snaktype) {
+    public void setSnaktype(Snaktype snaktype) {
         this.snaktype = snaktype;
     }
 
@@ -60,11 +90,11 @@ public class Claim {
         this.userid = userid;
     }
 
-    public Enumeration<Rank> getRanking() {
+    public Rank getRanking() {
         return ranking;
     }
 
-    public void setRanking(Enumeration<Rank> ranking) {
+    public void setRanking(Rank ranking) {
         this.ranking = ranking;
     }
 
