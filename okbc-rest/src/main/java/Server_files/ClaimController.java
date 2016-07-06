@@ -31,13 +31,13 @@ public class ClaimController {
                     "reference.retrievaldate,\", trustrating: \", reference.trustrating,\", articletype: \", reference.articletype,\", title: \", \n" +
                     "reference.title,\", neutralityrating: \", reference.neutralityrating) as 'sources: ', \n" +
             "GROUP_CONCAT(DISTINCT authors.author) as 'authors: ' \n" +
-            "from okbcdb.events\n" +
-            "LEFT JOIN okbcdb.categories ON events.eventid = categories.eventid\n" +
-            "LEFT JOIN okbcdb.okbstatement ON events.eventid = okbstatement.eventid\n" +
-            "LEFT JOIN okbcdb.claim ON okbstatement.propertyid = claim.propertyid\n" +
-            "LEFT JOIN okbcdb.reference ON reference.claimid = claim.clid\n" +
-            "LEFT JOIN okbcdb.qualifier ON qualifier.claimid = claim.clid\n" +
-            "LEFT JOIN okbcdb.authors ON authors.refid = reference.refid\n";
+            "from OKBCDB.events\n" +
+            "LEFT JOIN OKBCDB.categories ON events.eventid = categories.eventid\n" +
+            "LEFT JOIN OKBCDB.okbstatement ON events.eventid = okbstatement.eventid\n" +
+            "LEFT JOIN OKBCDB.claim ON okbstatement.propertyid = claim.propertyid\n" +
+            "LEFT JOIN OKBCDB.reference ON reference.claimid = claim.clid\n" +
+            "LEFT JOIN OKBCDB.qualifier ON qualifier.claimid = claim.clid\n" +
+            "LEFT JOIN OKBCDB.authors ON authors.refid = reference.refid\n";
 
     public ClaimController() {
         get("/test", (req, res) -> {

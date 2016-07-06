@@ -32,7 +32,7 @@ public class ResultSetToJson {
             result+="{";
         String separator="";
         for(WikiDataItem.Event ev : event) {
-            result += separator + event.toString() + "\n";
+            result += separator + ev.toString() + "\n";
             separator=",";
         }
         if(event.size()>1)
