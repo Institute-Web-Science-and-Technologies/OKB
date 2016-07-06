@@ -10,4 +10,5 @@ public enum Datatype {
     Url,
     Time,
     MonolingualText;
+
 }

@@ -1,6 +1,7 @@
 package WikiDataItem;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * Created by wkoop on 13.06.2016.
@@ -8,17 +9,35 @@ import java.time.LocalDateTime;
 public class Reference {
     private String url;
     private String title;
-    private LocalDateTime publicationDate;
-    private LocalDateTime retrievalDate;
-    private String authors;
+    private String publicationDate;
+    private String retrievalDate;
+    private ArrayList<String> authors;
     private String articleType;
     private float trustRating;
     private float neutralityRating;
 
+    public String toString(){
+        String out="{\"url\": \""+url+"\", \"title\": \""+title+
+                "\", \"publicationDate\": \""+ publicationDate+"\", \"retrievalDate\": \""
+                +retrievalDate+ "\", \"authors\": [";
+       /* if(authors.size()>0) {
+            for (int i = 0; i < authors.size(); i++) {
+                if (i == authors.size() - 1)
+                    out += "\"" + authors.get(i) + "\"";
+                else
+                    out += "\"" + authors.get(i) + "\", ";
+            }
+        }
+        */
+        out+="], \"articleType\": \""+articleType+"\", \"trustRating\": \""
+                +trustRating+"\", \"neutralityRating\": \""+neutralityRating+"\"}";
+        return out;
+    }
+
     public Reference() {
     }
 
-    public Reference(String url, String title, LocalDateTime publicationDate, LocalDateTime retrievalDate, String authors, String articleType, float trustRating, float neutralityRating) {
+    public Reference(String url, String title, String publicationDate, String retrievalDate, ArrayList<String> authors, String articleType, float trustRating, float neutralityRating) {
         this.url = url;
         this.title = title;
         this.publicationDate = publicationDate;
@@ -45,27 +64,27 @@ public class Reference {
         this.title = title;
     }
 
-    public LocalDateTime getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(LocalDateTime publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
-    public LocalDateTime getRetrievalDate() {
+    public String getRetrievalDate() {
         return retrievalDate;
     }
 
-    public void setRetrievalDate(LocalDateTime retrievalDate) {
+    public void setRetrievalDate(String retrievalDate) {
         this.retrievalDate = retrievalDate;
     }
 
-    public String getAuthors() {
+    public ArrayList<String>  getAuthors() {
         return authors;
     }
 
-    public void setAuthors(String authors) {
+    public void setAuthors(ArrayList<String>  authors) {
         this.authors = authors;
     }
 

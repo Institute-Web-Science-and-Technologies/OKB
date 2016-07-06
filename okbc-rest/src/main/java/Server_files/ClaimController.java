@@ -1,7 +1,7 @@
 package Server_files;
 
 import static Server_files.ResultSetToJson.ResultSetoutput;
-import static Server_files.ResultSetToJson.convertResultSetIntoJSON;
+import static Server_files.ResultSetToJson.ResultSetoutput;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -15,34 +15,36 @@ import java.util.Set;
 
 public class ClaimController {
 
-    private String sqlgetrequest ="SELECT GROUP_CONCAT(DISTINCT \"\\\"Q\", events.eventid, \"\\\"\") as '\\\"eventid\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"\", events.label, \"\\\"\") as '\\\"label\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"\", events.location, \"\\\"\") as '\\\"location\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \" \\\"\", categories.category, \"\\\"\") as '\\\"category\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"propertyid\\\": \\\"P\", okbstatement.propertyid, \"\\\", \\\"label\\\": \\\"\", okbstatement.label, \"\\\", \\\"datatype\\\": \\\"\", \n" +
-            "\tokbstatement.datatype, \"\\\"\") as '\\\"statements\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"snaktype\\\": \\\"\", claim.snaktype,\"\\\", \\\"value\\\": \\\"\",claim.clvalue,\"\\\",\\\"ranking\\\": \\\"\", \n" +
-            "\tclaim.ranking, \"\\\"\") as '\\\"claims\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"propertyid\\\": \\\"\", qualifier.propertyid,\"\\\", \\\"label\\\":\\\"\", qualifier.label, \"\\\", \\\"datatype\\\": \\\"\",\n" +
-            "\tqualifier.datatype,\"\\\", \\\"value\\\": \\\"\", qualifier.qvalue, \"\\\"\") as '\\\"qualifiers\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"url\\\": \\\"\", reference.url,\"\\\", \\\"publicationdate\\\": \\\"\", reference.publicationdate,\"\\\", \\\"retrievaldate\\\": \\\"\", \n" +
-            "\treference.retrievaldate,\"\\\", \\\"trustrating\\\": \\\"\", reference.trustrating,\"\\\", \\\"articletype\\\": \\\"\", reference.articletype,\"\\\", \\\"title\\\": \\\"\", \n" +
-            "\treference.title,\"\\\", \\\"neutralityrating\\\": \\\"\", reference.neutralityrating, \"\\\"\") as '\\\"sources\\\": ', \n" +
-            "GROUP_CONCAT(DISTINCT \"\\\"\", authors.author, \"\\\"\") as '\\\"authors\\\": ' \n" +
-            "from okbcdb.events \n" +
-            "LEFT JOIN okbcdb.categories ON events.eventid = categories.eventid \n" +
-            "LEFT JOIN okbcdb.okbstatement ON events.eventid = okbstatement.eventid \n" +
-            "LEFT JOIN okbcdb.claim ON okbstatement.propertyid = claim.propertyid \n" +
-            "LEFT JOIN okbcdb.reference ON reference.claimid = claim.clid \n" +
-            "LEFT JOIN okbcdb.qualifier ON qualifier.claimid = claim.clid \n" +
-            "LEFT JOIN okbcdb.authors ON authors.refid = reference.refid \n";
+    private String sqlgetrequest =
+            "SELECT " +
+                "GROUP_CONCAT(DISTINCT \"Q\", events.eventid) as 'eventid', \n" +
+                "GROUP_CONCAT(DISTINCT events.label) as 'label', \n" +
+                "GROUP_CONCAT(DISTINCT events.location) as 'location', \n" +
+                "GROUP_CONCAT(DISTINCT categories.category) as 'category', \n" +
+                "GROUP_CONCAT(DISTINCT \"propertyid: P\", okbstatement.propertyid,\", label: \", okbstatement.label, \", datatype: \", " +
+                    "okbstatement.datatype) as 'statements', \n" +
+                "GROUP_CONCAT(DISTINCT \"snaktype: \", claim.snaktype,\", value: \",claim.clvalue,\", ranking: \", " +
+                    "claim.ranking) as 'claims', \n" +
+                "GROUP_CONCAT(DISTINCT \"propertyid: \", qualifier.propertyid,\", label: \", qualifier.label, \", datatype: \", " +
+                    "qualifier.datatype,\", value: \", qualifier.qvalue) as 'qualifiers', \n" +
+                "GROUP_CONCAT(DISTINCT \"url: \", reference.url,\", publicationdate: \", reference.publicationdate,\", retrievaldate: \", \n" +
+                    "reference.retrievaldate,\", trustrating: \", reference.trustrating,\", articletype: \", reference.articletype,\", title: \", \n" +
+                    "reference.title,\", neutralityrating: \", reference.neutralityrating) as 'sources: ', \n" +
+            "GROUP_CONCAT(DISTINCT authors.author) as 'authors: ' \n" +
+            "from okbcdb.events\n" +
+            "LEFT JOIN okbcdb.categories ON events.eventid = categories.eventid\n" +
+            "LEFT JOIN okbcdb.okbstatement ON events.eventid = okbstatement.eventid\n" +
+            "LEFT JOIN okbcdb.claim ON okbstatement.propertyid = claim.propertyid\n" +
+            "LEFT JOIN okbcdb.reference ON reference.claimid = claim.clid\n" +
+            "LEFT JOIN okbcdb.qualifier ON qualifier.claimid = claim.clid\n" +
+            "LEFT JOIN okbcdb.authors ON authors.refid = reference.refid\n";
 
     public ClaimController() {
         get("/test", (req, res) -> {
             Set<String> a = req.queryParams();
             String ret ="";
             for(String i : a)
-                ret +=", "+i+": "+req.queryParams(i);
+                ret +="("+i+": "+req.queryParams(i)+") ";
 
             return ret;
         });
@@ -55,8 +57,8 @@ public class ClaimController {
             try {
                 result = mySQL.getDbCon().query(
                         sqlgetrequest +
-                                "GROUP BY events.eventid \n" +
-                                "ORDER BY events.eventid ASC\n;");
+                                "GROUP BY events.eventid  \n" +
+                                "ORDER BY events.eventid ASC;\n");
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -118,7 +120,7 @@ public class ClaimController {
             try {
                 result = mySQL.getDbCon().query(
                         sqlgetrequest + "AND events.label = \"" + label + "\";");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -135,7 +137,7 @@ public class ClaimController {
             try {
                 result = mySQL.getDbCon().query(
                         sqlgetrequest + "AND categories.category = \"" + category + "\"\n" + "LIMIT 10" + ";");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -151,7 +153,7 @@ public class ClaimController {
             try {
                 result = mySQL.getDbCon().query(
                         sqlgetrequest + "ORDER BY reference.publicationdate DESC\n" + "LIMIT 10" + ";");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -181,7 +183,7 @@ public class ClaimController {
                                 "authors, articletype, trustrating, neutralityrating, claimid)\n" +
                         "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
                                 "', "+authors+", "+articletype+", "+trustrating+", "+neutralityrating+", "+claimid+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -200,7 +202,7 @@ public class ClaimController {
                 result = mySQL.getDbCon().query(
                         "INSERT INTO OKBCDB.Qualifier(PropertyId, Label,  Datatype, Qvalue\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "+qvalue+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -223,7 +225,7 @@ public class ClaimController {
                         "INSERT INTO OKBCDB.Claim (Clid, Clvalue, Snaktype, Userid, Ranking, Refid, Qualifierid\n)" +
                                 "VALUES ("+clid+", "+clvalue+", "+snaktype+", "+userid+", "+ranking+
                                 ", "+refid+", "+qualifierid+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -240,7 +242,7 @@ public class ClaimController {
                 result = mySQL.getDbCon().query(
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+ctid+", "+category+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -261,7 +263,7 @@ public class ClaimController {
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "
                                 +ctid+", "+claimid+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -280,7 +282,7 @@ public class ClaimController {
                 result = mySQL.getDbCon().query(
                         "INSERT INTO OKBCDB.Events(Eventid, Label, Location, PropertyId)" +
                                 "VALUES ("+eventid+", " +label+", "+location+", "+propertyid+");");
-                ret = convertResultSetIntoJSON(result);
+                ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
