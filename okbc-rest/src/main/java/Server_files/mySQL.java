@@ -17,6 +17,7 @@ public class mySQL {
         String driver = "com.mysql.jdbc.Driver";
         String userName = "cstein1";
         String password = "95_curati_R/O_78";
+
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection) DriverManager.getConnection(url + dbName, userName, password);

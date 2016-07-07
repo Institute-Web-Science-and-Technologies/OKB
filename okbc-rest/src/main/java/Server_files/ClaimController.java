@@ -10,6 +10,7 @@ import static spark.Spark.put;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
 
@@ -271,22 +272,30 @@ public class ClaimController {
         });
 
         post("/addEvent", (req, res) -> {
-            String eventid = req.params(":eventid");
+            String evid = req.params(":eventid");
             String label = req.params(":label");
             String location = req.params(":location");
-            String propertyid = req.params(":propertyid");
+            String eventid="";
+            if(evid.charAt(0)=='Q') {
+                for (int i = 1; i < evid.length(); i++)
+                    eventid += evid.charAt(i);
+            }
 
-            ResultSet result = null;
-            String ret = "";
-            try {
-                result = mySQL.getDbCon().query(
-                        "INSERT INTO OKBCDB.Events(Eventid, Label, Location, PropertyId)" +
-                                "VALUES ("+eventid+", " +label+", "+location+", "+propertyid+");");
-                ret = ResultSetoutput(result);
-            } catch (Exception e) {
+            System.out.println("Test");
+            String query = "INSERT INTO OKBCDB.events(eventid, label, location)" +
+                    "VALUES (?,?,?);";
+
+            try{
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(query);
+                ps.setString(1, eventid);
+                ps.setString(2, label);
+                ps.setString(3, location);
+                ps.executeUpdate();
+            }catch (Exception e){
                 e.printStackTrace();
             }
-            return ret;
+
+            return "finished";
         });
     }
 
