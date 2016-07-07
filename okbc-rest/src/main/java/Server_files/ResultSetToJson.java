@@ -16,6 +16,7 @@ import static WikiDataItem.Rank.Normal;
 /**
  * Created by wkoop on 27.06.2016.
  */
+
 public class ResultSetToJson {
 
     public static String ResultSetoutput(ResultSet rs) {
