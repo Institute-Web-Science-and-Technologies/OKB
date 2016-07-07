@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>POST test</title>
+
+        <meta charset="utf8">
+        <meta name="author" content="Alex Baier">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+
+
+        <script>
+            var apiurl = 'http://localhost:4567/addEvents';
+            function executeSamplePost() {
+                var curatedClaim = {
+                    'eventId' : 'Q2532',
+                    'user': 'null',
+                    'propertyId': 'P2630',
+                    'propertyName': 'cost of damage',
+                    'value': '123',
+                    'multiClaimType': 'conflict',
+                    'qualifiers': [],
+                    'source': {
+                        'url': 'example.org',
+                        'reliabilityRating': '0.8',
+                        'neutralityRating': '0.9',
+                        'publicationDate': '2015-02-01',
+                        'retrievalDate': '2016-06-28',
+                        'authors': ['Peter', 'Paul']
+
+                    }
+                };
+                $.ajax({
+                    'type': 'POST',
+                    'url': apiurl,
+                    'data': curatedClaim,
+                    'success': function(data) {console.log(data);}
+                });
+            }
+        </script>
+
+        
+    </head>
+    <body>
+        <button onclick="executeSamplePost();">Send post request</html>
+        <div id="result"></div>
+    </body>
+</html>
