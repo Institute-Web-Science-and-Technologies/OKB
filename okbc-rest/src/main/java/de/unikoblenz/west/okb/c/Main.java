@@ -4,6 +4,8 @@ import Server_files.ClaimController;
 import Server_files.mySQL;
 import java.sql.SQLException;
 
+import static Server_files.ClaimController.enableCORS;
+
 
 public class Main {
 
@@ -16,6 +18,7 @@ public class Main {
 
         mySQL.getDbCon();
         new ClaimController();
+        enableCORS("*","*","*");
 
 
 

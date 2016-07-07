@@ -2,10 +2,7 @@ package Server_files;
 
 import static Server_files.ResultSetToJson.ResultSetoutput;
 import static Server_files.ResultSetToJson.ResultSetoutput;
-
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.put;
+import static spark.Spark.*;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,6 +12,31 @@ import java.sql.ResultSet;
 import java.util.Set;
 
 public class ClaimController {
+
+    public static void enableCORS(final String origin, final String methods, final String headers){
+        options("/*", (req, res)->{
+
+            String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+            String accessControlRequestMethod = req.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+
+        });
+
+        before((req, res)->{
+            res.header("Access-Control-Allow-Origin", origin);
+            res.header("Access-Control-Request-Method", methods);
+            res.header("Access-Control-Allow-Headers", headers);
+            // Note: this may or may not be necessary in your particular application
+            res.type("application/json");
+        });
+    }
 
     private String sqlgetrequest =
             "SELECT " +
