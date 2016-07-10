@@ -13,13 +13,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class App {
+public class ParseJson {
 
     public static void main(String[] args) {
         
     }
 
-    public void run(String data) {
+    public void parse(String data) {
       ObjectMapper mapper = new ObjectMapper();
 
       try {
@@ -30,65 +30,66 @@ public class App {
           JsonParser jp = factory.createJsonParser(data);
           JsonNode actualObj = mapper.readTree(jp);
          // System.out.println(actualObj);
-          events ev = new events();
+          Events ev = new Events();
          
           ev.eventID =  Integer.parseInt((actualObj.get("eventid").asText()));
           ev.categories = actualObj.get("categories").asText();
           ev.label = actualObj.get("label").asText();
           ev.location = actualObj.get("location").asText();
           ev.save();
-          statements st = new statements();
+          Statements st = new Statements();
           
           
           JsonNode stmt = actualObj.get("statements");
-          if (stmt.isArray()) {
-              // If this node an Arrray?
-          }
+
 
           for (JsonNode node : stmt) {
               Integer pid = Integer.parseInt((node.path("propertyid").asText()));
               String label = node.path("label").asText();
               System.out.println("propertyid : " + pid);
               System.out.println("label : " + label);
-              st.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+              st.id=node.path("statementid").intValue();
 
               st.label=label;
               st.propertyId=pid;
               st.save();
               
               JsonNode claims = node.get("claims");
-              claims cl = new claims();
+              Claims cl = new Claims();
               for (JsonNode node1 : claims) {
                 String snaktype = node1.path("snaktype").asText();
                 String qualifier = node1.path("qualifier").asText();
                 String value = node1.path("value").asText();
-
-                cl.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+                int claimid = node1.path("claimid").intValue();
+                int userid = node1.path("userid").intValue();
+                
+                cl.id=claimid;
                 cl.snakType=snaktype;
                 cl.value = value;
                 cl.qualifiers=qualifier;
+                cl.userid=userid;
                 cl.save();
                 
                 JsonNode references = node1.get("sources");
-                references ref = new references();
+                References ref = new References();
                 for (JsonNode node2 : references) {
                   String url = node2.path("url").asText();
                   String publicationdate = node2.path("publicationdate").asText();
                   String retrievaldate = node2.path("retrievaldate").asText();
                   String authors = node2.path("authors").asText();
-                  float trustrating = Float.valueOf((node2.path("trustrating").asText()));
+                  float trustrating = node2.path("trustrating").floatValue();
                   String articleType = node2.path("article-type").asText();
                   String title = node2.path("title").asText();
-                  float neutralityRating = Float.valueOf((node2.path("neutralityRating").asText()));
+                  float neutralityRating = node2.path("neutralityRating").floatValue();
                   
-                  sourceFact sf =new sourceFact();
+                  SourceFact sf =new SourceFact();
                   sf.Source = url;
                   sf.fact = cl.value;
                   sf.statementId = st.id;
                   sf.save();
 
 
-                  ref.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+                  ref.id=node2.path("referenceid").intValue();
                   ref.url=url;
                   ref.publicationDate=publicationdate;
                   ref.retrievalDate=retrievaldate;

@@ -11,11 +11,11 @@ import com.mysql.jdbc.Driver;
  * @desc A singleton database access class for MySQL
  * @author Ramindu
  */
-public final class mySql {
+public final class MySql {
     public Connection conn;
     private Statement statement;
-    public static mySql db;
-    public mySql() {
+    public static MySql db;
+    public MySql() {
         String url= "jdbc:mysql://localhost:3306/";
         String dbName = "okbr";
         String driver = "com.mysql.jdbc.Driver";
@@ -33,9 +33,9 @@ public final class mySql {
      *
      * @return MysqlConnect Database connection object
      */
-    public static synchronized mySql getDbCon() {
+    public static synchronized MySql getDbCon() {
         if ( db == null ) {
-            db = new mySql();
+            db = new MySql();
         }
         return db;
  

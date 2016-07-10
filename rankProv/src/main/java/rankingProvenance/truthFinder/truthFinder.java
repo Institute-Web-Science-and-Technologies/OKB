@@ -22,7 +22,7 @@ import cern.jet.math.Functions;
  * @author Mujji
  * Takes a set of facts provided by set of websites and computes trustworthiness 
  */
-public class truthFinder {
+public class TruthFinder {
     SparseDoubleMatrix2D A, B;
     double initTrust = 0.9;
     double dampeningFactor = 0.3;
@@ -31,7 +31,7 @@ public class truthFinder {
     String bMatrix = "bmatrix";
     String trustVectorObject = "trustVectorObject";
 
-    public truthFinder(double value[][]) {
+    public TruthFinder(double value[][]) {
         B = new SparseDoubleMatrix2D(value);// this will change after
                                             // implication
         A = new SparseDoubleMatrix2D(B.columns(), B.rows());
@@ -207,7 +207,7 @@ public class truthFinder {
                 { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
                 { 0, 1.0, 0, 0, 0 } };
 
-        truthFinder calc = new truthFinder(value);
+        TruthFinder calc = new TruthFinder(value);
         boolean result;
         calc.calculateConfidenceVectors();
         while (!calc.shouldStop(0.99)) {

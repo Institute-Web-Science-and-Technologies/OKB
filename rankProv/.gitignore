@@ -1,1 +1,6 @@
 .settings
+.classpath
+amatrix
+bmatrix
+trustVectorObject
+sport-event.json
