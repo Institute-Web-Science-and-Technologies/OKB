@@ -24,9 +24,7 @@ public class ClaimController {
             if (accessControlRequestMethod != null) {
                 res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
             }
-
             return "OK";
-
         });
 
         before((req, res)->{
@@ -78,11 +76,13 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
-                        sqlgetrequest +
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                        sqlgetrequest+
                                 "GROUP BY events.eventid  \n" +
                                 "ORDER BY events.eventid ASC;\n");
-                ret = ResultSetoutput(result);
+                ps.execute();
+                result = ps.getResultSet();
+                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -100,37 +100,17 @@ public class ClaimController {
             String ret = "";
             //if(ret=="") return sqlgetrequest;
             try {
-                result = mySQL.getDbCon().query(
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
                         sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
                                 "GROUP BY events.eventid \n" +
                                 "ORDER BY events.eventid ASC\n;");
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return ret;
-        });
-
-        //returns all events for one specific event
-        //is called by: localhost.com:4567/getEventById?id=321
-        // the last number is the id to be searched for.
-        // If the id doesn't exist you'll get: []
-        get("/getEventById2", (req, res) -> {
-            Set<String> a = req.queryParams();
-            String id = req.queryParams("id");
-            ResultSet result = null;
-            String ret = "";
-            //if(ret=="") return sqlgetrequest;
-            try {
-                result = mySQL.getDbCon().query(
-                        sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
-                                "GROUP BY events.eventid \n" +
-                                "ORDER BY events.eventid ASC\n;");
-                ret = ResultSetoutput(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result.toString();
         });
 
         //returns all events with the given label
@@ -141,8 +121,10 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
                         sqlgetrequest + "AND events.label = \"" + label + "\";");
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -158,8 +140,11 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
-                        sqlgetrequest + "AND categories.category = \"" + category + "\"\n" + "LIMIT 10" + ";");
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                        sqlgetrequest + "AND categories.category = \""
+                                + category + "\"\n" + "LIMIT 10" + ";");
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -174,8 +159,10 @@ public class ClaimController {
             String ret = "";
 
             try {
-                result = mySQL.getDbCon().query(
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
                         sqlgetrequest + "ORDER BY reference.publicationdate DESC\n" + "LIMIT 10" + ";");
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -201,11 +188,14 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                PreparedStatement ps = mySQL.db.conn.prepareStatement(
                         "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
                                 "authors, articletype, trustrating, neutralityrating, claimid)\n" +
-                        "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
+                                "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
                                 "', "+authors+", "+articletype+", "+trustrating+", "+neutralityrating+", "+claimid+");");
+                ps.execute();
+                result = ps.getResultSet();
+
                 ret = ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
