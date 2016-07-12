@@ -7,6 +7,7 @@ import static spark.Spark.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
@@ -308,6 +309,20 @@ public class ClaimController {
             }
 
             return "finished";
+        });
+
+        get("/utility/getEventsByCategory", (req, res) -> {
+            WikidataSparqlAccessor acc = new WikidataSparqlAccessor();
+            JSONObject obj;
+            try {
+                obj = acc.getItemsByInstanceOfId(req.queryParams("id"));
+            } catch (IllegalArgumentException e) {
+                obj =  new JSONObject("{ \"error\": \"id is not valid\" }");
+            } catch (IOException e) {
+                obj = new JSONObject("{ \"error\": \"connection to SPARQL service lost\" }");
+            }
+            res.type("application/json");
+            return obj.toString();
         });
     }
 
