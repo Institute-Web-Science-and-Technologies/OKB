@@ -1,17 +1,16 @@
-package Server_files;
+package de.unikoblenz.west.okb.c.Item_Handling;
 
 import java.sql.*;
-import com.mysql.jdbc.Driver;
 
 /**
  * Created by wkoop on 02.06.2016.
  */
-public class mySQL {
-    public static mySQL db;
+public class MySQL_connector {
+    public static MySQL_connector db;
     public Connection conn;
     private Statement statement;
 
-    public mySQL() {
+    public MySQL_connector() {
         String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
@@ -26,9 +25,9 @@ public class mySQL {
         }
     }
 
-    public static synchronized mySQL getDbCon() {
+    public static synchronized MySQL_connector getDbCon() {
         if (db == null) {
-            db = new mySQL();
+            db = new MySQL_connector();
         }
         return db;
     }

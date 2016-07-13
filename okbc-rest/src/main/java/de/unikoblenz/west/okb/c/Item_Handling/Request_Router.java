@@ -1,10 +1,7 @@
-package Server_files;
+package de.unikoblenz.west.okb.c.Item_Handling;
 
-import static Server_files.ResultSetToJson.ResultSetoutput;
-import static Server_files.ResultSetToJson.ResultSetoutput;
 import static spark.Spark.*;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -12,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
 
-public class ClaimController {
+public class Request_Router {
 
     public static void enableCORS(final String origin, final String methods, final String headers){
         options("/*", (req, res)->{
@@ -61,7 +58,7 @@ public class ClaimController {
             "LEFT JOIN OKBCDB.qualifier ON qualifier.claimid = claim.clid\n" +
             "LEFT JOIN OKBCDB.authors ON authors.refid = reference.refid\n";
 
-    public ClaimController() {
+    public Request_Router() {
         get("/test", (req, res) -> {
             Set<String> a = req.queryParams();
             String ret ="";
@@ -77,13 +74,13 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         sqlgetrequest+
                                 "GROUP BY events.eventid  \n" +
                                 "ORDER BY events.eventid ASC;\n");
                 ps.execute();
                 result = ps.getResultSet();
-                 ret = ResultSetoutput(result);
+                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -101,13 +98,13 @@ public class ClaimController {
             String ret = "";
             //if(ret=="") return sqlgetrequest;
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
                                 "GROUP BY events.eventid \n" +
                                 "ORDER BY events.eventid ASC\n;");
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -122,11 +119,11 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         sqlgetrequest + "AND events.label = \"" + label + "\";");
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -141,12 +138,12 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         sqlgetrequest + "AND categories.category = \""
                                 + category + "\"\n" + "LIMIT 10" + ";");
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -160,18 +157,18 @@ public class ClaimController {
             String ret = "";
 
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         sqlgetrequest + "ORDER BY reference.publicationdate DESC\n" + "LIMIT 10" + ";");
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return ret;
         });
 
-        //insert Reference item to mySQL Database
+        //insert Reference item to MySQL_connector Database
         //can be calles with: localhost.com:4567/addReference?refid=6&url=google.com&title=Googel&...
         post("/addReference", (req, res) -> {
             Set<String> reqest = req.queryParams();
@@ -189,7 +186,7 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
                         "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
                                 "authors, articletype, trustrating, neutralityrating, claimid)\n" +
                                 "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
@@ -197,7 +194,7 @@ public class ClaimController {
                 ps.execute();
                 result = ps.getResultSet();
 
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -213,10 +210,10 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                result = MySQL_connector.getDbCon().query(
                         "INSERT INTO OKBCDB.Qualifier(PropertyId, Label,  Datatype, Qvalue\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "+qvalue+");");
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -235,11 +232,11 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                result = MySQL_connector.getDbCon().query(
                         "INSERT INTO OKBCDB.Claim (Clid, Clvalue, Snaktype, Userid, Ranking, Refid, Qualifierid\n)" +
                                 "VALUES ("+clid+", "+clvalue+", "+snaktype+", "+userid+", "+ranking+
                                 ", "+refid+", "+qualifierid+");");
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -253,10 +250,10 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                result = MySQL_connector.getDbCon().query(
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+ctid+", "+category+");");
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -273,11 +270,11 @@ public class ClaimController {
             ResultSet result = null;
             String ret = "";
             try {
-                result = mySQL.getDbCon().query(
+                result = MySQL_connector.getDbCon().query(
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "
                                 +ctid+", "+claimid+");");
-                ret = ResultSetoutput(result);
+                ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -299,7 +296,7 @@ public class ClaimController {
                     "VALUES (?,?,?);";
 
             try{
-                PreparedStatement ps = mySQL.db.conn.prepareStatement(query);
+                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(query);
                 ps.setString(1, eventid);
                 ps.setString(2, label);
                 ps.setString(3, location);

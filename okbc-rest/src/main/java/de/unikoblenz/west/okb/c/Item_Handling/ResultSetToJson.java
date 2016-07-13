@@ -1,4 +1,4 @@
-package Server_files;
+package de.unikoblenz.west.okb.c.Item_Handling;
 
 import WikiDataItem.*;
 import de.unikoblenz.west.okb.c.WikidataItemReader;
@@ -382,7 +382,7 @@ public class ResultSetToJson {
         return ref;
     }
 
-    //parses result from mySQL DB query to Json
+    //parses result from MySQL_connector DB query to Json
     public static String ResultSetoutput2(ResultSet rs) {
         String ret="";
         int idx=0;
