@@ -1,10 +1,10 @@
 package de.unikoblenz.west.okb.c;
 
-import Server_files.ClaimController;
-import Server_files.mySQL;
+import de.unikoblenz.west.okb.c.Item_Handling.Request_Router;
+import de.unikoblenz.west.okb.c.Item_Handling.MySQL_connector;
 import java.sql.SQLException;
 
-import static Server_files.ClaimController.enableCORS;
+import static de.unikoblenz.west.okb.c.Item_Handling.Request_Router.enableCORS;
 
 
 public class Main {
@@ -16,8 +16,8 @@ public class Main {
         //System.out.println(output);
         //System.out.println(e.getClaims().toString());
 
-        mySQL.getDbCon();
-        new ClaimController();
+        MySQL_connector.getDbCon();
+        new Request_Router();
         enableCORS("*","*","*");
 
 
