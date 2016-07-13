@@ -126,6 +126,7 @@ function createWikidataRequest(params, callbackFunc) {
     return encodeURI(request);
 }
 
+// TODO: doc
 function executeEventsByInstanceOfRequest(instanceId, callbackFunc) {
     console.log("execute events by instanceOf request");
     var url = OKB_EVENT_BASE_URL + "/utility/getEventsByCategory";
@@ -133,7 +134,8 @@ function executeEventsByInstanceOfRequest(instanceId, callbackFunc) {
 }
 
 // TODO: doc
-function createOkbEventByIdRequest(eventId, callbackFunc) {
-    var request = OKB_EVENT_BASE_URL + '/getEventById?id=' + eventId;
-    return request;
+function executeEventByIdRequest(eventId, callbackFunc) {
+    console.log("execute get event by id request");
+    var url = OKB_EVENT_BASE_URL + "/getEventById";
+    $.get(url, {'id': eventId}, callbackFunc, 'json');
 }

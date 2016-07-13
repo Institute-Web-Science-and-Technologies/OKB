@@ -53,7 +53,14 @@ button:hover {
     margin-top: 10%;
     display: flex;
 }
+
 #results ul {
     overflow-y: scroll;
     height: 50vh;
+}
+
+#results li {
+    cursor: pointer;
+    color: rgb(0, 0, 255);
+    text-decoration: underline;
 }
