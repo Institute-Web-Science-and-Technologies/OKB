@@ -17,8 +17,9 @@ function init() {
         window.alert(err);
         return;
     }
+
     initCurationForm();
+
     setTimeout(function () {printItem(currentEvent, "item");}, 2000);
-    
 }
 

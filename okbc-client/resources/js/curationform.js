@@ -349,7 +349,12 @@ function processOverviewForm() {
     // Push a copy of curatedData into curatedClaims.
     curatedClaims.push(jQuery.extend(true, {}, curatingData));
     // Submit curation data to server.
-    $.post(CURATING_DATA_POST_URL, curatingData, function(data){console.log('POST success');});
+    $.ajax({
+        'type': 'POST',
+        'url': CURATING_DATA_POST_URL,
+        'data': curatingData,
+        'success': function(data) {console.log('POST success');}
+    });
     resetCurationForm();
 }
 

@@ -20,6 +20,7 @@
     <script src="resources/js/idlabelstore.js"></script>
     <script src="resources/js/wditemmapper.js"></script>
     <script src="resources/js/wditemprinter.js"></script>
+    <script src="resources/js/config.js"></script>
 </head>
 <body>
     <header>
@@ -72,6 +73,16 @@
             {{^search}}
                 No results.
             {{/search}}
+            </ul>
+        </script>
+        <script id="categorySelectionResultTemplate" type="x-tmpl-mustache">
+            <ul>
+            {{#events}}
+                <li onclick="executeItemRequest('{{id}}');">{{label}} ({{id}})</li>
+            {{/events}}
+            {{^events}}
+                No events found.
+            {{/events}}
             </ul>
         </script>
     </main>

@@ -127,18 +127,9 @@ function createWikidataRequest(params, callbackFunc) {
 }
 
 function executeEventsByInstanceOfRequest(instanceId, callbackFunc) {
-    var sparqlEndpoint = 'https://query.wikidata.org/sparql';
-    var query = `
-        SELECT ?item ?itemLabel
-        WHERE
-        {
-            ?item wdt:P31 wd:INSTANCEID .
-            ?item wdt:P585 ?date .
-            SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
-        } ORDER BY DESC(?date)
-    `.replace('INSTANCEID', instanceId);
-    
-    $.get(sparqlEndpoint, {'query': query, 'format': 'json'}, callbackFunc, 'text');
+    console.log("execute events by instanceOf request");
+    var url = OKB_EVENT_BASE_URL + "/utility/getEventsByCategory";
+    $.get(url, {'id': instanceId}, callbackFunc, 'json');
 }
 
 // TODO: doc

@@ -57,8 +57,6 @@ var PROPERTIES = {
     // TODO: add further relevant properties to the dictionary.
 };
 
-// STUBS
-// TODO: implement functionality
 function getInputTypeForProperty(propertyName) {
     if (PROPERTIES[propertyName].type == DATATYPE.QUANTITY) {
         return 'number';
@@ -77,8 +75,10 @@ function isValidProperty(propertyName) {
 // TODO: doc
 // TODO: add check for url, item, coordinate, ... .
 function isValidValue(value, propertyName) {
+    // Check if value is an integer.
     if (PROPERTIES[propertyName].type == DATATYPE.QUANTITY) {
         return !isNaN(value);
+    // Check if value is a date.
     } else if (PROPERTIES[propertyName].type == DATATYPE.TIME) {
         // Check for date of form YYYY-MM-DD.
         // TODO: Add other options for date and time formats.
