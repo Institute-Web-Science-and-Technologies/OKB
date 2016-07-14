@@ -88,10 +88,10 @@ public class References {
       return false;
   }
   
-  public List<Map<String,String>> getEvent(int id) throws SQLException
+  public List<Map<String,String>> getReference(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from references WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from `references` WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

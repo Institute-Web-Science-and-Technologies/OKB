@@ -36,7 +36,11 @@ public class ParseJson {
           ev.categories = actualObj.get("categories").asText();
           ev.label = actualObj.get("label").asText();
           ev.location = actualObj.get("location").asText();
-          ev.save();
+          List<Map<String,String>> evExist = ev.getEvent(ev.eventID);
+          if(evExist.size()<1)
+                ev.save();
+     
+
           Statements st = new Statements();
           
           
@@ -48,11 +52,13 @@ public class ParseJson {
               String label = node.path("label").asText();
               System.out.println("propertyid : " + pid);
               System.out.println("label : " + label);
-              st.id=node.path("statementid").intValue();
+              st.id=Integer.parseInt((node.get("statementid").asText()));
 
               st.label=label;
               st.propertyId=pid;
-              st.save();
+              List<Map<String,String>> stmtExist = st.getStatement(st.id);
+              if(stmtExist.size()<1)
+                st.save();
               
               JsonNode claims = node.get("claims");
               Claims cl = new Claims();
@@ -60,15 +66,26 @@ public class ParseJson {
                 String snaktype = node1.path("snaktype").asText();
                 String qualifier = node1.path("qualifier").asText();
                 String value = node1.path("value").asText();
-                int claimid = node1.path("claimid").intValue();
-                int userid = node1.path("userid").intValue();
+                int claimid = Integer.parseInt((node1.get("claimid").asText()));
+                int userid = Integer.parseInt((node1.get("userid").asText()));
                 
                 cl.id=claimid;
                 cl.snakType=snaktype;
                 cl.value = value;
                 cl.qualifiers=qualifier;
                 cl.userid=userid;
-                cl.save();
+                List<Map<String,String>> claimExist = cl.getClaims(cl.id);
+                if(claimExist.size()<1)
+                {
+                  cl.save();
+                  EventStatementClaim esc= new EventStatementClaim();
+                  esc.eventId = ev.eventID;
+                  esc.statementId = st.id;
+                  esc.claimId = cl.id;
+                  esc.save();
+                }
+                
+                
                 
                 JsonNode references = node1.get("sources");
                 References ref = new References();
@@ -77,10 +94,11 @@ public class ParseJson {
                   String publicationdate = node2.path("publicationdate").asText();
                   String retrievaldate = node2.path("retrievaldate").asText();
                   String authors = node2.path("authors").asText();
-                  float trustrating = node2.path("trustrating").floatValue();
+                 // float trustrating = node2.path("trustrating").floatValue();
+                  float trustrating =  Float.parseFloat((node2.get("trustrating").asText()));
                   String articleType = node2.path("article-type").asText();
                   String title = node2.path("title").asText();
-                  float neutralityRating = node2.path("neutralityRating").floatValue();
+                  float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
                   
                   SourceFact sf =new SourceFact();
                   sf.Source = url;
@@ -89,7 +107,7 @@ public class ParseJson {
                   sf.save();
 
 
-                  ref.id=node2.path("referenceid").intValue();
+                  ref.id=Integer.parseInt((node2.get("referenceid").asText()));
                   ref.url=url;
                   ref.publicationDate=publicationdate;
                   ref.retrievalDate=retrievaldate;
@@ -98,7 +116,9 @@ public class ParseJson {
                   ref.articleType=articleType;
                   ref.title = title;
                   ref.neutralityRating = neutralityRating;
-                  ref.save();
+                  List<Map<String,String>> refExist = ref.getReference(ref.id);
+                  if(refExist.size()<1)
+                    ref.save();
        
               }
                 

@@ -1,4 +1,4 @@
-package rankingProvenance.truthFinder;
+package algos;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -8,50 +8,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Statements {
-  Integer id;
-  Integer propertyId;
-  String label;
+public class EventStatementClaim {
   
-  public Integer getId() {
-    return id;
+  Integer eventId, statementId, claimId;
+  
+  
+  
+  public Integer getEventId() {
+    return eventId;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setEventId(Integer eventId) {
+    this.eventId = eventId;
   }
 
-  public Integer getPropertyId() {
-    return propertyId;
+  public Integer getStatementId() {
+    return statementId;
   }
 
-  public void setPropertyId(Integer propertyId) {
-    this.propertyId = propertyId;
+  public void setStatementId(Integer statementId) {
+    this.statementId = statementId;
   }
 
-  public String getLabel() {
-    return label;
+  public Integer getClaimId() {
+    return claimId;
   }
 
-  public void setLabel(String label) {
-    this.label = label;
+  public void setClaimId(Integer claimId) {
+    this.claimId = claimId;
   }
 
   public boolean save() throws SQLException
   {
-   
-    
-    int i =  MySql.getDbCon().insert("INSERT INTO statements (`id`,`propertyId`, `label`) VALUES ("+this.id+",'"+this.propertyId+"','"+this.label+"') ");
+  
+    int i =  MySql.getDbCon().insert("INSERT INTO eventStatementClaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getStatement(int id) throws SQLException
+  public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from statements WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE eventId="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -67,8 +67,5 @@ public class Statements {
         data.add(row);
     }
     return data;
-    
   }
-  
-  
 }
