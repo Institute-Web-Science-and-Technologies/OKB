@@ -1,6 +1,5 @@
-package WikiDataItem;
+package de.unikoblenz.west.okb.c.WikiDataItem;
 
-import java.util.Enumeration;
 import java.util.List;
 
 /**

@@ -1,19 +1,16 @@
 package de.unikoblenz.west.okb.c.Item_Handling;
 
+import static de.unikoblenz.west.okb.c.Item_Handling.PrepareStatements.*;
 import static spark.Spark.*;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
 
-public class Request_Router {
+public class RequestRouter {
 
     public static void enableCORS(final String origin, final String methods, final String headers){
         options("/*", (req, res)->{
-
             String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
                 res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
@@ -34,50 +31,27 @@ public class Request_Router {
         });
     }
 
-    private String sqlgetrequest =
-            "SELECT " +
-                "GROUP_CONCAT(DISTINCT \"Q\", events.eventid) as 'eventid', \n" +
-                "GROUP_CONCAT(DISTINCT events.label) as 'label', \n" +
-                "GROUP_CONCAT(DISTINCT events.location) as 'location', \n" +
-                "GROUP_CONCAT(DISTINCT categories.category) as 'category', \n" +
-                "GROUP_CONCAT(DISTINCT \"propertyid: P\", okbstatement.propertyid,\", label: \", okbstatement.label, \", datatype: \", " +
-                    "okbstatement.datatype) as 'statements', \n" +
-                "GROUP_CONCAT(DISTINCT \"snaktype: \", claim.snaktype,\", value: \",claim.clvalue,\", ranking: \", " +
-                    "claim.ranking) as 'claims', \n" +
-                "GROUP_CONCAT(DISTINCT \"propertyid: \", qualifier.propertyid,\", label: \", qualifier.label, \", datatype: \", " +
-                    "qualifier.datatype,\", value: \", qualifier.qvalue) as 'qualifiers', \n" +
-                "GROUP_CONCAT(DISTINCT \"url: \", reference.url,\", publicationdate: \", reference.publicationdate,\", retrievaldate: \", \n" +
-                    "reference.retrievaldate,\", trustrating: \", reference.trustrating,\", articletype: \", reference.articletype,\", title: \", \n" +
-                    "reference.title,\", neutralityrating: \", reference.neutralityrating) as 'sources: ', \n" +
-            "GROUP_CONCAT(DISTINCT authors.author) as 'authors: ' \n" +
-            "from OKBCDB.events\n" +
-            "LEFT JOIN OKBCDB.categories ON events.eventid = categories.eventid\n" +
-            "LEFT JOIN OKBCDB.okbstatement ON events.eventid = okbstatement.eventid\n" +
-            "LEFT JOIN OKBCDB.claim ON okbstatement.propertyid = claim.propertyid\n" +
-            "LEFT JOIN OKBCDB.reference ON reference.claimid = claim.clid\n" +
-            "LEFT JOIN OKBCDB.qualifier ON qualifier.claimid = claim.clid\n" +
-            "LEFT JOIN OKBCDB.authors ON authors.refid = reference.refid\n";
-
-    public Request_Router() {
+    public RequestRouter() {
         get("/test", (req, res) -> {
             Set<String> a = req.queryParams();
             String ret ="";
             for(String i : a)
                 ret +="("+i+": "+req.queryParams(i)+") ";
-
             return ret;
         });
+
 
         //returns all events for all events in jsonformat
         //is called by: localhost.com:4567/getEvents
         get("/getEvents", (req, res) -> {
+            Set<String> a = req.queryParams();
             ResultSet result = null;
             String ret = "";
+
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
-                        sqlgetrequest+
-                                "GROUP BY events.eventid  \n" +
-                                "ORDER BY events.eventid ASC;\n");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps =
+                        preparedStatementgetEvents();
                 ps.execute();
                 result = ps.getResultSet();
                  ret = ResultSetToJson.ResultSetoutput(result);
@@ -92,61 +66,65 @@ public class Request_Router {
         // the last number is the id to be searched for.
         // If the id doesn't exist you'll get: []
         get("/getEventById", (req, res) -> {
+
             Set<String> a = req.queryParams();
             String id = req.queryParams("id");
-            ResultSet result = null;
-            String ret = "";
-            //if(ret=="") return sqlgetrequest;
+            if (id.charAt(0) == 'Q') id = id.substring(1);
+
+            ResultSet result = null; String ret = "";
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
-                        sqlgetrequest + "WHERE events.eventid = " + id + " \n" +
-                                "GROUP BY events.eventid \n" +
-                                "ORDER BY events.eventid ASC\n;");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps =
+                        preparedStatementgetEventById(id);
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetToJson.ResultSetoutput(result);
+                return ResultSetToJson.ResultSetoutput(result);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return ret;
+
+            return "No Event with ID: \"" + id + "\"!";
         });
 
         //returns all events with the given label
-        //is called by: localhost.com:4567/getEventsByLabel?label=de
+        //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
         get("/getEventsByLabel", (req, res) -> {
             Set<String> a = req.queryParams();
             String label = req.queryParams("label");
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
-                        sqlgetrequest + "AND events.label = \"" + label + "\";");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = preparedStatementgetEventsByLabel(label);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if(ret=="")
+                return "No Event with label+\""+label+"\"!";
             return ret;
         });
 
         //returns all events with the given category
-        //is called by: localhost.com:4567/getEventsByCategory?category=sport
+        //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
         get("/getEventsByCategory", (req, res) -> {
             Set<String> a = req.queryParams();
             String category = req.queryParams("category");
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
-                        sqlgetrequest + "AND categories.category = \""
-                                + category + "\"\n" + "LIMIT 10" + ";");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = preparedStatementgetEventsByCategory(category);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            if (ret=="") return "No Event with category: \""+category+"\"!";
             return ret;
         });
 
@@ -157,8 +135,8 @@ public class Request_Router {
             String ret = "";
 
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
-                        sqlgetrequest + "ORDER BY reference.publicationdate DESC\n" + "LIMIT 10" + ";");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = preparedStatementgetLatestEditedEvents();
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -168,10 +146,14 @@ public class Request_Router {
             return ret;
         });
 
-        //insert Reference item to MySQL_connector Database
+        //insert Reference item to MySQLconnector Database
         //can be calles with: localhost.com:4567/addReference?refid=6&url=google.com&title=Googel&...
         post("/addReference", (req, res) -> {
             Set<String> reqest = req.queryParams();
+
+
+            ResultSet result = null;
+            String ret = "";
             String refid = req.queryParams("refid");
             String url = req.queryParams("url");
             String title = req.queryParams("title");
@@ -182,11 +164,8 @@ public class Request_Router {
             String trustrating = req.queryParams("trustrating");
             String neutralityrating = req.queryParams("neutralityrating");
             String claimid = req.queryParams("claimid");
-
-            ResultSet result = null;
-            String ret = "";
             try {
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(
+                PreparedStatement ps = MySQLconnector.db.conn.prepareStatement(
                         "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
                                 "authors, articletype, trustrating, neutralityrating, claimid)\n" +
                                 "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
@@ -210,7 +189,7 @@ public class Request_Router {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQL_connector.getDbCon().query(
+                result = MySQLconnector.getDbCon().query(
                         "INSERT INTO OKBCDB.Qualifier(PropertyId, Label,  Datatype, Qvalue\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "+qvalue+");");
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -232,7 +211,7 @@ public class Request_Router {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQL_connector.getDbCon().query(
+                result = MySQLconnector.getDbCon().query(
                         "INSERT INTO OKBCDB.Claim (Clid, Clvalue, Snaktype, Userid, Ranking, Refid, Qualifierid\n)" +
                                 "VALUES ("+clid+", "+clvalue+", "+snaktype+", "+userid+", "+ranking+
                                 ", "+refid+", "+qualifierid+");");
@@ -250,7 +229,7 @@ public class Request_Router {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQL_connector.getDbCon().query(
+                result = MySQLconnector.getDbCon().query(
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+ctid+", "+category+");");
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -270,7 +249,7 @@ public class Request_Router {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQL_connector.getDbCon().query(
+                result = MySQLconnector.getDbCon().query(
                         "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
                                 "VALUES ("+propertyid+", "+label+", "+datatype+", "
                                 +ctid+", "+claimid+");");
@@ -296,7 +275,7 @@ public class Request_Router {
                     "VALUES (?,?,?);";
 
             try{
-                PreparedStatement ps = MySQL_connector.db.conn.prepareStatement(query);
+                PreparedStatement ps = MySQLconnector.db.conn.prepareStatement(query);
                 ps.setString(1, eventid);
                 ps.setString(2, label);
                 ps.setString(3, location);
@@ -307,7 +286,7 @@ public class Request_Router {
 
             return "finished";
         });
-
+/*
         get("/utility/getEventsByCategory", (req, res) -> {
             WikidataSparqlAccessor acc = new WikidataSparqlAccessor();
             JSONObject obj;
@@ -321,6 +300,8 @@ public class Request_Router {
             res.type("application/json");
             return obj.toString();
         });
+
+    */
     }
 
 }

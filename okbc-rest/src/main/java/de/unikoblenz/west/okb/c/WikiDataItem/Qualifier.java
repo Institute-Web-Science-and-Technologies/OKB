@@ -1,6 +1,4 @@
-package WikiDataItem;
-
-import java.util.Enumeration;
+package de.unikoblenz.west.okb.c.WikiDataItem;
 
 /**
  * Created by wkoop on 13.06.2016.

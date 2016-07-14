@@ -5,12 +5,12 @@ import java.sql.*;
 /**
  * Created by wkoop on 02.06.2016.
  */
-public class MySQL_connector {
-    public static MySQL_connector db;
+public class MySQLconnector {
+    public static MySQLconnector db;
     public Connection conn;
     private Statement statement;
 
-    public MySQL_connector() {
+    public MySQLconnector() {
         String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
@@ -25,9 +25,9 @@ public class MySQL_connector {
         }
     }
 
-    public static synchronized MySQL_connector getDbCon() {
+    public static synchronized MySQLconnector getDbCon() {
         if (db == null) {
-            db = new MySQL_connector();
+            db = new MySQLconnector();
         }
         return db;
     }

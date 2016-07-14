@@ -33,7 +33,7 @@ public class WikidataSparqlAccessor {
      * @throws IOException if the connection to Wikidata SPARQL service failed somehow.
      * @throws IllegalArgumentException if the parameter id is not a valid Wikidata item ID.
      */
-    public JSONObject getItemsByInstanceOfId(String id) throws IOException, IllegalArgumentException {
+    public JSONObject getItemsByInstanceOfId(String id) throws IOException, IllegalArgumentException, org.json.JSONException {
         if (!this.isValidWikidataItemId(id)) {
             throw new IllegalArgumentException(String.format("supplied id=\"%s\" is not a valid Wikidata item ID", id));
         }
@@ -75,12 +75,13 @@ public class WikidataSparqlAccessor {
      * @param response a JSON response of the Wikidata SPARQL service.
      * @return a JSONObject, which contains an array of "events", where each event contains an "id" and a "label".
      */
-    private JSONObject mapItemByInstanceOfResponse(JSONObject response){
+
+    private JSONObject mapItemByInstanceOfResponse(JSONObject response) throws org.json.JSONException{
         JSONArray bindings = response.getJSONObject("results").getJSONArray("bindings");
 
         JSONObject result = new JSONObject();
         result.put("events", new JSONArray());
-
+        /*
         for (Object binding : bindings) {
             JSONObject eventData = (JSONObject) binding;
             String eventId = eventData.getJSONObject("item").getString("value").replace("http://www.wikidata.org/entity/", "");
@@ -90,6 +91,7 @@ public class WikidataSparqlAccessor {
             event.put("label", eventLabel);
             result.append("events", event);
         }
+        */
         return result;
     }
 

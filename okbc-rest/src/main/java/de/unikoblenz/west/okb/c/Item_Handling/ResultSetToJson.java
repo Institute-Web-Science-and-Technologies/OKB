@@ -1,16 +1,11 @@
 package de.unikoblenz.west.okb.c.Item_Handling;
 
-import WikiDataItem.*;
-import de.unikoblenz.west.okb.c.WikidataItemReader;
+import de.unikoblenz.west.okb.c.WikiDataItem.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
-import java.awt.Event;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
-import static WikiDataItem.Rank.Normal;
 
 
 /**
@@ -20,7 +15,7 @@ import static WikiDataItem.Rank.Normal;
 public class ResultSetToJson {
 
     public static String ResultSetoutput(ResultSet rs) {
-        ArrayList<WikiDataItem.Event> event = new ArrayList<WikiDataItem.Event>();
+        ArrayList<de.unikoblenz.west.okb.c.WikiDataItem.Event> event = new ArrayList<de.unikoblenz.west.okb.c.WikiDataItem.Event>();
         String result = "";
         try {
             while (rs.next()) {
@@ -32,7 +27,7 @@ public class ResultSetToJson {
         if(event.size()>1)
             result+="{";
         String separator="";
-        for(WikiDataItem.Event ev : event) {
+        for(de.unikoblenz.west.okb.c.WikiDataItem.Event ev : event) {
             result += separator + ev.toString() + "\n";
             separator=",";
         }
@@ -42,15 +37,15 @@ public class ResultSetToJson {
     }
 
     //parses ResultSet containing Event(s) to Json valid String
-    public static WikiDataItem.Event parseEvents(ResultSet rs){
-        WikiDataItem.Event event = new WikiDataItem.Event();
+    public static de.unikoblenz.west.okb.c.WikiDataItem.Event parseEvents(ResultSet rs){
+        de.unikoblenz.west.okb.c.WikiDataItem.Event event = new de.unikoblenz.west.okb.c.WikiDataItem.Event();
         event.setLabel("null");
         event.setLocation("null");
         ArrayList<String> empty = new ArrayList<String>();
         empty.add("null");
         event.setCategories(empty);
         event.setEventid("null");
-        ArrayList<WikiDataItem.Statement> statements = new ArrayList<WikiDataItem.Statement>();
+        ArrayList<Statement> statements = new ArrayList<Statement>();
         event.setStatements(statements);
         int statementcounter=-1, claimcounter=-1;
         try {
@@ -86,9 +81,9 @@ public class ResultSetToJson {
                 if(name.contains("claim")) {
                     statements.get(statementcounter).getClaims().add(ClaimParser(value));
                     claimcounter++;
-                    ArrayList<WikiDataItem.Qualifier> qualifier = new ArrayList<Qualifier>();
+                    ArrayList<Qualifier> qualifier = new ArrayList<Qualifier>();
                     statements.get(statementcounter).getClaims().get(claimcounter).setQualifier(qualifier);
-                    ArrayList<WikiDataItem.Reference> references = new ArrayList<Reference>();
+                    ArrayList<Reference> references = new ArrayList<Reference>();
                     statements.get(statementcounter).getClaims().get(claimcounter).setReferences(references);
 
                 }
@@ -110,9 +105,9 @@ public class ResultSetToJson {
 
     //input is a string with statement input (propertyid, label and datatype)
     //output is a statement object
-    public static WikiDataItem.Statement StatementParser(String in){
-        WikiDataItem.Statement st = new WikiDataItem.Statement();
-        ArrayList<WikiDataItem.Claim> claims = new ArrayList<WikiDataItem.Claim>();
+    public static Statement StatementParser(String in){
+        Statement st = new Statement();
+        ArrayList<Claim> claims = new ArrayList<Claim>();
         st.setClaims(claims);
         String save="";
 
@@ -171,8 +166,8 @@ public class ResultSetToJson {
         return st;
     }
 
-    public static WikiDataItem.Claim ClaimParser(String in){
-        WikiDataItem.Claim claim = new WikiDataItem.Claim();
+    public static Claim ClaimParser(String in){
+        Claim claim = new Claim();
         String save = "";
         for(int i=in.indexOf("snaktype")+10; i<in.length(); i++){
             if(in.charAt(i)==',')
@@ -247,9 +242,9 @@ public class ResultSetToJson {
         return claim;
     }
 
-    public static WikiDataItem.Qualifier QualifierParser(String in){
+    public static Qualifier QualifierParser(String in){
         //if(in.length()<2) return new Qualifier(-1,"null",null,"null");
-        WikiDataItem.Qualifier q = new Qualifier();
+        Qualifier q = new Qualifier();
         String save="";
         for(int i=in.indexOf("propertyid")+12; i<in.length(); i++){
             if(in.charAt(i)==',')
@@ -313,7 +308,7 @@ public class ResultSetToJson {
         return q;
     }
 
-    public static WikiDataItem.Reference ReferenceParser(String in){
+    public static Reference ReferenceParser(String in){
         Reference ref = new Reference();
         String save="";
         for(int i=in.indexOf("url")+5; i<in.length(); i++){
@@ -382,7 +377,7 @@ public class ResultSetToJson {
         return ref;
     }
 
-    //parses result from MySQL_connector DB query to Json
+    //parses result from MySQLconnector DB query to Json
     public static String ResultSetoutput2(ResultSet rs) {
         String ret="";
         int idx=0;
