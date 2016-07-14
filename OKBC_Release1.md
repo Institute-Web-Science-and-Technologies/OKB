@@ -1,6 +1,7 @@
 _Release 1:_
 * [Curation tool code](https://github.com/Institute-Web-Science-and-Technologies/OKB/tree/okbcclient/okbc-client)
   + [sketch](https://drive.google.com/open?id=0B9kmg3xTFciWSnVNdzBoMURwTEk)
+  + [demo](https://userpages.uni-koblenz.de/~abaier/selection.html)
 * [REST API code](https://github.com/Institute-Web-Science-and-Technologies/OKB/tree/master/okbc-rest)
 * REST API data: 
   + [schema](https://github.com/Institute-Web-Science-and-Technologies/OKB/blob/master/okbc-rest/doc/schema_getEventById.json)
