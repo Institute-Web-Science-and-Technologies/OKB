@@ -1,4 +1,4 @@
-package de.unikoblenz.west.okb.c.WikiDataItem;
+package de.unikoblenz.west.okb.c.datamodel;
 
 import java.util.List;
 

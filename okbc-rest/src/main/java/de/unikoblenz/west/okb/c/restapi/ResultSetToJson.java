@@ -1,6 +1,6 @@
-package de.unikoblenz.west.okb.c.Item_Handling;
+package de.unikoblenz.west.okb.c.restapi;
 
-import de.unikoblenz.west.okb.c.WikiDataItem.*;
+import de.unikoblenz.west.okb.c.datamodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ResultSetToJson {
 
     public static String ResultSetoutput(ResultSet rs) {
-        ArrayList<de.unikoblenz.west.okb.c.WikiDataItem.Event> event = new ArrayList<de.unikoblenz.west.okb.c.WikiDataItem.Event>();
+        ArrayList<de.unikoblenz.west.okb.c.datamodel.Event> event = new ArrayList<de.unikoblenz.west.okb.c.datamodel.Event>();
         String result = "";
         try {
             while (rs.next()) {
@@ -27,7 +27,7 @@ public class ResultSetToJson {
         if(event.size()>1)
             result+="{";
         String separator="";
-        for(de.unikoblenz.west.okb.c.WikiDataItem.Event ev : event) {
+        for(de.unikoblenz.west.okb.c.datamodel.Event ev : event) {
             result += separator + ev.toString() + "\n";
             separator=",";
         }
@@ -37,8 +37,8 @@ public class ResultSetToJson {
     }
 
     //parses ResultSet containing Event(s) to Json valid String
-    public static de.unikoblenz.west.okb.c.WikiDataItem.Event parseEvents(ResultSet rs){
-        de.unikoblenz.west.okb.c.WikiDataItem.Event event = new de.unikoblenz.west.okb.c.WikiDataItem.Event();
+    public static de.unikoblenz.west.okb.c.datamodel.Event parseEvents(ResultSet rs){
+        de.unikoblenz.west.okb.c.datamodel.Event event = new de.unikoblenz.west.okb.c.datamodel.Event();
         event.setLabel("null");
         event.setLocation("null");
         ArrayList<String> empty = new ArrayList<String>();
@@ -377,7 +377,7 @@ public class ResultSetToJson {
         return ref;
     }
 
-    //parses result from MySQLconnector DB query to Json
+    //parses result from MySQLConnector DB query to Json
     public static String ResultSetoutput2(ResultSet rs) {
         String ret="";
         int idx=0;

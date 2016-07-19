@@ -1,4 +1,4 @@
-package de.unikoblenz.west.okb.c.Item_Handling;
+package de.unikoblenz.west.okb.c.restapi;
 
 /**
  * Created by wkoop on 14.07.2016.

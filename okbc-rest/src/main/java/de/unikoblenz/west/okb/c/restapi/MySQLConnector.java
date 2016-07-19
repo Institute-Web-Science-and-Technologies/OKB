@@ -1,16 +1,16 @@
-package de.unikoblenz.west.okb.c.Item_Handling;
+package de.unikoblenz.west.okb.c.restapi;
 
 import java.sql.*;
 
 /**
  * Created by wkoop on 02.06.2016.
  */
-public class MySQLconnector {
-    public static MySQLconnector db;
+public class MySQLConnector {
+    public static MySQLConnector db;
     public Connection conn;
     private Statement statement;
 
-    public MySQLconnector() {
+    public MySQLConnector() {
         String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
@@ -25,9 +25,9 @@ public class MySQLconnector {
         }
     }
 
-    public static synchronized MySQLconnector getDbCon() {
+    public static synchronized MySQLConnector getDbCon() {
         if (db == null) {
-            db = new MySQLconnector();
+            db = new MySQLConnector();
         }
         return db;
     }

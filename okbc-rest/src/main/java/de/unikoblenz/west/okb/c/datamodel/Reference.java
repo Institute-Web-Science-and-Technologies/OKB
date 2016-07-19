@@ -1,6 +1,5 @@
-package de.unikoblenz.west.okb.c.WikiDataItem;
+package de.unikoblenz.west.okb.c.datamodel;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**

@@ -1,7 +1,6 @@
-package de.unikoblenz.west.okb.c.Item_Handling;
+package de.unikoblenz.west.okb.c.restapi;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package de.unikoblenz.west.okb.c.WikiDataItem;
+package de.unikoblenz.west.okb.c.datamodel;
 
 /**
  * Created by wkoop on 13.06.2016.

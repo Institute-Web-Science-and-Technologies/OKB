@@ -1,14 +1,14 @@
-package de.unikoblenz.west.okb.c.Item_Handling;
+package de.unikoblenz.west.okb.c.restapi;
 
-import javax.xml.transform.Result;
+import org.json.JSONObject;
 
-import static de.unikoblenz.west.okb.c.Item_Handling.PrepareStatements.*;
-import static spark.Spark.*;
-
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
+
+import static spark.Spark.*;
 
 public class RequestRouter {
 
@@ -49,7 +49,7 @@ public class RequestRouter {
             String ret="";
             try {
                 PreparedStatement ps =
-                        MySQLconnector.db.conn.prepareStatement("Select * FROM OKBCDB.reference;");
+                        MySQLConnector.db.conn.prepareStatement("Select * FROM OKBCDB.reference;");
                 ps.execute();
                 rs=ps.getResultSet();
                 return ResultSetToJson.ResultSetoutput2(rs);
@@ -67,9 +67,9 @@ public class RequestRouter {
             String ret = "";
 
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
+                MySQLConnector.db.conn.setAutoCommit(false);
                 PreparedStatement ps =
-                        preparedStatementgetEvents();
+                        PreparedStatementGenerator.preparedStatementgetEvents();
                 ps.execute();
                 result = ps.getResultSet();
                  ret = ResultSetToJson.ResultSetoutput(result);
@@ -90,9 +90,9 @@ public class RequestRouter {
 
             ResultSet result = null; String ret = "";
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
+                MySQLConnector.db.conn.setAutoCommit(false);
                 PreparedStatement ps =
-                        preparedStatementgetEventById(id);
+                        PreparedStatementGenerator.getEventById(id);
                 ps.execute();
                 result = ps.getResultSet();
                 return ResultSetToJson.ResultSetoutput(result);
@@ -112,8 +112,8 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
-                PreparedStatement ps = preparedStatementgetEventsByLabel(label);
+                MySQLConnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = PreparedStatementGenerator.getEventsByLabel(label);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -133,8 +133,8 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
-                PreparedStatement ps = preparedStatementgetEventsByCategory(category);
+                MySQLConnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = PreparedStatementGenerator.getEventsByCategory(category);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -152,8 +152,8 @@ public class RequestRouter {
             String ret = "";
 
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
-                PreparedStatement ps = preparedStatementgetLatestEditedEvents();
+                MySQLConnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = PreparedStatementGenerator.getLatestEditedEvents();
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -163,7 +163,7 @@ public class RequestRouter {
             return ret;
         });
 
-        //insert Reference item to MySQLconnector Database
+        //insert Reference item to MySQLConnector Database
         //can be calles with: localhost.com:4567/addReference?refid=6&url=google.com&title=Googel&...
         post("/addReference", (req, res) -> {
             Set<String> reqest = req.queryParams();
@@ -182,8 +182,8 @@ public class RequestRouter {
 
 
             try {
-                MySQLconnector.db.conn.setAutoCommit(false);
-                PreparedStatement ps = prepareStatementaddReference(refid,url,title,publicationdate,retrievaldate,authors,articletype,trustrating,neutralityrating,claimid);
+                MySQLConnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = PreparedStatementGenerator.addReference(refid,url,title,publicationdate,retrievaldate,authors,articletype,trustrating,neutralityrating,claimid);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -202,7 +202,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = prepareStatementaddQualifier(propertyid, label, datatype, qvalue);
+                PreparedStatement ps = PreparedStatementGenerator.addQualifier(propertyid, label, datatype, qvalue);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -224,7 +224,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = prepareStatementaddClaim(clid, clvalue, snaktype, userid, ranking, refid, qualifierid);
+                PreparedStatement ps = PreparedStatementGenerator.addClaim(clid, clvalue, snaktype, userid, ranking, refid, qualifierid);
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -239,7 +239,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = prepareStatementaddCategory(ctid, category);
+                PreparedStatement ps = PreparedStatementGenerator.addCategory(ctid, category);
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -257,7 +257,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                PreparedStatement ps = prepareStatementaddOkbStatement(propertyid, label, datatype, ctid, claimid);
+                PreparedStatement ps = PreparedStatementGenerator.addOkbStatement(propertyid, label, datatype, ctid, claimid);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
@@ -275,7 +275,7 @@ public class RequestRouter {
             ResultSet result=null;
 
             try{
-                PreparedStatement ps = prepareStatementaddEvent(eventid, label, location);
+                PreparedStatement ps = PreparedStatementGenerator.addEvent(eventid, label, location);
                 ps.execute();
                 result = ps.getResultSet();
             }catch (Exception e){
@@ -284,7 +284,7 @@ public class RequestRouter {
 
             return "finished";
         });
-/*
+
         get("/utility/getEventsByCategory", (req, res) -> {
             WikidataSparqlAccessor acc = new WikidataSparqlAccessor();
             JSONObject obj;
@@ -299,7 +299,7 @@ public class RequestRouter {
             return obj.toString();
         });
 
-    */
+
     }
 
 }
