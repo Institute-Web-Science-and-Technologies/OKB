@@ -387,33 +387,7 @@ public class ResultSetToJson {
                 for(int i = 1; i<rs.getMetaData().getColumnCount(); i++){
                     String name = rs.getMetaData().getColumnLabel(i).toLowerCase();
                     Object val = rs.getObject(i);
-                    if(val == null || val.toString()=="") val = "null";
-                    String value = val.toString();
-
-                    if(name.contains("statements")){
-                        name +="[";
-                        value = splitandaddtoJson(value,"\"propertyid\"");
-                    } else
-                    if(name.contains("claims")){
-                        name +="[";
-                        value = splitandaddtoJson(value,"\"snaktype\"");
-                        value += "}]";
-                    } else
-                    if(name.contains("qualifiers")){
-                        name +="[";
-                        value = splitandaddtoJson(value,"\"propertyid\"");
-                        value += "}]";
-                    } else
-                    if(name.contains("sources")){
-                        name +="[";
-                        value = splitandaddtoJson(value,"\"snaktype\"");
-                        value += "}]";
-                    }
-
-
-                    ret += idx+"."+i+": "+name+value;
-                    if (i+1<rs.getMetaData().getColumnCount())
-                        ret+=", ";
+                    ret+=name+": "+val.toString();
                 }
                 ret += "}\n";
             }

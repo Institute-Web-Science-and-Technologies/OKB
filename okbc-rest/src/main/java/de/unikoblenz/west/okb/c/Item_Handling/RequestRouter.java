@@ -1,10 +1,13 @@
 package de.unikoblenz.west.okb.c.Item_Handling;
 
+import javax.xml.transform.Result;
+
 import static de.unikoblenz.west.okb.c.Item_Handling.PrepareStatements.*;
 import static spark.Spark.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Set;
 
 public class RequestRouter {
@@ -41,6 +44,21 @@ public class RequestRouter {
         });
 
 
+        get("/test", (req,res) ->{
+            ResultSet rs = null;
+            String ret="";
+            try {
+                PreparedStatement ps =
+                        MySQLconnector.db.conn.prepareStatement("Select * FROM OKBCDB.reference;");
+                ps.execute();
+                rs=ps.getResultSet();
+                return ResultSetToJson.ResultSetoutput2(rs);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return "Went wrong";
+        });
+
         //returns all events for all events in jsonformat
         //is called by: localhost.com:4567/getEvents
         get("/getEvents", (req, res) -> {
@@ -66,7 +84,6 @@ public class RequestRouter {
         // the last number is the id to be searched for.
         // If the id doesn't exist you'll get: []
         get("/getEventById", (req, res) -> {
-
             Set<String> a = req.queryParams();
             String id = req.queryParams("id");
             if (id.charAt(0) == 'Q') id = id.substring(1);
@@ -150,8 +167,6 @@ public class RequestRouter {
         //can be calles with: localhost.com:4567/addReference?refid=6&url=google.com&title=Googel&...
         post("/addReference", (req, res) -> {
             Set<String> reqest = req.queryParams();
-
-
             ResultSet result = null;
             String ret = "";
             String refid = req.queryParams("refid");
@@ -164,15 +179,13 @@ public class RequestRouter {
             String trustrating = req.queryParams("trustrating");
             String neutralityrating = req.queryParams("neutralityrating");
             String claimid = req.queryParams("claimid");
+
+
             try {
-                PreparedStatement ps = MySQLconnector.db.conn.prepareStatement(
-                        "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
-                                "authors, articletype, trustrating, neutralityrating, claimid)\n" +
-                                "VALUES ("+refid+", "+url+", "+title+", '"+publicationdate+"', '"+retrievaldate+
-                                "', "+authors+", "+articletype+", "+trustrating+", "+neutralityrating+", "+claimid+");");
+                MySQLconnector.db.conn.setAutoCommit(false);
+                PreparedStatement ps = prepareStatementaddReference(refid,url,title,publicationdate,retrievaldate,authors,articletype,trustrating,neutralityrating,claimid);
                 ps.execute();
                 result = ps.getResultSet();
-
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -189,9 +202,9 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQLconnector.getDbCon().query(
-                        "INSERT INTO OKBCDB.Qualifier(PropertyId, Label,  Datatype, Qvalue\n)" +
-                                "VALUES ("+propertyid+", "+label+", "+datatype+", "+qvalue+");");
+                PreparedStatement ps = prepareStatementaddQualifier(propertyid, label, datatype, qvalue);
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -211,10 +224,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQLconnector.getDbCon().query(
-                        "INSERT INTO OKBCDB.Claim (Clid, Clvalue, Snaktype, Userid, Ranking, Refid, Qualifierid\n)" +
-                                "VALUES ("+clid+", "+clvalue+", "+snaktype+", "+userid+", "+ranking+
-                                ", "+refid+", "+qualifierid+");");
+                PreparedStatement ps = prepareStatementaddClaim(clid, clvalue, snaktype, userid, ranking, refid, qualifierid);
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -229,9 +239,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQLconnector.getDbCon().query(
-                        "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
-                                "VALUES ("+ctid+", "+category+");");
+                PreparedStatement ps = prepareStatementaddCategory(ctid, category);
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -249,10 +257,9 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                result = MySQLconnector.getDbCon().query(
-                        "INSERT INTO OKBCDB.Categories(Ctid, Category)\n)" +
-                                "VALUES ("+propertyid+", "+label+", "+datatype+", "
-                                +ctid+", "+claimid+");");
+                PreparedStatement ps = prepareStatementaddOkbStatement(propertyid, label, datatype, ctid, claimid);
+                ps.execute();
+                result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -265,21 +272,12 @@ public class RequestRouter {
             String label = req.params(":label");
             String location = req.params(":location");
             String eventid="";
-            if(evid.charAt(0)=='Q') {
-                for (int i = 1; i < evid.length(); i++)
-                    eventid += evid.charAt(i);
-            }
-
-            System.out.println("Test");
-            String query = "INSERT INTO OKBCDB.events(eventid, label, location)" +
-                    "VALUES (?,?,?);";
+            ResultSet result=null;
 
             try{
-                PreparedStatement ps = MySQLconnector.db.conn.prepareStatement(query);
-                ps.setString(1, eventid);
-                ps.setString(2, label);
-                ps.setString(3, location);
-                ps.executeUpdate();
+                PreparedStatement ps = prepareStatementaddEvent(eventid, label, location);
+                ps.execute();
+                result = ps.getResultSet();
             }catch (Exception e){
                 e.printStackTrace();
             }
