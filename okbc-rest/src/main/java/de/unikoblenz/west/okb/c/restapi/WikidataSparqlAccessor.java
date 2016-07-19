@@ -80,7 +80,7 @@ public class WikidataSparqlAccessor {
 
         JSONObject result = new JSONObject();
         result.put("events", new JSONArray());
-        /*
+
         for (Object binding : bindings) {
             JSONObject eventData = (JSONObject) binding;
             String eventId = eventData.getJSONObject("item").getString("value").replace("http://www.wikidata.org/entity/", "");
@@ -90,7 +90,7 @@ public class WikidataSparqlAccessor {
             event.put("label", eventLabel);
             result.append("events", event);
         }
-        */
+
         return result;
     }
 
