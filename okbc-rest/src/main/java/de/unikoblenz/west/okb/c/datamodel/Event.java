@@ -9,7 +9,6 @@ public class Event {
     private String eventid;
     private String label;
     private List<String> categories;
-    private String location;
     private List<Statement> statements;
 
 
@@ -24,8 +23,7 @@ public class Event {
             else
                 result +="\""+categories.get(i)+"\""+(", ");
         }
-        result+="], \"location\": \""+location+"\", \n";
-        result+="\"statements\": [";
+        result+="], \"statements\": [";
         for(Statement st : statements)
             result+=st.toString();
         result+="}";
@@ -35,11 +33,10 @@ public class Event {
     public Event() {
     }
 
-    public Event(String eventid, String label, List<String> categories, String location, List<Statement> statements) {
+    public Event(String eventid, String label, List<String> categories, List<Statement> statements) {
         this.eventid = eventid;
         this.label = label;
         this.categories = categories;
-        this.location = location;
         this.statements = statements;
     }
 
@@ -73,14 +70,6 @@ public class Event {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
 }
