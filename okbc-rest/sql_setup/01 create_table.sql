@@ -22,9 +22,9 @@ CREATE TABLE Users (
 
 CREATE TABLE Claims (
   claimid    INT PRIMARY KEY AUTO_INCREMENT,
-  snaktype   ENUM ('Value', 'NoValue', 'MissingValue'),
+  snaktype   ENUM ('value', 'novalue', 'missingvalue'),
   cvalue      VARCHAR(255),
-  ranking    ENUM ('Deprecated', 'Normal', 'Preferred'),
+  ranking    ENUM ('deprecated', 'normal', 'preferred'),
   statementid INT,
   FOREIGN KEY (statementid) REFERENCES Statements(statementid),
   userid     INT,
