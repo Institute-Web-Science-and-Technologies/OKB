@@ -242,26 +242,220 @@ SET @rid = @@IDENTITY;
 
 INSERT INTO Authors(author, refid)
 VALUES ("Laura Clark", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "2016-02-12", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://bbc.com", "Train Crash in Germany", "2016-02-12",
+        "2016-02-13", 0.6, 0.7, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Jeremy White", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "2016-02-10", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://fox.com", "Train Crash in Germany", "2016-02-10",
+        "2016-02-13", 0.4, 0.7, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Ahmed Sheikh", @rid);
 
 -- for United Kingdom European Union membership referendum
 INSERT INTO Statements(propertyid, label, datatype, eventid)
 VALUES (1697, "total valid votes", "quantity", 21812812);
 
+SET @sid = @@IDENTITY;
+
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "33551983", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://bbc.com", "Britain leaves EU", "2016-06-24",
+        "2016-06-24", 0.9, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Jeremy White", @rid);
+
 INSERT INTO Statements(propertyid, label, datatype, eventid)
 VALUES (1867, "eligible voters", "quantity", 21812812);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "33551983", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://al-jezeera.com", "UK out of EU", "2016-06-24",
+        "2016-06-24", 0.4, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Ahmed Sheikh", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "33551983", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://nytimes.com", "Britishers decides to leave EU", "2016-06-24",
+        "2016-06-24", 0.8, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Laura Clark", @rid);
+
+INSERT INTO Statements(propertyid, label, datatype, eventid)
+VALUES (1867, "eligible voters", "quantity", 21812812);
+
+SET @sid = @@IDENTITY;
+
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "46500001", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://al-jezeera.com", "Britishers decides to leave EU", "2016-06-22",
+        "2016-06-23", 0.4, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Ahmed Sheikh", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "46500001", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://nytimes.com", "Britishers decides to leave EU", "2016-06-24",
+        "2016-06-24", 0.9, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Laura Clark", @rid);
 
 -- for 2016 Istanbul airport attack
 INSERT INTO Statements(propertyid, label, datatype, eventid)
 VALUES (1339, "number of injured", "quantity", 25007917);
 
+SET @sid = @@IDENTITY;
+
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "147", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://bbc.com", "Several dead in Istanbul airport attack", "2016-06-29",
+        "2016-06-29", 0.8, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Laura Clark", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "150", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://fox.com", "Attack on Istanbul airport", "2016-06-28",
+        "2016-06-29", 0.2, 0, @cid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "120", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://al-jezeera.com", "Sucide bombing in Istanbul", "2016-06-28",
+        "2016-06-28", 0.7, 0, @cid);
+
+SET @rid = @@IDENTITY;
+
+INSERT INTO Authors(author, refid)
+VALUES ("Ahmed Sheikh", @rid);
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "147", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://dw.com", "Many injured in Istanbul attack", "2016-06-28",
+        "2016-06-29", 0.9, 0, @cid);
+
 -- for 2016 Turøy helicopter crash
 INSERT INTO Statements(propertyid, label, datatype, eventid)
 VALUES (131, "located in the administrative territorial entity", "item", 23936619);
 
+SET @sid = @@IDENTITY;
 
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "Øygarden", @sid);
 
+SET @cid = @@IDENTITY;
 
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://nytimes.com", "2016 Turøy helicopter crash", "2016-04-29",
+        "2016-04-29", 0.9, 0, @cid);
 
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "Fjell", @sid);
 
+SET @cid = @@IDENTITY;
 
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://fox.com", "2016 Turøy helicopter crash", "2016-04-29",
+        "2016-04-29", 0.6, 0, @cid);
 
+-- next claim
+INSERT INTO Claims(snaktype, cvalue, statementid)
+VALUES("value", "Fjell", @sid);
+
+SET @cid = @@IDENTITY;
+
+INSERT INTO Refs(url, title, publicationdate,
+                 retrievaldate, trustrating, neutralityrating, claimid)
+VALUES ("http://al-jezeera.com", "2016 Turøy helicopter crash", "2016-04-29",
+        "2016-04-29", 0.6, 0, @cid);
