@@ -25,7 +25,7 @@ CREATE TABLE Claims (
   snaktype   ENUM ('value', 'novalue', 'missingvalue'),
   cvalue      VARCHAR(255),
   ranking    ENUM ('deprecated', 'normal', 'preferred'),
-  statementid INT,
+  statementid INT NOT NULL,
   FOREIGN KEY (statementid) REFERENCES Statements(statementid),
   userid     INT,
   FOREIGN KEY (userid) REFERENCES Users(userid)
@@ -45,7 +45,7 @@ CREATE TABLE Refs (
 );
 
 CREATE TABLE Authors (
-  authorid    INT PRIMARY KEY,
+  authorid    INT PRIMARY KEY AUTO_INCREMENT,
   author VARCHAR(255),
   refid  INT,
   FOREIGN KEY (refid) REFERENCES Refs(refid)
