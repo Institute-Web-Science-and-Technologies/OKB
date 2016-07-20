@@ -49,7 +49,7 @@ public class RequestRouter {
             String ret="";
             try {
                 PreparedStatement ps =
-                        MySQLConnector.db.conn.prepareStatement("Select * FROM OKBCDB.reference;");
+                        MySQLConnector.getInstance().getConnection().prepareStatement("Select * FROM OKBCDB.reference;");
                 ps.execute();
                 rs=ps.getResultSet();
                 return ResultSetToJson.ResultSetoutput2(rs);
@@ -67,7 +67,7 @@ public class RequestRouter {
             String ret = "";
 
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps =
                         PreparedStatementGenerator.preparedStatementgetEvents();
                 ps.execute();
@@ -90,7 +90,7 @@ public class RequestRouter {
 
             ResultSet result = null; String ret = "";
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps =
                         PreparedStatementGenerator.getEventById(id);
                 ps.execute();
@@ -112,7 +112,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps = PreparedStatementGenerator.getEventsByLabel(label);
                 ps.execute();
                 result = ps.getResultSet();
@@ -133,7 +133,7 @@ public class RequestRouter {
             ResultSet result = null;
             String ret = "";
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps = PreparedStatementGenerator.getEventsByCategory(category);
                 ps.execute();
                 result = ps.getResultSet();
@@ -152,7 +152,7 @@ public class RequestRouter {
             String ret = "";
 
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps = PreparedStatementGenerator.getLatestEditedEvents();
                 ps.execute();
                 result = ps.getResultSet();
@@ -182,7 +182,7 @@ public class RequestRouter {
 
 
             try {
-                MySQLConnector.db.conn.setAutoCommit(false);
+                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps = PreparedStatementGenerator.addReference(refid,url,title,publicationdate,retrievaldate,authors,articletype,trustrating,neutralityrating,claimid);
                 ps.execute();
                 result = ps.getResultSet();

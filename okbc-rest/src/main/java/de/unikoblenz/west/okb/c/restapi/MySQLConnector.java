@@ -6,11 +6,11 @@ import java.sql.*;
  * Created by wkoop on 02.06.2016.
  */
 public class MySQLConnector {
-    public static MySQLConnector db;
-    public Connection conn;
-    private Statement statement;
+    private static MySQLConnector db;
+    private Connection conn;
 
-    public MySQLConnector() {
+    private MySQLConnector() {
+        /* TODO: Replace with loading of configuration file. */
         String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
         String dbName = "OKBCDB";
         String driver = "com.mysql.jdbc.Driver";
@@ -25,15 +25,19 @@ public class MySQLConnector {
         }
     }
 
-    public static synchronized MySQLConnector getDbCon() {
+    public static synchronized MySQLConnector getInstance() {
         if (db == null) {
             db = new MySQLConnector();
         }
         return db;
     }
 
+    public Connection getConnection() {
+        return this.conn;
+    }
+
     public ResultSet query(String query) throws SQLException {
-        statement = db.conn.createStatement();
+        Statement statement = db.conn.createStatement();
         ResultSet res = statement.executeQuery(query);
         return res;
     }
@@ -45,10 +49,9 @@ public class MySQLConnector {
      * @desc Method to insert data to a table
      */
     public int insert(String insertQuery) throws SQLException {
-        statement = db.conn.createStatement();
+        Statement statement = db.conn.createStatement();
         int result = statement.executeUpdate(insertQuery);
         return result;
-
     }
     
 }

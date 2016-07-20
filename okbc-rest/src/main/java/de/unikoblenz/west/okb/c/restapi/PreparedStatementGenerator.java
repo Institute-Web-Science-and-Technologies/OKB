@@ -7,10 +7,11 @@ import java.sql.PreparedStatement;
  */
 public class PreparedStatementGenerator {
 
+    private static MySQLConnector connector = MySQLConnector.getInstance();
+
     public static PreparedStatement preparedStatementgetEvents () throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
-
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 MySQL.getSqlgetrequest() +
                         "GROUP BY events.eventid \n" +
                         "ORDER BY events.eventid ASC;"
@@ -20,7 +21,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement getEventById(String id) throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 MySQL.getSqlgetrequest() +
                         "WHERE events.eventid = ? \n" +
                         "GROUP BY events.eventid \n" +
@@ -34,7 +35,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement getEventsByLabel(String label) throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 MySQL.getSqlgetrequest() +
                         "WHERE events.label = ?" +
                         "GROUP BY events.eventid \n" +
@@ -46,7 +47,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement getEventsByCategory(String category) throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 MySQL.getSqlgetrequest() +
                         "WHERE categories.category = ?" +
                         "GROUP BY events.eventid \n" +
@@ -58,7 +59,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement getLatestEditedEvents() throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 MySQL.getSqlgetrequest() +
                         "GROUP BY events.eventid \n" +
                         "ORDER BY events.eventid DESC\n" +
@@ -70,7 +71,7 @@ public class PreparedStatementGenerator {
     public static PreparedStatement addReference(String refid, String url, String title, String publicationdate, String retrievaldate, String authors, String articletype
             , String trustrating, String neutralityrating, String claimid)throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
                         "authors, articletype, trustrating, neutralityrating, claimid)\n" +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
@@ -95,7 +96,7 @@ public class PreparedStatementGenerator {
     public static PreparedStatement addQualifier(String propertyid, String label,
                                                  String datatype, String qvalue)throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.Qualifier(propertyId, label,  datatype, qvalue\n)" +
                         "VALUES (?,?,?,?);"
         );
@@ -110,7 +111,7 @@ public class PreparedStatementGenerator {
     public static PreparedStatement addClaim(String clid, String clvalue, String snaktype, String userid,
                                              String ranking, String refid, String qualifierid)throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.Claim (clid, clvalue, snaktype, userid, ranking, refid, qualifierid\n)" +
                         "VALUES (?,?,?,?,?,?,?);"
         );
@@ -127,7 +128,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement addCategory(String ctid, String category)throws java.sql.SQLException {
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.Qualifier(ctid, category\n)" +
                         "VALUES (?,?);"
         );
@@ -141,7 +142,7 @@ public class PreparedStatementGenerator {
     public static PreparedStatement addOkbStatement(String propertyid, String label, String datatype, String ctid,
                                                     String claimid)throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.okbstatement(propertyid, label, datatype, ctid, claimid\n)" +
                         "VALUES (?,?,?,?,?);"
         );
@@ -157,7 +158,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement addEvent(String eventid, String label, String location)throws java.sql.SQLException{
 
-        PreparedStatement stmt = MySQLConnector.db.conn.prepareStatement(
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO OKBCDB.events(eventid, label, location\n)" +
                         "VALUES (?,?,?,?,?);"
         );

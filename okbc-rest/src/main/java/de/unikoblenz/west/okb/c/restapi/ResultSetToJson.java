@@ -40,7 +40,6 @@ public class ResultSetToJson {
     public static de.unikoblenz.west.okb.c.datamodel.Event parseEvents(ResultSet rs){
         de.unikoblenz.west.okb.c.datamodel.Event event = new de.unikoblenz.west.okb.c.datamodel.Event();
         event.setLabel("null");
-        event.setLocation("null");
         ArrayList<String> empty = new ArrayList<String>();
         empty.add("null");
         event.setCategories(empty);
@@ -62,8 +61,6 @@ public class ResultSetToJson {
                     event.setEventid(value);
                 if(name.contains("evlabel"))
                     event.setLabel(value);
-                if(name.contains("location"))
-                    event.setLocation(value);
                 if(name.contains("category")) {
                     if(value.contains(",")){
                         String[] cat = value.split(",");
@@ -71,8 +68,7 @@ public class ResultSetToJson {
                         for(String c : cat)
                             categories.add(c);
                         event.setCategories(categories);
-                    }else
-                        event.setLocation(value);
+                    }
                 }
                 if(name.contains("statements")) {
                     statements.add(StatementParser(value));
