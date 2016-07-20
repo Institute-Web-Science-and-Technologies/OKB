@@ -100,6 +100,6 @@ public class WikidataSparqlAccessor {
      * @return true if the parameter id is a valid Wikidata item ID (e.g. "Q1234").
      */
     private boolean isValidWikidataItemId(String id) {
-        return id.matches("^Q\\d+");
+        return id.matches("^Q\\d+$");
     }
 }

@@ -10,7 +10,7 @@ public class PreparedStatementGenerator {
 
     private static MySQLConnector connector = MySQLConnector.getInstance();
 
-    public static PreparedStatement getLatestEditedEvents(int limit) throws SQLException{
+    public static PreparedStatement getLatestEditedEvents(int limit) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "SELECT eventid, label, lastedited FROM Events ORDER BY lastedited DESC LIMIT ?;"
         );
@@ -18,7 +18,7 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
-    public static PreparedStatement getEventById(int id) throws SQLException{
+    public static PreparedStatement getEventById(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "SELECT eventid, label, lastedited FROM Events WHERE eventid = ?;"
         );
@@ -26,7 +26,7 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
-    public static PreparedStatement getEventsByLabel(String label) throws SQLException{
+    public static PreparedStatement getEventsByLabel(String label) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
             "SELECT eventid, label, lastedited FROM Events WHERE LOWER(label) LIKE LOWER(CONCAT('%', ?, '%'));"
         );
@@ -34,12 +34,20 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
-    public static PreparedStatement getEventsByCategory(String category) throws SQLException{
+    public static PreparedStatement getEventsByCategory(String category) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
             "SELECT eventid, label, lastedited FROM Events\n"
                 + "WHERE eventid IN (SELECT DISTINCT eventid FROM Categories WHERE category = ?);"
         );
         stmt.setString(1,category);
+        return stmt;
+    }
+
+    public static PreparedStatement getCategoriesByEventId(int id) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT DISTINCT category FROM Categories WHERE eventid = ?;"
+        );
+        stmt.setInt(1,id);
         return stmt;
     }
 

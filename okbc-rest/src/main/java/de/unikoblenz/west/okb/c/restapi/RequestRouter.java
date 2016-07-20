@@ -5,6 +5,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static spark.Spark.*;
@@ -34,6 +37,28 @@ public class RequestRouter {
     }
 
     public RequestRouter() {
+        //returns limit# or default 10 of the latest edited events
+        //is called by: localhost.com:4567/getLatestEditedEvents
+        get("/getLatestEditedEvents", (req, res) -> {
+            int limit = ParameterExtractor.extractLimit(req, 10);
+            JSONObject result;
+            try {
+                ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
+                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
+                events.first();
+                while (!events.isAfterLast()) {
+                    int eventid = events.getInt("eventid");
+                    ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
+                    eventCategories.put(eventid, categories);
+                    events.next();
+                }
+                result = ResultSetToJSONMapper.mapLatestEditedEvents(events, eventCategories);
+            } catch (SQLException e) {
+                result = new JSONObject("{ error: \"\"");
+            }
+            return result.toString();
+        });
+
         //returns all events for one specific event
         //is called by: localhost.com:4567/getEventById?id=321
         // the last number is the id to be searched for.
@@ -50,7 +75,7 @@ public class RequestRouter {
                         PreparedStatementGenerator.getEventById(Integer.parseInt(id));
                 ps.execute();
                 result = ps.getResultSet();
-                return ResultSetToJson.ResultSetoutput(result);
+                return ResultSetToJSONMapper.ResultSetoutput(result);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -71,7 +96,7 @@ public class RequestRouter {
                 PreparedStatement ps = PreparedStatementGenerator.getEventsByLabel(label);
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetToJson.ResultSetoutput(result);
+                ret = ResultSetToJSONMapper.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -92,29 +117,11 @@ public class RequestRouter {
                 PreparedStatement ps = PreparedStatementGenerator.getEventsByCategory(category);
                 ps.execute();
                 result = ps.getResultSet();
-                ret = ResultSetToJson.ResultSetoutput(result);
+                ret = ResultSetToJSONMapper.ResultSetoutput(result);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (ret=="") return "No Event with category: \""+category+"\"!";
-            return ret;
-        });
-
-        //returns 15 of the latest edited events
-        //is called by: localhost.com:4567/getLatestEditedEvents
-        get("/getLatestEditedEvents", (req, res) -> {
-            ResultSet result = null;
-            String ret = "";
-
-            try {
-                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps = PreparedStatementGenerator.getLatestEditedEvents(15);
-                ps.execute();
-                result = ps.getResultSet();
-                ret = ResultSetToJson.ResultSetoutput(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return ret;
         });
 
