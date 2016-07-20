@@ -1,15 +1,15 @@
 CREATE TABLE Events (
   -- Corresponds directly to its Wikidata equivalent.
   eventid  INT PRIMARY KEY,
-  label    VARCHAR(255),
+  label    NVARCHAR(255),
   lastedited DATETIME NOT NULL
 );
 
 CREATE TABLE Statements (
   statementid INT PRIMARY KEY AUTO_INCREMENT,
   propertyid INT NOT NULL,
-  label      VARCHAR(255),
-  datatype   VARCHAR(255) NOT NULL,
+  label      NVARCHAR(255),
+  datatype   NVARCHAR(255) NOT NULL,
   eventid    INT NOT NULL,
   FOREIGN KEY (eventid) REFERENCES Events(eventid)
 );
@@ -23,7 +23,7 @@ CREATE TABLE Users (
 CREATE TABLE Claims (
   claimid    INT PRIMARY KEY AUTO_INCREMENT,
   snaktype   ENUM ('value', 'novalue', 'missingvalue'),
-  cvalue     VARCHAR(255),
+  cvalue     NVARCHAR(255),
   ranking    ENUM ('deprecated', 'normal', 'preferred'),
   statementid INT NOT NULL,
   FOREIGN KEY (statementid) REFERENCES Statements(statementid),
@@ -33,11 +33,11 @@ CREATE TABLE Claims (
 
 CREATE TABLE Refs (
   refid            INT PRIMARY KEY AUTO_INCREMENT,
-  url              VARCHAR(255),
-  title            VARCHAR(255),
+  url              NVARCHAR(255),
+  title            NVARCHAR(255),
   publicationdate  DATE,
   retrievaldate    DATE,
-  articletype      VARCHAR(255),
+  articletype      NVARCHAR(255),
   trustrating      FLOAT,
   neutralityrating FLOAT,
   claimid          INT NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE Refs (
 
 CREATE TABLE Authors (
   authorid    INT PRIMARY KEY AUTO_INCREMENT,
-  author VARCHAR(255),
+  author NVARCHAR(255),
   refid  INT,
   FOREIGN KEY (refid) REFERENCES Refs(refid)
 );
@@ -54,14 +54,14 @@ CREATE TABLE Authors (
 CREATE TABLE Qualifiers (
   qualifierid INT PRIMARY KEY AUTO_INCREMENT,
   datatype   ENUM ('quantity', 'item', 'property', 'url', 'time', 'globe coordinate', 'string'),
-  qvalue     VARCHAR(255) NOT NULL,
+  qvalue     NVARCHAR(255) NOT NULL,
   claimid    INT NOT NULL,
   FOREIGN KEY (claimid) REFERENCES Claims(claimid)
 );
 
 CREATE TABLE Categories (
   ctid     INT PRIMARY KEY AUTO_INCREMENT,
-  category VARCHAR(255),
+  category NVARCHAR(255),
   eventid  INT,
   FOREIGN KEY (eventid) REFERENCES Events(eventid)
 );
