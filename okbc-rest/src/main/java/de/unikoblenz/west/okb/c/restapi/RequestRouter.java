@@ -90,6 +90,33 @@ public class RequestRouter {
             return result.toString();
         });
 
+        //returns all events with the given label
+        //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
+        /* TODO: Move code to acquire needed resultsets somewhere else. */
+        get("/getEventsByLabel", (req, res) -> {
+            String label = ParameterExtractor.extractLabel(req);
+            JSONObject result;
+            try {
+                ResultSet events = PreparedStatementGenerator.getEventsByLabel(label).executeQuery();
+                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
+                if (events.isBeforeFirst()) { // events is not empty.
+                    events.first();
+                    while (!events.isAfterLast()) {
+                        int eventid = events.getInt("eventid");
+                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
+                        eventCategories.put(eventid, categories);
+                        events.next();
+                    }
+                    // Set cursor back to beginning.
+                    events.beforeFirst();
+                }
+                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
+            } catch (SQLException e) {
+                result = new JSONObject("{ error: \"\"");
+            }
+            return result.toString();
+        });
+
         //returns all events for one specific event
         //is called by: localhost.com:4567/getEventById?id=321
         // the last number is the id to be searched for.
@@ -113,27 +140,6 @@ public class RequestRouter {
             }
 
             return "No Event with ID: \"" + id + "\"!";
-        });
-
-        //returns all events with the given label
-        //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
-        get("/getEventsByLabel", (req, res) -> {
-            Set<String> a = req.queryParams();
-            String label = req.queryParams("label");
-            ResultSet result = null;
-            String ret = "";
-            try {
-                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps = PreparedStatementGenerator.getEventsByLabel(label);
-                ps.execute();
-                result = ps.getResultSet();
-                ret = ResultSetToJSONMapper.ResultSetoutput(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if(ret=="")
-                return "No Event with label+\""+label+"\"!";
-            return ret;
         });
 
         get("/utility/getEventsByCategory", (req, res) -> {

@@ -25,6 +25,14 @@ public class ParameterExtractor {
         return category;
     }
 
+    public static String extractLabel(Request req) {
+        String label = req.queryParams("label");
+        if (label == null || !label.matches("^[a-zA-Z0-9]*$")) {
+            label = "";
+        }
+        return label;
+    }
+
     public static int extractItemId(Request req) throws IllegalArgumentException {
         /* TODO: implement */
         return -1;
