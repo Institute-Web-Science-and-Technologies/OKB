@@ -16,25 +16,29 @@ import java.util.Map;
 
 public class ResultSetToJSONMapper {
 
-    public static JSONObject mapLatestEditedEvents(ResultSet events, Map<Integer, ResultSet> eventCategories) throws SQLException {
+    public static JSONObject mapEvents(ResultSet events, Map<Integer, ResultSet> eventCategories) throws SQLException {
         JSONObject result = new JSONObject();
         result.put("events", new JSONArray());
 
-        events.first();
-        while (!events.isAfterLast()) {
-            JSONObject event = new JSONObject();
-            int eventid = events.getInt("eventid");
-            event.put("eventid", "Q" + String.valueOf(eventid));
-            event.put("label", events.getNString("label"));
-            event.put("categories", new JSONArray());
-            ResultSet categories = eventCategories.get(eventid);
-            categories.first();
-            while (!categories.isAfterLast()) {
-                event.append("categories", categories.getNString("category"));
-                categories.next();
+        if (events.isBeforeFirst()) {
+            events.first();
+            while (!events.isAfterLast()) {
+                JSONObject event = new JSONObject();
+                int eventid = events.getInt("eventid");
+                event.put("eventid", "Q" + String.valueOf(eventid));
+                event.put("label", events.getNString("label"));
+                event.put("categories", new JSONArray());
+                ResultSet categories = eventCategories.get(eventid);
+                if (categories.isBeforeFirst()) {
+                    categories.first();
+                    while (!categories.isAfterLast()) {
+                        event.append("categories", categories.getNString("category"));
+                        categories.next();
+                    }
+                }
+                result.append("events", event);
+                events.next();
             }
-            result.append("events", event);
-            events.next();
         }
 
         return result;

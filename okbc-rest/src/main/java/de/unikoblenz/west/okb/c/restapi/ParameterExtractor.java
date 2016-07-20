@@ -16,6 +16,15 @@ public class ParameterExtractor {
         return limit;
     }
 
+    public static String extractCategory(Request req) {
+        String category = req.queryParams("category");
+        if (category == null) {
+            category = "";
+        }
+        category = category.replace('_', ' ');
+        return category;
+    }
+
     public static int extractItemId(Request req) throws IllegalArgumentException {
         /* TODO: implement */
         return -1;

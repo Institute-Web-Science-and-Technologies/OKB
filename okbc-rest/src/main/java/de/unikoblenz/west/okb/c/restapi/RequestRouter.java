@@ -39,20 +39,51 @@ public class RequestRouter {
     public RequestRouter() {
         //returns limit# or default 10 of the latest edited events
         //is called by: localhost.com:4567/getLatestEditedEvents
+        /* TODO: Move code to acquire needed resultsets somewhere else. */
         get("/getLatestEditedEvents", (req, res) -> {
             int limit = ParameterExtractor.extractLimit(req, 10);
             JSONObject result;
             try {
                 ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
                 Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
-                events.first();
-                while (!events.isAfterLast()) {
-                    int eventid = events.getInt("eventid");
-                    ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
-                    eventCategories.put(eventid, categories);
-                    events.next();
+                if (events.isBeforeFirst()) { // events is not empty.
+                    events.first();
+                    while (!events.isAfterLast()) {
+                        int eventid = events.getInt("eventid");
+                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
+                        eventCategories.put(eventid, categories);
+                        events.next();
+                    }
+                    events.beforeFirst();
                 }
-                result = ResultSetToJSONMapper.mapLatestEditedEvents(events, eventCategories);
+                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
+            } catch (SQLException e) {
+                result = new JSONObject("{ error: \"\"");
+            }
+            return result.toString();
+        });
+
+        //returns all events with the given category
+        //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
+        /* TODO: Move code to acquire needed resultsets somewhere else. */
+        get("/getEventsByCategory", (req, res) -> {
+            String category = ParameterExtractor.extractCategory(req);
+            JSONObject result;
+            try {
+                ResultSet events = PreparedStatementGenerator.getEventsByCategory(category).executeQuery();
+                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
+                if (events.isBeforeFirst()) { // events is not empty.
+                    events.first();
+                    while (!events.isAfterLast()) {
+                        int eventid = events.getInt("eventid");
+                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
+                        eventCategories.put(eventid, categories);
+                        events.next();
+                    }
+                    // Set cursor back to beginning.
+                    events.beforeFirst();
+                }
+                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
                 result = new JSONObject("{ error: \"\"");
             }
@@ -102,26 +133,6 @@ public class RequestRouter {
             }
             if(ret=="")
                 return "No Event with label+\""+label+"\"!";
-            return ret;
-        });
-
-        //returns all events with the given category
-        //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
-        get("/getEventsByCategory", (req, res) -> {
-            Set<String> a = req.queryParams();
-            String category = req.queryParams("category");
-            ResultSet result = null;
-            String ret = "";
-            try {
-                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps = PreparedStatementGenerator.getEventsByCategory(category);
-                ps.execute();
-                result = ps.getResultSet();
-                ret = ResultSetToJSONMapper.ResultSetoutput(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (ret=="") return "No Event with category: \""+category+"\"!";
             return ret;
         });
 
