@@ -34,26 +34,6 @@ public class RequestRouter {
     }
 
     public RequestRouter() {
-        //returns all events for all events in jsonformat
-        //is called by: localhost.com:4567/getEvents
-        get("/getEvents", (req, res) -> {
-            Set<String> a = req.queryParams();
-            ResultSet result = null;
-            String ret = "";
-
-            try {
-                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps =
-                        PreparedStatementGenerator.preparedStatementgetEvents();
-                ps.execute();
-                result = ps.getResultSet();
-                 ret = ResultSetToJson.ResultSetoutput(result);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return ret;
-        });
-
         //returns all events for one specific event
         //is called by: localhost.com:4567/getEventById?id=321
         // the last number is the id to be searched for.
@@ -67,7 +47,7 @@ public class RequestRouter {
             try {
                 MySQLConnector.getInstance().getConnection().setAutoCommit(false);
                 PreparedStatement ps =
-                        PreparedStatementGenerator.getEventById(id);
+                        PreparedStatementGenerator.getEventById(Integer.parseInt(id));
                 ps.execute();
                 result = ps.getResultSet();
                 return ResultSetToJson.ResultSetoutput(result);
@@ -128,7 +108,7 @@ public class RequestRouter {
 
             try {
                 MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps = PreparedStatementGenerator.getLatestEditedEvents();
+                PreparedStatement ps = PreparedStatementGenerator.getLatestEditedEvents(15);
                 ps.execute();
                 result = ps.getResultSet();
                 ret = ResultSetToJson.ResultSetoutput(result);

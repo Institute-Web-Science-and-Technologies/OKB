@@ -1,6 +1,7 @@
 package de.unikoblenz.west.okb.c.restapi;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * Created by wkoop on 14.07.2016.
@@ -9,165 +10,79 @@ public class PreparedStatementGenerator {
 
     private static MySQLConnector connector = MySQLConnector.getInstance();
 
-    public static PreparedStatement preparedStatementgetEvents () throws java.sql.SQLException{
-
+    public static PreparedStatement getLatestEditedEvents(int limit) throws SQLException{
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                MySQL.getSqlgetrequest() +
-                        "GROUP BY events.eventid \n" +
-                        "ORDER BY events.eventid ASC;"
+                "SELECT eventid, label, lastedited FROM Events ORDER BY lastedited DESC LIMIT ?;"
         );
+        stmt.setInt(1, limit);
         return stmt;
     }
 
-    public static PreparedStatement getEventById(String id) throws java.sql.SQLException{
-
+    public static PreparedStatement getEventById(int id) throws SQLException{
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                MySQL.getSqlgetrequest() +
-                        "WHERE events.eventid = ? \n" +
-                        "GROUP BY events.eventid \n" +
-                        "ORDER BY events.eventid ASC;"
+                "SELECT eventid, label, lastedited FROM Events WHERE eventid = ?;"
         );
-            stmt.setString(1,id);
-            return stmt;
+        stmt.setInt(1,id);
+        return stmt;
     }
 
-
-
-    public static PreparedStatement getEventsByLabel(String label) throws java.sql.SQLException{
-
+    public static PreparedStatement getEventsByLabel(String label) throws SQLException{
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                MySQL.getSqlgetrequest() +
-                        "WHERE events.label = ?" +
-                        "GROUP BY events.eventid \n" +
-                        "ORDER BY events.eventid ASC;"
+            "SELECT eventid, label, lastedited FROM Events WHERE LOWER(label) LIKE LOWER(CONCAT('%', ?, '%'));"
         );
         stmt.setString(1,label);
         return stmt;
     }
 
-    public static PreparedStatement getEventsByCategory(String category) throws java.sql.SQLException{
-
+    public static PreparedStatement getEventsByCategory(String category) throws SQLException{
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                MySQL.getSqlgetrequest() +
-                        "WHERE categories.category = ?" +
-                        "GROUP BY events.eventid \n" +
-                        "ORDER BY events.eventid ASC;"
+            "SELECT eventid, label, lastedited FROM Events\n"
+                + "WHERE eventid IN (SELECT DISTINCT eventid FROM Categories WHERE category = ?);"
         );
         stmt.setString(1,category);
         return stmt;
     }
 
-    public static PreparedStatement getLatestEditedEvents() throws java.sql.SQLException{
-
+    public static PreparedStatement getClaimsByEventId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                MySQL.getSqlgetrequest() +
-                        "GROUP BY events.eventid \n" +
-                        "ORDER BY events.eventid DESC\n" +
-                        "LIMIT 10;"
+                "SELECT C.claimid, C.snaktype, C.cvalue, C.ranking, C.statementid, S.eventid, S.propertyid, C.userid\n"
+                        + "FROM Claims as C, Statements as S\n"
+                        + "WHERE C.statementid = S.statementid AND S.eventid = ?;"
         );
+        stmt.setInt(1,id);
         return stmt;
     }
 
-    public static PreparedStatement addReference(String refid, String url, String title, String publicationdate, String retrievaldate, String authors, String articletype
-            , String trustrating, String neutralityrating, String claimid)throws java.sql.SQLException{
-
+    public static PreparedStatement getQualifiersByClaimId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.reference(refid, url, title, publicationdate, retrievaldate, " +
-                        "authors, articletype, trustrating, neutralityrating, claimid)\n" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+                "SELECT qualifierid, datatype, qvalue FROM Qualifiers WHERE claimid = ?;"
         );
-        stmt.setString(1,refid );
-        stmt.setString(2, url);
-        stmt.setString(3, title);
-        stmt.setString(4, publicationdate);
-        stmt.setString(5, retrievaldate);
-        stmt.setString(6, authors);
-        stmt.setString(7, articletype);
-        stmt.setString(8, trustrating);
-        stmt.setString(9, neutralityrating);
-        stmt.setString(10, claimid);
-
-        return stmt;
-
-
-
-    }
-
-    public static PreparedStatement addQualifier(String propertyid, String label,
-                                                 String datatype, String qvalue)throws java.sql.SQLException{
-
-        PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.Qualifier(propertyId, label,  datatype, qvalue\n)" +
-                        "VALUES (?,?,?,?);"
-        );
-        stmt.setString(1, propertyid );
-        stmt.setString(2, label);
-        stmt.setString(3, datatype);
-        stmt.setString(4, qvalue);
-
+        stmt.setInt(1,id);
         return stmt;
     }
 
-    public static PreparedStatement addClaim(String clid, String clvalue, String snaktype, String userid,
-                                             String ranking, String refid, String qualifierid)throws java.sql.SQLException{
-
+    public static PreparedStatement getReferencesByClaimId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.Claim (clid, clvalue, snaktype, userid, ranking, refid, qualifierid\n)" +
-                        "VALUES (?,?,?,?,?,?,?);"
+                "SELECT refid, url, title, publicationdate, retrievaldate, trustrating, neutralityrating"
+                        + "FROM Refs WHERE claimid = ?;"
         );
-        stmt.setString(1, clid);
-        stmt.setString(2, clvalue);
-        stmt.setString(3, snaktype);
-        stmt.setString(4,userid );
-        stmt.setString(5, ranking);
-        stmt.setString(6, refid);
-        stmt.setString(7, qualifierid);
-
+        stmt.setInt(1,id);
         return stmt;
     }
 
-    public static PreparedStatement addCategory(String ctid, String category)throws java.sql.SQLException {
-
+    public static PreparedStatement getUserById(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.Qualifier(ctid, category\n)" +
-                        "VALUES (?,?);"
+                "SELECT userid, username, reputation FROM Users WHERE userid = ?;"
         );
-        stmt.setString(1, ctid);
-        stmt.setString(2, category);
-
-        return stmt;
-
-    }
-
-    public static PreparedStatement addOkbStatement(String propertyid, String label, String datatype, String ctid,
-                                                    String claimid)throws java.sql.SQLException{
-
-        PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.okbstatement(propertyid, label, datatype, ctid, claimid\n)" +
-                        "VALUES (?,?,?,?,?);"
-        );
-        stmt.setString(1, propertyid);
-        stmt.setString(2, label);
-        stmt.setString(3, datatype);
-        stmt.setString(4, ctid );
-        stmt.setString(5, claimid);
-
+        stmt.setInt(1,id);
         return stmt;
     }
 
-
-    public static PreparedStatement addEvent(String eventid, String label, String location)throws java.sql.SQLException{
-
+    public static PreparedStatement getUserByName(String name) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO OKBCDB.events(eventid, label, location\n)" +
-                        "VALUES (?,?,?,?,?);"
+                "SELECT userid, username, reputation FROM Users WHERE username = ?;"
         );
-        stmt.setString(1, eventid);
-        stmt.setString(2, label);
-        stmt.setString(3, location);
-
+        stmt.setString(1,name);
         return stmt;
     }
-
-
 }
