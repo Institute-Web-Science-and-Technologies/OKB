@@ -21,8 +21,7 @@ public class ResultSetToJSONMapper {
         result.put("events", new JSONArray());
 
         if (events.isBeforeFirst()) {
-            events.first();
-            while (!events.isAfterLast()) {
+            while (events.next()) {
                 JSONObject event = new JSONObject();
                 int eventid = events.getInt("eventid");
                 event.put("eventid", "Q" + String.valueOf(eventid));
@@ -31,18 +30,59 @@ public class ResultSetToJSONMapper {
                 ResultSet categories = eventCategories.get(eventid);
                 if (categories.isBeforeFirst()) {
                     categories.first();
-                    while (!categories.isAfterLast()) {
+                    while (categories.next()) {
                         event.append("categories", categories.getNString("category"));
-                        categories.next();
                     }
+                    categories.beforeFirst();
+                    // Reset categories cursor.
                 }
                 result.append("events", event);
-                events.next();
+            }
+            // Reset events cursor.
+            events.beforeFirst();
+        }
+        return result;
+    }
+
+    public static JSONObject mapEventWithClaims(ResultSet event, ResultSet categories, ResultSet statements,
+                                                Map<Integer, ResultSet> statementClaims,
+                                                Map<Integer, ResultSet> claimQualifiers,
+                                                Map<Integer, ResultSet> claimReferences) throws SQLException {
+        JSONObject result = new JSONObject();
+        if (event.isBeforeFirst()) {
+            event.first();
+            // Put general event info into JSON.
+            result.put("eventid", event.getInt("eventid"));
+            result.put("label", event.getNString("label"));
+            result.put("lastedited", event.getDate("lastedited"));
+            // Put categories into JSON.
+            result.put("categories", new JSONArray());
+            if (categories.isBeforeFirst()) {
+                while (categories.next()) {
+                    result.append("categories", categories.getNString("category"));
+                }
+                categories.beforeFirst();
+            }
+            // Put statements into JSON.
+            result.put("statements", new JSONArray());
+            if (statements.isBeforeFirst()) {
+                while (statements.next()) {
+                    JSONObject stmtJson = new JSONObject();
+                    stmtJson.put("statementid", statements.getInt("statementid"));
+                    stmtJson.put("label", statements.getNString("label"));
+                    stmtJson.put("propertyid", "P" + statements.getInt("propertyid"));
+                    stmtJson.put("datatype", statements.getNString("datatype"));
+                    result.append("statements", stmtJson);
+                }
+                statements.beforeFirst();
             }
         }
 
         return result;
+
     }
+
+    // methods below this comment should be replaced or are already dead.
 
     public static String ResultSetoutput(ResultSet rs) {
         ArrayList<de.unikoblenz.west.okb.c.datamodel.Event> event = new ArrayList<de.unikoblenz.west.okb.c.datamodel.Event>();

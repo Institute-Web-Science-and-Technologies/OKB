@@ -16,25 +16,37 @@ public class ParameterExtractor {
         return limit;
     }
 
-    public static String extractCategory(Request req) {
+    public static String extractCategory(Request req) throws IllegalArgumentException {
         String category = req.queryParams("category");
         if (category == null) {
-            category = "";
+            throw new IllegalArgumentException("No param 'category' found.");
         }
         category = category.replace('_', ' ');
         return category;
     }
 
-    public static String extractLabel(Request req) {
+    public static String extractLabel(Request req) throws IllegalArgumentException {
         String label = req.queryParams("label");
         if (label == null || !label.matches("^[a-zA-Z0-9]*$")) {
-            label = "";
+            throw new IllegalArgumentException("No param 'label' found or contains illegal characters.");
         }
         return label;
     }
 
-    public static int extractItemId(Request req) throws IllegalArgumentException {
-        /* TODO: implement */
-        return -1;
+    public static int extractId(Request req) throws IllegalArgumentException {
+        String idParam = req.queryParams("id");
+        if (idParam == null) {
+            throw new IllegalArgumentException("No param 'id' found.");
+        }
+        int id;
+        // Two options for ids: Wikidata item format or numeric.
+        if (idParam.matches("^Q\\d+$")) {
+            id = Integer.parseInt(idParam.substring(1));
+        } else if (idParam.matches("^\\d+$")) {
+            id = Integer.parseInt(idParam);
+        } else {
+            throw new IllegalArgumentException("Param 'id' is neither a Wikidata ID nor a numeric ID.");
+        }
+        return id;
     }
 }

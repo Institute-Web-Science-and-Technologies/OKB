@@ -51,6 +51,24 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getStatementsByEventId(int id) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT statementid, propertyid, label, datatype\n"
+                        + "FROM Statements WHERE eventid=?;"
+        );
+        stmt.setInt(1,id);
+        return stmt;
+    }
+
+    public static PreparedStatement getClaimsByStatementId(int id) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT claimid, snaktype, cvalue, userid, ranking\n"
+                        + "FROM Claims WHERE statementid=?;"
+        );
+        stmt.setInt(1,id);
+        return stmt;
+    }
+
     public static PreparedStatement getClaimsByEventId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "SELECT C.claimid, C.snaktype, C.cvalue, C.ranking, C.statementid, S.eventid, S.propertyid, C.userid\n"
@@ -71,7 +89,7 @@ public class PreparedStatementGenerator {
 
     public static PreparedStatement getReferencesByClaimId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "SELECT refid, url, title, publicationdate, retrievaldate, trustrating, neutralityrating"
+                "SELECT refid, url, title, publicationdate, retrievaldate, trustrating, neutralityrating\n"
                         + "FROM Refs WHERE claimid = ?;"
         );
         stmt.setInt(1,id);

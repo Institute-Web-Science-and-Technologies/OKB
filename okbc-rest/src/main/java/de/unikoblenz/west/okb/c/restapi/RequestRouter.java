@@ -3,12 +3,10 @@ package de.unikoblenz.west.okb.c.restapi;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import static spark.Spark.*;
 
@@ -47,18 +45,17 @@ public class RequestRouter {
                 ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
                 Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
                 if (events.isBeforeFirst()) { // events is not empty.
-                    events.first();
-                    while (!events.isAfterLast()) {
+                    while (events.next()) {
                         int eventid = events.getInt("eventid");
                         ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
                         eventCategories.put(eventid, categories);
-                        events.next();
                     }
+                    // Reset cursor.
                     events.beforeFirst();
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
-                result = new JSONObject("{ error: \"\"");
+                result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
         });
@@ -67,25 +64,28 @@ public class RequestRouter {
         //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
         /* TODO: Move code to acquire needed resultsets somewhere else. */
         get("/getEventsByCategory", (req, res) -> {
-            String category = ParameterExtractor.extractCategory(req);
+            String category;
+            try {
+                category = ParameterExtractor.extractCategory(req);
+            } catch (IllegalArgumentException e) {
+                category = "";
+            }
             JSONObject result;
             try {
                 ResultSet events = PreparedStatementGenerator.getEventsByCategory(category).executeQuery();
                 Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
                 if (events.isBeforeFirst()) { // events is not empty.
-                    events.first();
-                    while (!events.isAfterLast()) {
+                    while (events.next()) {
                         int eventid = events.getInt("eventid");
                         ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
                         eventCategories.put(eventid, categories);
-                        events.next();
                     }
-                    // Set cursor back to beginning.
+                    // Reset cursor.
                     events.beforeFirst();
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
-                result = new JSONObject("{ error: \"\"");
+                result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
         });
@@ -94,52 +94,87 @@ public class RequestRouter {
         //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
         /* TODO: Move code to acquire needed resultsets somewhere else. */
         get("/getEventsByLabel", (req, res) -> {
-            String label = ParameterExtractor.extractLabel(req);
+            String label;
+            try {
+                label = ParameterExtractor.extractLabel(req);
+            } catch (IllegalArgumentException e) {
+                label = "";
+            }
             JSONObject result;
             try {
                 ResultSet events = PreparedStatementGenerator.getEventsByLabel(label).executeQuery();
                 Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
                 if (events.isBeforeFirst()) { // events is not empty.
-                    events.first();
-                    while (!events.isAfterLast()) {
+                    while (events.next()) {
                         int eventid = events.getInt("eventid");
                         ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
                         eventCategories.put(eventid, categories);
-                        events.next();
                     }
-                    // Set cursor back to beginning.
+                    // Reset cursor.
                     events.beforeFirst();
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
-                result = new JSONObject("{ error: \"\"");
+                result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
         });
 
-        //returns all events for one specific event
+        //returns event with all claims(+qualifiers, references)
         //is called by: localhost.com:4567/getEventById?id=321
-        // the last number is the id to be searched for.
-        // If the id doesn't exist you'll get: []
         get("/getEventById", (req, res) -> {
-            Set<String> a = req.queryParams();
-            String id = req.queryParams("id");
-            if (id.charAt(0) == 'Q') id = id.substring(1);
-
-            ResultSet result = null; String ret = "";
+            int eventId;
             try {
-                MySQLConnector.getInstance().getConnection().setAutoCommit(false);
-                PreparedStatement ps =
-                        PreparedStatementGenerator.getEventById(Integer.parseInt(id));
-                ps.execute();
-                result = ps.getResultSet();
-                return ResultSetToJSONMapper.ResultSetoutput(result);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                eventId = ParameterExtractor.extractId(req);
+            } catch (IllegalArgumentException e) {
+                return new JSONObject("{ \"error\": \"\" }");
             }
-
-            return "No Event with ID: \"" + id + "\"!";
+            JSONObject result;
+            try {
+                ResultSet event = PreparedStatementGenerator.getEventById(eventId).executeQuery();
+                if (event.isBeforeFirst()) { // the event exists.
+                    ResultSet categories;
+                    ResultSet statements;
+                    Map<Integer, ResultSet> statementClaims = new HashMap<Integer, ResultSet>();
+                    Map<Integer, ResultSet> claimQualifiers = new HashMap<Integer, ResultSet>();
+                    Map<Integer, ResultSet> claimReferences = new HashMap<Integer, ResultSet>();
+                    // Get categories.
+                    categories = PreparedStatementGenerator.getCategoriesByEventId(eventId).executeQuery();
+                    // Get statements.
+                    statements = PreparedStatementGenerator.getStatementsByEventId(eventId).executeQuery();
+                    if (statements.isBeforeFirst()) {// event has any claims.
+                        // Iterate over all claims.
+                        while (statements.next()) {
+                            int statementId = statements.getInt("statementid");
+                            ResultSet claims = PreparedStatementGenerator.getClaimsByStatementId(statementId).executeQuery();
+                            statementClaims.put(statementId, claims);
+                            if (claims.isBeforeFirst()) {
+                                while (claims.next()) {
+                                    int claimId = claims.getInt("claimid");
+                                    // Get all qualifiers of current claim.
+                                    ResultSet qualifiers = PreparedStatementGenerator.getQualifiersByClaimId(claimId).executeQuery();
+                                    claimQualifiers.put(claimId, qualifiers);
+                                    // Get all references of current claim.
+                                    ResultSet references = PreparedStatementGenerator.getReferencesByClaimId(claimId).executeQuery();
+                                    claimReferences.put(claimId, references);
+                                }
+                                claims.beforeFirst();
+                            }
+                        }
+                        // Reset cursor.
+                        statements.beforeFirst();
+                    }
+                    result = ResultSetToJSONMapper.mapEventWithClaims(event, categories, statements, statementClaims,
+                            claimQualifiers, claimReferences);
+                } else { // the event does not exist.
+                    /* TODO: detailed missing message */
+                    result = new JSONObject("{ \"missing\":\"\"");
+                }
+            } catch (SQLException e) {
+                /* TODO: detailed error message */
+                result = new JSONObject("{ \"error\": \"\" }");
+            }
+            return result.toString();
         });
 
         get("/utility/getEventsByCategory", (req, res) -> {
