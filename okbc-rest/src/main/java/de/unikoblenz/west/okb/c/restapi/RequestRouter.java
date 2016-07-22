@@ -1,6 +1,7 @@
 package de.unikoblenz.west.okb.c.restapi;
 
 import org.json.JSONObject;
+import spark.Spark;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -8,12 +9,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static spark.Spark.*;
+
 
 public class RequestRouter {
 
     public static void enableCORS(final String origin, final String methods, final String headers){
-        options("/*", (req, res)->{
+        Spark.options("/*", (req, res)->{
             String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
                 res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
@@ -25,7 +26,7 @@ public class RequestRouter {
             return "OK";
         });
 
-        before((req, res)->{
+        Spark.before((req, res)->{
             res.header("Access-Control-Allow-Origin", origin);
             res.header("Access-Control-Request-Method", methods);
             res.header("Access-Control-Allow-Headers", headers);
@@ -38,7 +39,7 @@ public class RequestRouter {
         //returns limit# or default 10 of the latest edited events
         //is called by: localhost.com:4567/getLatestEditedEvents
         /* TODO: Move code to acquire needed resultsets somewhere else. */
-        get("/getLatestEditedEvents", (req, res) -> {
+        Spark.get("/getLatestEditedEvents", (req, res) -> {
             int limit = ParameterExtractor.extractLimit(req, 10);
             JSONObject result;
             try {
@@ -55,6 +56,7 @@ public class RequestRouter {
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
+                e.printStackTrace();
                 result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
@@ -63,7 +65,7 @@ public class RequestRouter {
         //returns all events with the given category
         //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
         /* TODO: Move code to acquire needed resultsets somewhere else. */
-        get("/getEventsByCategory", (req, res) -> {
+        Spark.get("/getEventsByCategory", (req, res) -> {
             String category;
             try {
                 category = ParameterExtractor.extractCategory(req);
@@ -85,6 +87,7 @@ public class RequestRouter {
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
+                e.printStackTrace();
                 result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
@@ -93,7 +96,7 @@ public class RequestRouter {
         //returns all events with the given label
         //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
         /* TODO: Move code to acquire needed resultsets somewhere else. */
-        get("/getEventsByLabel", (req, res) -> {
+        Spark.get("/getEventsByLabel", (req, res) -> {
             String label;
             try {
                 label = ParameterExtractor.extractLabel(req);
@@ -115,6 +118,7 @@ public class RequestRouter {
                 }
                 result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
             } catch (SQLException e) {
+                e.printStackTrace();
                 result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
@@ -122,7 +126,8 @@ public class RequestRouter {
 
         //returns event with all claims(+qualifiers, references)
         //is called by: localhost.com:4567/getEventById?id=321
-        get("/getEventById", (req, res) -> {
+        /* TODO: Move code to acquire needed resultsets somewhere else. */
+        Spark.get("/getEventById", (req, res) -> {
             int eventId;
             try {
                 eventId = ParameterExtractor.extractId(req);
@@ -172,12 +177,13 @@ public class RequestRouter {
                 }
             } catch (SQLException e) {
                 /* TODO: detailed error message */
+                e.printStackTrace();
                 result = new JSONObject("{ \"error\": \"\" }");
             }
             return result.toString();
         });
 
-        get("/utility/getEventsByCategory", (req, res) -> {
+        Spark.get("/utility/getEventsByCategory", (req, res) -> {
             WikidataSparqlAccessor acc = new WikidataSparqlAccessor();
             JSONObject obj;
             try {
