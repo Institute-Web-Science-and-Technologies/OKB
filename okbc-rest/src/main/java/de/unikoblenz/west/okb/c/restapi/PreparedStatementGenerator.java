@@ -111,4 +111,13 @@ public class PreparedStatementGenerator {
         stmt.setString(1,name);
         return stmt;
     }
+
+    public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "UPDATE Claims SET ranking=? WHERE claimid=?;"
+        );
+        stmt.setString(1, rank);
+        stmt.setInt(2, claimid);
+        return stmt;
+    }
 }

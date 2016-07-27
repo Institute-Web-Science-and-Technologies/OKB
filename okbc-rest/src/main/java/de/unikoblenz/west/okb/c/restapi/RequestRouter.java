@@ -1,5 +1,7 @@
 package de.unikoblenz.west.okb.c.restapi;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Spark;
 
@@ -195,6 +197,40 @@ public class RequestRouter {
             }
             res.type("application/json");
             return obj.toString();
+        });
+
+        Spark.post("/addCuratedClaim", (req, res) -> {
+            JSONObject response;
+            try {
+                response= new JSONObject(req.body());
+            } catch (JSONException e) {
+                response =  new JSONObject("{\"error\":\"\"}");
+            }
+            return response;
+
+        });
+
+        Spark.post("addRankedClaims", (req, res) -> {
+            JSONObject response = new JSONObject();
+            try {
+                response.put("failed", new JSONArray());
+                JSONObject body = new JSONObject(req.body());
+                for (Object obj : body.getJSONArray("rankedclaims")) {
+                    JSONObject rankedClaim = (JSONObject) obj;
+                    int claimid = rankedClaim.getInt("id");
+                    String rank = rankedClaim.getString("rank");
+                    try {
+                        PreparedStatementGenerator.updateRankOfClaim(claimid, rank).execute();
+                    } catch (SQLException e) {
+                        response.append("failed", claimid);
+                        e.printStackTrace();
+                    }
+                }
+                response.put("message", "ok");
+            } catch (JSONException e) {
+                response.put("error", "request body is not valid JSON");
+            }
+            return response;
         });
 
 
