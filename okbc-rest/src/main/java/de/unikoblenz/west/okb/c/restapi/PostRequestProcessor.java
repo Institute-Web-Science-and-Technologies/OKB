@@ -23,7 +23,7 @@ public class PostRequestProcessor {
             // Get all information from the JSON body.
             int eventId = curatedClaim.getInt("eventId");
             // TODO: check before getting this value.
-            String userName = curatedClaim.getString("user");
+            String userName = curatedClaim.getString("user").trim();
             int propertyId = curatedClaim.getInt("propertyId");
             // TODO: check before getting this value.
             String propertyName = curatedClaim.getString("propertyName");
@@ -63,7 +63,7 @@ public class PostRequestProcessor {
             }
             // Check if a username was provided.
             int userId = 0;
-            if (userName != "") {
+            if (userName.length() != 0) {
                 ResultSet userRs = PreparedStatementGenerator.getUserByName(userName).executeQuery();
                 // Check if the user already exists in database.
                 if (userRs.isBeforeFirst()) { // User exists.
