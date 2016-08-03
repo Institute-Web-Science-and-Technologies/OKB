@@ -27,10 +27,11 @@ var TEMPLATE = {
 */
 var curatingData = {
     'eventId' : undefined,
-    'user': 'unregistered',
+    'user': '',
+    'propertyId': undefined,
     'propertyName': undefined,
     'value': undefined,
-    'multiClaimType': undefined,
+    'multiClaimType': '',
     'qualifiers': [],
     'source': {
         'url': undefined,
@@ -120,10 +121,11 @@ function resetCurationForm() {
     // Reset curatingData.
     curatingData = {
         'eventId' : undefined,
-        'user': undefined,
+        'user': '',
+        'propertyId': undefined,
         'propertyName': undefined,
         'value': undefined,
-        'multiClaimType': undefined,
+        'multiClaimType': '',
         'qualifiers': [],
         'source': {
             'url': undefined,
@@ -132,6 +134,7 @@ function resetCurationForm() {
             'publicationDate': undefined,
             'retrievalDate': undefined,
             'authors': []
+
         }
     };
     loadStartCurationForm();
@@ -180,6 +183,7 @@ function processChoosePropertyForm() {
 function loadEnterValueForm(property) {
     // Add the name of the property of the claim to the data.
     curatingData.propertyName = property;
+    curatingData.propertyId = parseInt(PROPERTIES[property].id.substring(1));
 
     var type = getInputTypeForProperty(property);
     var args = {'propertyName': property, 'type': type};
@@ -345,15 +349,15 @@ function loadOverviewForm() {
 // TODO: doc
 function processOverviewForm() {
     // Add event ID to the curating data.
-    curatingData.eventId = currentEvent.id;
+    curatingData.eventId = parseInt(currentEvent.id.substring(1));
     // Push a copy of curatedData into curatedClaims.
     curatedClaims.push(jQuery.extend(true, {}, curatingData));
     // Submit curation data to server.
     $.ajax({
         'type': 'POST',
         'url': CURATING_DATA_POST_URL,
-        'data': curatingData,
-        'success': function(data) {console.log('POST success');}
+        'data': JSON.stringify(curatingData),
+        'success': function(data) {console.log(data);}
     });
     resetCurationForm();
 }
