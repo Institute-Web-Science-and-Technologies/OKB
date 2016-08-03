@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class truthFinder {
+public class TruthFinder {
 
     Integer id;
     Integer sourceId;
@@ -37,7 +37,7 @@ public class truthFinder {
     public boolean save() throws SQLException
     {
     
-      int i =  mySql.getDbCon().insert("INSERT INTO truthfinder (`id`,`sourceId`,`factId`) VALUES ("+this.id+",'"+this.sourceId+"','"+this.factId+"') ");
+      int i =  MySql.getDbCon().insert("INSERT INTO truthfinder (`id`,`sourceId`,`factId`) VALUES ("+this.id+",'"+this.sourceId+"','"+this.factId+"') ");
       if(i>0)
         return true;
       else
@@ -47,7 +47,7 @@ public class truthFinder {
     public List<Map<String,String>> getEvent(int id) throws SQLException
     {
       HashMap<String, String> hm = new HashMap<String, String>();
-      ResultSet rs = mySql.getDbCon().query("Select * from truthfinder WHERE id="+id);
+      ResultSet rs = MySql.getDbCon().query("Select * from truthfinder WHERE id="+id);
      
       ResultSetMetaData rsmd = rs.getMetaData();
       List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

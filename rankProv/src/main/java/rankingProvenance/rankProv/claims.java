@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class claims {
+public class Claims {
   Integer id;
   String value;
   String snakType;
   String qualifiers;
+  Integer userid;
   
+
   public String getValue() {
     return value;
   }
@@ -38,22 +40,27 @@ public class claims {
   public void setQualifiers(String qualifiers) {
     this.qualifiers = qualifiers;
   }
-  
+  public Integer getUserid() {
+    return userid;
+  }
+  public void setUserid(Integer userid) {
+    this.userid = userid;
+  }
 
   public boolean save() throws SQLException
   {
   
-    int i =  mySql.getDbCon().insert("INSERT INTO claims (`id`,`snaktype`,`value`, `qualifiers`) VALUES ("+this.id+",'"+this.snakType+"','"+this.value+"','"+this.qualifiers+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO claims (`id`,`snaktype`,`value`, `qualifiers`, `userid`) VALUES ("+this.id+",'"+this.snakType+"','"+this.value+"','"+this.qualifiers+"','"+this.userid+"') ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getEvent(int id) throws SQLException
+  public List<Map<String,String>> getClaims(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from claims WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from claims WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

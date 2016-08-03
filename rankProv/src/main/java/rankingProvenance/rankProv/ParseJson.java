@@ -13,13 +13,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class App {
+public class ParseJson {
 
     public static void main(String[] args) {
         
     }
 
-    public void run(String data) {
+    public void parse(String data) {
       ObjectMapper mapper = new ObjectMapper();
 
       try {
@@ -30,65 +30,84 @@ public class App {
           JsonParser jp = factory.createJsonParser(data);
           JsonNode actualObj = mapper.readTree(jp);
          // System.out.println(actualObj);
-          events ev = new events();
+          Events ev = new Events();
          
           ev.eventID =  Integer.parseInt((actualObj.get("eventid").asText()));
           ev.categories = actualObj.get("categories").asText();
           ev.label = actualObj.get("label").asText();
           ev.location = actualObj.get("location").asText();
-          ev.save();
-          statements st = new statements();
+          List<Map<String,String>> evExist = ev.getEvent(ev.eventID);
+          if(evExist.size()<1)
+                ev.save();
+     
+
+          Statements st = new Statements();
           
           
           JsonNode stmt = actualObj.get("statements");
-          if (stmt.isArray()) {
-              // If this node an Arrray?
-          }
+
 
           for (JsonNode node : stmt) {
               Integer pid = Integer.parseInt((node.path("propertyid").asText()));
               String label = node.path("label").asText();
               System.out.println("propertyid : " + pid);
               System.out.println("label : " + label);
-              st.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+              st.id=Integer.parseInt((node.get("statementid").asText()));
 
               st.label=label;
               st.propertyId=pid;
-              st.save();
+              List<Map<String,String>> stmtExist = st.getStatement(st.id);
+              if(stmtExist.size()<1)
+                st.save();
               
               JsonNode claims = node.get("claims");
-              claims cl = new claims();
+              Claims cl = new Claims();
               for (JsonNode node1 : claims) {
                 String snaktype = node1.path("snaktype").asText();
                 String qualifier = node1.path("qualifier").asText();
                 String value = node1.path("value").asText();
-
-                cl.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+                int claimid = Integer.parseInt((node1.get("claimid").asText()));
+                int userid = Integer.parseInt((node1.get("userid").asText()));
+                
+                cl.id=claimid;
                 cl.snakType=snaktype;
                 cl.value = value;
                 cl.qualifiers=qualifier;
-                cl.save();
+                cl.userid=userid;
+                List<Map<String,String>> claimExist = cl.getClaims(cl.id);
+                if(claimExist.size()<1)
+                {
+                  cl.save();
+                  EventStatementClaim esc= new EventStatementClaim();
+                  esc.eventId = ev.eventID;
+                  esc.statementId = st.id;
+                  esc.claimId = cl.id;
+                  esc.save();
+                }
+                
+                
                 
                 JsonNode references = node1.get("sources");
-                references ref = new references();
+                References ref = new References();
                 for (JsonNode node2 : references) {
                   String url = node2.path("url").asText();
                   String publicationdate = node2.path("publicationdate").asText();
                   String retrievaldate = node2.path("retrievaldate").asText();
                   String authors = node2.path("authors").asText();
-                  float trustrating = Float.valueOf((node2.path("trustrating").asText()));
+                 // float trustrating = node2.path("trustrating").floatValue();
+                  float trustrating =  Float.parseFloat((node2.get("trustrating").asText()));
                   String articleType = node2.path("article-type").asText();
                   String title = node2.path("title").asText();
-                  float neutralityRating = Float.valueOf((node2.path("neutralityRating").asText()));
+                  float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
                   
-                  sourceFact sf =new sourceFact();
+                  SourceFact sf =new SourceFact();
                   sf.Source = url;
                   sf.fact = cl.value;
                   sf.statementId = st.id;
                   sf.save();
 
 
-                  ref.id=1 + (int)(Math.random() * ((2000 - 1) + 1));
+                  ref.id=Integer.parseInt((node2.get("referenceid").asText()));
                   ref.url=url;
                   ref.publicationDate=publicationdate;
                   ref.retrievalDate=retrievaldate;
@@ -97,7 +116,9 @@ public class App {
                   ref.articleType=articleType;
                   ref.title = title;
                   ref.neutralityRating = neutralityRating;
-                  ref.save();
+                  List<Map<String,String>> refExist = ref.getReference(ref.id);
+                  if(refExist.size()<1)
+                    ref.save();
        
               }
                 

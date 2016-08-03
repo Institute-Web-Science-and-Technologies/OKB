@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class statements {
+public class Statements {
   Integer id;
   Integer propertyId;
   String label;
@@ -41,17 +41,17 @@ public class statements {
   {
    
     
-    int i =  mySql.getDbCon().insert("INSERT INTO statements (`id`,`propertyId`, `label`) VALUES ("+this.id+",'"+this.propertyId+"','"+this.label+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO statements (`id`,`propertyId`, `label`) VALUES ("+this.id+",'"+this.propertyId+"','"+this.label+"') ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getEvent(int id) throws SQLException
+  public List<Map<String,String>> getStatement(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from statements WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from statements WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

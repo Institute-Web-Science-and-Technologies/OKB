@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class references {
+public class References {
 
   Integer id;
 
@@ -81,17 +81,17 @@ public class references {
   public boolean save() throws SQLException
   {
   
-    int i =  mySql.getDbCon().insert("INSERT INTO `references` (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"',"+this.trustRating+",'"+this.articleType+"','"+this.title+"',"+this.neutralityRating+") ");
+    int i =  MySql.getDbCon().insert("INSERT INTO `references` (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"',"+this.trustRating+",'"+this.articleType+"','"+this.title+"',"+this.neutralityRating+") ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getEvent(int id) throws SQLException
+  public List<Map<String,String>> getReference(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = mySql.getDbCon().query("Select * from references WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from `references` WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

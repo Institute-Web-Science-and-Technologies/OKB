@@ -1,22 +1,19 @@
 package rankingProvenance.API;
 
-import rankingProvenance.rankProv.App;
+import rankingProvenance.rankProv.ParseJson;
 import spark.Spark;
 
-public class restApi {
+public class RestApi {
     
-    public static void main( String[] args )
-    {
- 
- 
+    public static void main( String[] args ){
         Spark.post("/notification",  (request, response) -> {
             //System.out.println(request.queryParams("id"));
             String data = request.queryParams("data");
            // ResultSet result = null;
             String js="";
             try {
-              App obj = new App();
-              obj.run(data);
+              ParseJson parser = new ParseJson();
+              parser.parse(data);
               response.status(200);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
