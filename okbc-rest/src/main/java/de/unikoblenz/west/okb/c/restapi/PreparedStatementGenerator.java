@@ -1,7 +1,9 @@
 package de.unikoblenz.west.okb.c.restapi;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by wkoop on 14.07.2016.
@@ -57,6 +59,16 @@ public class PreparedStatementGenerator {
                         + "FROM Statements WHERE eventid=?;"
         );
         stmt.setInt(1,id);
+        return stmt;
+    }
+
+    public static PreparedStatement getStatementByEventIdAndPropertyId(int eventId, int propertyId) throws SQLException{
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT statementid, propertyid, label, datatype\n"
+                        + "FROM Statements WHERE eventid=? AND propertyid=?;"
+        );
+        stmt.setInt(1,eventId);
+        stmt.setInt(2, propertyId);
         return stmt;
     }
 
@@ -118,6 +130,97 @@ public class PreparedStatementGenerator {
         );
         stmt.setString(1, rank);
         stmt.setInt(2, claimid);
+        return stmt;
+    }
+
+    public static PreparedStatement createEvent(int eventid, String label, Date lastedited) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Events(eventid, label, lastedited) VALUES (?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setInt(1, eventid);
+        stmt.setString(2, label);
+        stmt.setDate(3, lastedited);
+        return stmt;
+    }
+
+    public static PreparedStatement createStatement(int propertyid, String label, String datatype, int eventid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Statements(propertyid, label, datatype, eventid) VALUES (?,?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setInt(1, propertyid);
+        stmt.setString(2, label);
+        stmt.setString(3, datatype);
+        stmt.setInt(4, eventid);
+        return stmt;
+    }
+
+    public static PreparedStatement createClaim(String snaktype, String value, int statementid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Claims(snaktype, cvalue, statementid) VALUES (?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setString(1, snaktype);
+        stmt.setString(2, value);
+        stmt.setInt(3, statementid);
+        return stmt;
+    }
+
+    public static PreparedStatement createClaim(String snaktype, String value, int userid, int statementid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Claims(snaktype, cvalue, userid, statementid) VALUES (?,?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setString(1, snaktype);
+        stmt.setString(2, value);
+        stmt.setInt(3, userid);
+        stmt.setInt(4, statementid);
+        return stmt;
+    }
+
+    public static PreparedStatement createQualifier(int propertyid, String value, int claimid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Qualifiers(propertyid, qvalue, claimid) VALUES (?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setInt(1, propertyid);
+        stmt.setString(2, value);
+        stmt.setInt(3, claimid);
+        return stmt;
+    }
+
+    public static PreparedStatement createReference(String url, String publicationDate, String retrievalDate, double reliabilityRating, double neutralityRating, String multiClaimType, int claimId) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Refs(url, publicationdate, retrievaldate, trustrating, neutralityrating, claimid) VALUES (?,?,?,?,?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setString(1, url);
+        stmt.setDate(2, Date.valueOf(publicationDate));
+        stmt.setDate(3, Date.valueOf(retrievalDate));
+        stmt.setFloat(4, (float)reliabilityRating);
+        stmt.setFloat(5, (float)neutralityRating);
+        stmt.setInt(6, claimId);
+        return stmt;
+    }
+
+    public static PreparedStatement createAuthor(String author, int referenceid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Authors(author, refid) VALUES (?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setString(1, author);
+        stmt.setInt(2, referenceid);
+        return stmt;
+    }
+
+    public static PreparedStatement createUser(String userName, double reputation) throws SQLException{
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO Users(username, reputation) VALUES (?,?);",
+                Statement.RETURN_GENERATED_KEYS
+        );
+        stmt.setString(1, userName);
+        stmt.setFloat(2, (float)reputation);
         return stmt;
     }
 }
