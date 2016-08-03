@@ -11,8 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class RequestRouter {
@@ -42,149 +40,32 @@ public class RequestRouter {
     public RequestRouter() {
         //returns limit# or default 10 of the latest edited events
         //is called by: localhost.com:4567/getLatestEditedEvents
-        /* TODO: Move code to acquire needed resultsets somewhere else. */
         Spark.get("/getLatestEditedEvents", (req, res) -> {
-            int limit = ParameterExtractor.extractLimit(req, 10);
-            JSONObject result;
-            try {
-                ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
-                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
-                if (events.isBeforeFirst()) { // events is not empty.
-                    while (events.next()) {
-                        int eventid = events.getInt("eventid");
-                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
-                        eventCategories.put(eventid, categories);
-                    }
-                    // Reset cursor.
-                    events.beforeFirst();
-                }
-                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                result = new JSONObject("{ \"error\": \"\" }");
-            }
-            return result.toString();
+            JSONObject response = GetRequestProcessor.processGetLatestEditedEvents(req);
+            return response.toString();
         });
 
         //returns all events with the given category
         //is called by: http://localhost:4567/getEventsByCategory?category=catastrophe
-        /* TODO: Move code to acquire needed resultsets somewhere else. */
         Spark.get("/getEventsByCategory", (req, res) -> {
-            String category;
-            try {
-                category = ParameterExtractor.extractCategory(req);
-            } catch (IllegalArgumentException e) {
-                category = "";
-            }
-            JSONObject result;
-            try {
-                ResultSet events = PreparedStatementGenerator.getEventsByCategory(category).executeQuery();
-                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
-                if (events.isBeforeFirst()) { // events is not empty.
-                    while (events.next()) {
-                        int eventid = events.getInt("eventid");
-                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
-                        eventCategories.put(eventid, categories);
-                    }
-                    // Reset cursor.
-                    events.beforeFirst();
-                }
-                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                result = new JSONObject("{ \"error\": \"\" }");
-            }
-            return result.toString();
+            JSONObject response = GetRequestProcessor.processGetEventsByCategory(req);
+            return response.toString();
         });
 
         //returns all events with the given label
         //is called by: localhost:4567/getEventsByLabel?label=2016%20French%20Open
         /* TODO: Move code to acquire needed resultsets somewhere else. */
         Spark.get("/getEventsByLabel", (req, res) -> {
-            String label;
-            try {
-                label = ParameterExtractor.extractLabel(req);
-            } catch (IllegalArgumentException e) {
-                label = "";
-            }
-            JSONObject result;
-            try {
-                ResultSet events = PreparedStatementGenerator.getEventsByLabel(label).executeQuery();
-                Map<Integer,ResultSet> eventCategories = new HashMap<Integer, ResultSet>();
-                if (events.isBeforeFirst()) { // events is not empty.
-                    while (events.next()) {
-                        int eventid = events.getInt("eventid");
-                        ResultSet categories = PreparedStatementGenerator.getCategoriesByEventId(eventid).executeQuery();
-                        eventCategories.put(eventid, categories);
-                    }
-                    // Reset cursor.
-                    events.beforeFirst();
-                }
-                result = ResultSetToJSONMapper.mapEvents(events, eventCategories);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                result = new JSONObject("{ \"error\": \"\" }");
-            }
-            return result.toString();
+            JSONObject response = GetRequestProcessor.processGetEventsByLabel(req);
+            return response.toString();
         });
 
         //returns event with all claims(+qualifiers, references)
         //is called by: localhost.com:4567/getEventById?id=321
         /* TODO: Move code to acquire needed resultsets somewhere else. */
         Spark.get("/getEventById", (req, res) -> {
-            int eventId;
-            try {
-                eventId = ParameterExtractor.extractId(req);
-            } catch (IllegalArgumentException e) {
-                return new JSONObject("{ \"error\": \"\" }");
-            }
-            JSONObject result;
-            try {
-                ResultSet event = PreparedStatementGenerator.getEventById(eventId).executeQuery();
-                if (event.isBeforeFirst()) { // the event exists.
-                    ResultSet categories;
-                    ResultSet statements;
-                    Map<Integer, ResultSet> statementClaims = new HashMap<Integer, ResultSet>();
-                    Map<Integer, ResultSet> claimQualifiers = new HashMap<Integer, ResultSet>();
-                    Map<Integer, ResultSet> claimReferences = new HashMap<Integer, ResultSet>();
-                    // Get categories.
-                    categories = PreparedStatementGenerator.getCategoriesByEventId(eventId).executeQuery();
-                    // Get statements.
-                    statements = PreparedStatementGenerator.getStatementsByEventId(eventId).executeQuery();
-                    if (statements.isBeforeFirst()) {// event has any claims.
-                        // Iterate over all claims.
-                        while (statements.next()) {
-                            int statementId = statements.getInt("statementid");
-                            ResultSet claims = PreparedStatementGenerator.getClaimsByStatementId(statementId).executeQuery();
-                            statementClaims.put(statementId, claims);
-                            if (claims.isBeforeFirst()) {
-                                while (claims.next()) {
-                                    int claimId = claims.getInt("claimid");
-                                    // Get all qualifiers of current claim.
-                                    ResultSet qualifiers = PreparedStatementGenerator.getQualifiersByClaimId(claimId).executeQuery();
-                                    claimQualifiers.put(claimId, qualifiers);
-                                    // Get all references of current claim.
-                                    ResultSet references = PreparedStatementGenerator.getReferencesByClaimId(claimId).executeQuery();
-                                    claimReferences.put(claimId, references);
-                                }
-                                claims.beforeFirst();
-                            }
-                        }
-                        // Reset cursor.
-                        statements.beforeFirst();
-                    }
-                    result = ResultSetToJSONMapper.mapEventWithClaims(event, categories, statements, statementClaims,
-                            claimQualifiers, claimReferences);
-                } else { // the event does not exist.
-                    /* TODO: detailed missing message */
-                    result = new JSONObject("{ \"missing\":\"\"");
-                }
-            } catch (SQLException e) {
-                /* TODO: detailed error message */
-                e.printStackTrace();
-                result = new JSONObject("{ \"error\": \"\" }");
-            }
-            return result.toString();
+            JSONObject response = GetRequestProcessor.processGetEventById(req);
+            return response.toString();
         });
 
         Spark.get("/utility/getEventsByCategory", (req, res) -> {
