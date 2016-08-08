@@ -22,6 +22,7 @@ public class PostRequestProcessor {
             JSONObject curatedClaim = new JSONObject(req.body());
             // Get all information from the JSON body.
             int eventId = curatedClaim.getInt("eventId");
+            String eventName = curatedClaim.getString("eventName");
             // TODO: check before getting this value.
             String userName = curatedClaim.getString("user").trim();
             int propertyId = curatedClaim.getInt("propertyId");
@@ -44,7 +45,7 @@ public class PostRequestProcessor {
             ResultSet event = PreparedStatementGenerator.getEventById(eventId).executeQuery();
             // Check if event with eventId doesn't exist in database.
             if (!event.isBeforeFirst()) {
-                PreparedStatementGenerator.createEvent(eventId, "NULL", Date.valueOf(LocalDate.now())).executeUpdate();
+                PreparedStatementGenerator.createEvent(eventId, eventName, Date.valueOf(LocalDate.now())).executeUpdate();
             }
             ResultSet statement = PreparedStatementGenerator.getStatementByEventIdAndPropertyId(eventId, propertyId).executeQuery();
             int statementId;
