@@ -17,9 +17,15 @@ import java.time.LocalDate;
 public class PostRequestProcessor {
 
     public static JSONObject processAddCuratedClaim(Request req) {
+        String reqBody = req.body();
+        JSONObject response = processAddCuratedClaim(reqBody);
+        return response;
+    }
+
+    public static JSONObject processAddCuratedClaim(String reqBody) {
         JSONObject response = new JSONObject();
         try {
-            JSONObject curatedClaim = new JSONObject(req.body());
+            JSONObject curatedClaim = new JSONObject(reqBody);
             // Get all information from the JSON body.
             int eventId = curatedClaim.getInt("eventId");
             String eventName = curatedClaim.getString("eventName");
@@ -118,10 +124,16 @@ public class PostRequestProcessor {
     }
 
     public static JSONObject processAddRankedClaims(Request req) {
+        String reqBody = req.body();
+        JSONObject response = processAddCuratedClaim(reqBody);
+        return response;
+    }
+
+    public static JSONObject processAddRankedClaims(String reqBody) {
         JSONObject response = new JSONObject();
         try {
             response.put("failed", new JSONArray());
-            JSONObject body = new JSONObject(req.body());
+            JSONObject body = new JSONObject(reqBody);
             for (Object obj : body.getJSONArray("rankedclaims")) {
                 JSONObject rankedClaim = (JSONObject) obj;
                 int claimid = rankedClaim.getInt("id");
