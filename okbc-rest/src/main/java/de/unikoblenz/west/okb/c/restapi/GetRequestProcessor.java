@@ -15,6 +15,11 @@ public class GetRequestProcessor {
 
     public static JSONObject processGetLatestEditedEvents(Request req) {
         int limit = ParameterExtractor.extractLimit(req, 10);
+        JSONObject result = processGetLatestEditedEvents(limit);
+        return result;
+    }
+
+    public static JSONObject processGetLatestEditedEvents(int limit) {
         JSONObject result;
         try {
             ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
@@ -43,6 +48,11 @@ public class GetRequestProcessor {
         } catch (IllegalArgumentException e) {
             category = "";
         }
+        JSONObject result = processGetEventsByCategory(category);
+        return result;
+    }
+
+    public static JSONObject processGetEventsByCategory(String category) {
         JSONObject result;
         try {
             ResultSet events = PreparedStatementGenerator.getEventsByCategory(category).executeQuery();
@@ -71,6 +81,11 @@ public class GetRequestProcessor {
         } catch (IllegalArgumentException e) {
             label = "";
         }
+        JSONObject result = processGetEventsByLabel(label);
+        return result;
+    }
+
+    public static JSONObject processGetEventsByLabel(String label) {
         JSONObject result;
         try {
             ResultSet events = PreparedStatementGenerator.getEventsByLabel(label).executeQuery();
@@ -97,8 +112,15 @@ public class GetRequestProcessor {
         try {
             eventId = ParameterExtractor.extractId(req);
         } catch (IllegalArgumentException e) {
-            return new JSONObject("{ \"error\": \"\" }");
+            JSONObject result = new JSONObject();
+            result.put("error", "id is not valid");
+            return result;
         }
+        JSONObject result = processGetEventById(eventId);
+        return result;
+    }
+
+    public static JSONObject processGetEventById(int eventId) {
         JSONObject result;
         try {
             ResultSet event = PreparedStatementGenerator.getEventById(eventId).executeQuery();
