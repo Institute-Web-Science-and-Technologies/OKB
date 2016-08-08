@@ -81,8 +81,6 @@ public class RequestRouter {
             JSONObject response = PostRequestProcessor.processAddRankedClaims(req);
             return response.toString();
         });
-
-
     }
 
 }
