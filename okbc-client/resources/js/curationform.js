@@ -27,6 +27,7 @@ var TEMPLATE = {
 */
 var curatingData = {
     'eventId' : undefined,
+    'eventName': undefined,
     'user': '',
     'propertyId': undefined,
     'propertyName': undefined,
@@ -120,7 +121,8 @@ function loadStartCurationForm() {
 function resetCurationForm() {
     // Reset curatingData.
     curatingData = {
-        'eventId' : undefined,
+        'eventId': undefined,
+        'eventName': undefined,
         'user': '',
         'propertyId': undefined,
         'propertyName': undefined,
@@ -350,6 +352,8 @@ function loadOverviewForm() {
 function processOverviewForm() {
     // Add event ID to the curating data.
     curatingData.eventId = parseInt(currentEvent.id.substring(1));
+    // Add event label to curating data.
+    curatingData.eventName = currentEvent.label;
     // Push a copy of curatedData into curatedClaims.
     curatedClaims.push(jQuery.extend(true, {}, curatingData));
     // Submit curation data to server.

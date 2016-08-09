@@ -102,8 +102,25 @@ function createWikidataGetSuggestionsRequest(entityId, callbackFunc) {
     var params = 
         { action : 'wbsgetsuggestions'
         , entity : entityId
-        , format: 'json'
+        , format : 'json'
         };
+    return createWikidataRequest(params, callbackFunc);
+}
+
+/*
+* createWikidataGetUserDataRequest takes a callback function as an argument.
+* It returns a URL, which represents a call to get the user information of the
+* currently logged-in Wikidata user. This information is returned as the argument of
+* the callback function.
+*/
+function createWikidataGetUserDataRequest(callbackFunc) {
+    console.log("create wikidata get user data request");
+    var params = 
+    { action : 'query'
+    , meta : 'userinfo'
+    , uiprop : 'rights|groups|editcount'
+    , format : 'json'
+    };
     return createWikidataRequest(params, callbackFunc);
 }
 
@@ -138,4 +155,11 @@ function executeEventByIdRequest(eventId, callbackFunc) {
     console.log("execute get event by id request");
     var url = OKB_EVENT_BASE_URL + "/getEventById";
     $.get(url, {'id': eventId}, callbackFunc, 'json');
+}
+
+// TODO: doc
+function executeGetUserInfoRequest(username, callbackFunc) {
+    console.log("execute get user info request");
+    var url = OKB_EVENT_BASE_URL + "/getUserInfo";
+    $.get(url, {'username': username, callbackFunc, 'json');
 }
