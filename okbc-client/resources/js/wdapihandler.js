@@ -112,6 +112,9 @@ function createWikidataGetSuggestionsRequest(entityId, callbackFunc) {
 * It returns a URL, which represents a call to get the user information of the
 * currently logged-in Wikidata user. This information is returned as the argument of
 * the callback function.
+* 
+* @param callbackFunc a single argument function handling the response data.
+* @return a URL string describing the call to the Wikidata API.
 */
 function createWikidataGetUserDataRequest(callbackFunc) {
     console.log("create wikidata get user data request");

@@ -1,8 +1,23 @@
-// TODO: doc
+/*
+* ID_LABEL_STORE behaves as a key-value set.
+* Keys are Wikidata entity IDs and the values are the corresponding labels.
+*/
 var ID_LABEL_STORE = {};
+/*
+* Counts the number of currently active requests to Wikidata,
+* which were made to get missing labels.
+*/
 var unfinishedGatherStoreCalls = 0;
 
-// TODO: doc, rename
+/*
+* requestMissingIdLabelPairs takes an WikidataItem object as argument.
+* It executes requests to the Wikidata API for the entity IDs found in the item,
+* which are currently not element of the ID_LABEL_STORE.
+* Side effects: 
+*   - unfinishedGatherStoreCalls may be increment multiple times.
+*
+* @params item a WikidataItem object.
+*/
 function requestMissingIdLabelPairs(item) {
     var missingIds = getAllIdsFrom(item).subtract(Object.keys(ID_LABEL_STORE));
     // One API request can only handle 50 entity IDs at once.
