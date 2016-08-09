@@ -3,6 +3,7 @@ package de.unikoblenz.west.okb.c.restapi;
 import org.json.JSONObject;
 import spark.Request;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -165,6 +166,33 @@ public class GetRequestProcessor {
         } catch (SQLException e) {
             result = new JSONObject();
             result.put("error", e.getMessage());
+        }
+        return result;
+    }
+
+    public static JSONObject processGetUserInformation(Request req) {
+        JSONObject result = new JSONObject();
+        String username = req.queryParams("username");
+        if (username == null) {
+            result.put("error", "no username provided");
+        } else {
+            try {
+                ResultSet userRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
+                double reputation;
+                // Check if there is no user for the provided username.
+                if (!userRs.isBeforeFirst()) {
+                    reputation = Reputation.DEFAULT_REPUTATION; // TODO: Actually calculate reputation.
+                    // Create a new user with this name.
+                    PreparedStatement userPs = PreparedStatementGenerator.createUser(username, reputation);
+                } else {
+                    userRs.first();
+                    reputation = userRs.getFloat("reputation");
+                }
+                result.put("username", username);
+                result.put("reputation", reputation);
+            } catch (SQLException e) {
+                result.put("error", e.getMessage());
+            }
         }
         return result;
     }

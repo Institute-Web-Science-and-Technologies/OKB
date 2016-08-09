@@ -78,7 +78,7 @@ public class PostRequestProcessor {
                     userId = userRs.getInt("userid");
                 } else { // User does not exist.
                     // Add new user to database with initial reputation 0.5 .
-                    PreparedStatement newUserPs = PreparedStatementGenerator.createUser(userName, 0.5);
+                    PreparedStatement newUserPs = PreparedStatementGenerator.createUser(userName, Reputation.DEFAULT_REPUTATION);
                     newUserPs.executeUpdate();
                     // Get userid.
                     ResultSet userIdRs = newUserPs.getGeneratedKeys();
