@@ -133,6 +133,7 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    //TODO: consistent type for Date
     public static PreparedStatement createEvent(int eventid, String label, Date lastedited) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO Events(eventid, label, lastedited) VALUES (?,?,?);",
@@ -143,7 +144,7 @@ public class PreparedStatementGenerator {
         stmt.setDate(3, lastedited);
         return stmt;
     }
-
+    //TODO: consistent type for Date
     public static PreparedStatement createStatement(int propertyid, String label, String datatype, int eventid) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO Statements(propertyid, label, datatype, eventid) VALUES (?,?,?,?);",
@@ -157,7 +158,7 @@ public class PreparedStatementGenerator {
     }
 
     public static PreparedStatement createClaim(String snaktype, String value, int statementid) throws SQLException {
-        PreparedStatement stmt = connector.getConnection().prepareStatement(
+       PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO Claims(snaktype, cvalue, statementid) VALUES (?,?,?);",
                 Statement.RETURN_GENERATED_KEYS
         );
@@ -190,6 +191,7 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    //TODO: consistent type for Date
     public static PreparedStatement createReference(String url, String publicationDate, String retrievalDate, double reliabilityRating, double neutralityRating, String multiClaimType, int claimId) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO Refs(url, publicationdate, retrievaldate, trustrating, neutralityrating, claimid) VALUES (?,?,?,?,?,?);",
@@ -223,4 +225,6 @@ public class PreparedStatementGenerator {
         stmt.setFloat(2, (float)reputation);
         return stmt;
     }
+
+
 }

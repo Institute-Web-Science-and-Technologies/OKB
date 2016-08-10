@@ -21,6 +21,8 @@ public class GetRequestProcessor {
     }
 
     public static JSONObject processGetLatestEditedEvents(int limit) {
+        if (limit<1)
+            return new JSONObject().append("events", null);
         JSONObject result;
         try {
             ResultSet events = PreparedStatementGenerator.getLatestEditedEvents(limit).executeQuery();
