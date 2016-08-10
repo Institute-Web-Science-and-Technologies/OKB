@@ -83,8 +83,7 @@ public class Algorithms {
     return hostname;
 }
   
-  public static void main( String[] args ) throws SQLException, URISyntaxException{
-    
+  public static void main( String[] args ) throws SQLException, URISyntaxException{    
   Properties prop = Config.config();
   if(prop.getProperty("maxAlgo").equals("true"))
   {
