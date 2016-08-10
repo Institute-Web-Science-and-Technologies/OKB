@@ -1,15 +1,28 @@
 package de.unikoblenz.west.okb.c.restapi;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import spark.Request;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by Alex on 22.07.2016.
@@ -149,6 +162,66 @@ public class PostRequestProcessor {
         } catch (JSONException e) {
             response.put("error", "request body is not valid JSON");
         }
+        return response;
+    }
+
+    public static JSONObject processCheckUserLogin(Request req) {
+        JSONObject body = new JSONObject(req.body());
+        String username = body.getString("username");
+        String password = body.getString("password"); // clear-text password...
+
+        JSONObject response = new JSONObject();
+
+        HttpClient httpClient = HttpClients.createDefault();
+
+        // Get the token.
+        HttpGet getToken = new HttpGet("https://www.wikidata.org/w/api.php?action=query&meta=tokens&type=login&format=json");
+        String token;
+        try {
+            HttpResponse getTokenResponse = httpClient.execute(getToken);
+            // Extract the logintoken from the response body.
+            token = new JSONObject(new Scanner(getTokenResponse.getEntity().getContent()).useDelimiter("\\A").next()).getJSONObject("query").getJSONObject("tokens").getString("logintoken");
+        } catch (IOException e) {
+            response.put("error", e.getMessage());
+            return response;
+        }
+
+        // Perform login.
+        HttpPost postLogin = new HttpPost("https://www.wikidata.org/w/api.php?action=login&format=json");
+        List<NameValuePair> params = new ArrayList<>(2);
+        params.add(new BasicNameValuePair("lgname", username));
+        params.add(new BasicNameValuePair("lgpassword", password));
+        params.add(new BasicNameValuePair("lgtoken", token));
+        try {
+            postLogin.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // UTF-8 should always be supported
+        }
+        try {
+            HttpResponse postLoginResponse = httpClient.execute(postLogin);
+            JSONObject loginJson = new JSONObject(new Scanner(postLoginResponse.getEntity().getContent()).useDelimiter("\\A").next()).getJSONObject("login");
+            if (loginJson.getString("result").equals("Failed")) {
+                response.put("failed", loginJson.getString("reason"));
+            } else {
+                response.put("success", "");
+                response.put("username", loginJson.getString("lgusername"));
+                // Add user to database, if he doesn't exist in the database.
+                ResultSet userRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
+                // Check if there is no user for the provided username.
+                if (!userRs.isBeforeFirst()) {
+                    double reputation = Reputation.DEFAULT_REPUTATION; // TODO: Actually calculate reputation.
+                    // Create a new user with this name.
+                    PreparedStatementGenerator.createUser(loginJson.getString("lgusername"), reputation).executeUpdate();
+                }
+            }
+        } catch (IOException e) {
+            response.put("error", e.getMessage());
+            return response;
+        } catch (SQLException e) {
+            response.put("error", e.getMessage());
+            return response;
+        }
+
         return response;
     }
 }

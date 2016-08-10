@@ -82,8 +82,18 @@ public class RequestRouter {
             return response.toString();
         });
 
-        Spark.post("addRankedClaims", (req, res) -> {
+        Spark.post("/addRankedClaims", (req, res) -> {
             JSONObject response = PostRequestProcessor.processAddRankedClaims(req);
+            return response.toString();
+        });
+
+        /*
+         * This route is an absolutely horrible idea.
+         * What basically happens is that we perform a login into Wikidata
+         * and check if the login was successful. If it was not we return why it wasn't.
+         */
+        Spark.post("/checkUserLogin", (req, res) -> {
+            JSONObject response = PostRequestProcessor.processCheckUserLogin(req);
             return response.toString();
         });
     }

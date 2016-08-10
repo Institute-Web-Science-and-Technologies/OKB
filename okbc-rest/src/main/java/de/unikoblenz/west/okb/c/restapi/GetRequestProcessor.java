@@ -3,7 +3,6 @@ package de.unikoblenz.west.okb.c.restapi;
 import org.json.JSONObject;
 import spark.Request;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -180,18 +179,15 @@ public class GetRequestProcessor {
         } else {
             try {
                 ResultSet userRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
-                double reputation;
                 // Check if there is no user for the provided username.
                 if (!userRs.isBeforeFirst()) {
-                    reputation = Reputation.DEFAULT_REPUTATION; // TODO: Actually calculate reputation.
-                    // Create a new user with this name.
-                    PreparedStatement userPs = PreparedStatementGenerator.createUser(username, reputation);
+                    result.put("error", "no user with name " + username + " found.");
                 } else {
                     userRs.first();
-                    reputation = userRs.getFloat("reputation");
+                    double reputation = userRs.getFloat("reputation");
+                    result.put("username", username);
+                    result.put("reputation", reputation);
                 }
-                result.put("username", username);
-                result.put("reputation", reputation);
             } catch (SQLException e) {
                 result.put("error", e.getMessage());
             }

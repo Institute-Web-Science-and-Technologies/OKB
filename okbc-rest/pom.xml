@@ -79,10 +79,17 @@
         </dependency>
 
         <dependency>
+<<<<<<< HEAD
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.0.1</version>
         </dependency>
 
+=======
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+>>>>>>> 30a2190e53e1d353dee6fbacbe7b12a8acfc5674
     </dependencies>
 </project>
