@@ -199,11 +199,12 @@ public class PostRequestProcessor {
         }
         try {
             HttpResponse postLoginResponse = httpClient.execute(postLogin);
-            JSONObject loginJson = new JSONObject(new Scanner(postLoginResponse.getEntity().getContent()).useDelimiter("\\A").next());
+            JSONObject loginJson = new JSONObject(new Scanner(postLoginResponse.getEntity().getContent()).useDelimiter("\\A").next()).getJSONObject("login");
             if (loginJson.getString("result").equals("Failed")) {
                 response.put("failed", loginJson.getString("reason"));
             } else {
                 response.put("success", "");
+                response.put("username", loginJson.getString("lgusername"));
                 // Add user to database, if he doesn't exist in the database.
                 ResultSet userRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
                 // Check if there is no user for the provided username.
