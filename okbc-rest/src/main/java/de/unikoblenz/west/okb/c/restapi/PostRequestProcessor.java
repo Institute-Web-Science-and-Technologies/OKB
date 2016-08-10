@@ -211,7 +211,7 @@ public class PostRequestProcessor {
                 if (!userRs.isBeforeFirst()) {
                     double reputation = Reputation.DEFAULT_REPUTATION; // TODO: Actually calculate reputation.
                     // Create a new user with this name.
-                    PreparedStatementGenerator.createUser(username, reputation).executeUpdate();
+                    PreparedStatementGenerator.createUser(loginJson.getString("lgusername"), reputation).executeUpdate();
                 }
             }
         } catch (IOException e) {
