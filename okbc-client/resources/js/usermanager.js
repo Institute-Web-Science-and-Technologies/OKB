@@ -1,17 +1,61 @@
-function loadUser() {
-    var request = createWikidataGetUserDataRequest(handleUserDataRequest);
-    executeApiRequest(request);
-}
+/*
+* User information is stored in the sessionStorage with the key 'user'.
+*/
+var userLoginDivId = '#userlogin';
+var userLoginFrame;
 
-function handleUserDataRequest(data) {
-    var userInfo = data['query']['userinfo'];
-    // Check if user is not logged in.
-    if (userInfo.hasOwnProperty('anon')) { // not logged in.
-    } else { // is logged in.
-        var username = userinfo['name'];
-        executeGetUserInfoRequest(username, function(data){loadUserInfoFrame(userInfo, data);});
+function initUserManager() {
+    userLoginFrame = $(userLoginDivId);
+    // user already logged in.
+    if (sessionStorage.getItem('user')) {
+        var userData = JSON.parse(sessionStorage.getIem('user'));
+        loadUserInfoFrame(userData);
+        return;
+    } else {
+        loadUserLoginFrame();
+        return;
     }
 }
 
-function loadUserInfoFrame(wdUserInfo, okbUserInfo) {
+function executeLogin() {
+    var username = $('#username').val();
+    var password = $('#password').val();
+    executeCheckUserLogin(username, password, queryUserInformation);
+}
+
+function executeLogout() {
+    sessionStorage.removeItem('user');
+    loadUserLoginFrame();
+}
+
+// TODO: refactor
+function queryUserInformation(loginValidationData) {
+    console.log(loginValidationData);
+    if (loginValidationData.hasOwnProperty('failed')) {
+        window.alert(loginValidationData['failed']);
+        return;
+    } else if (loginValidationData.hasOwnProperty('error')) {
+        window.alert('Sorry. The server could not process your login request. This issue may take time to resolve.');
+        return;
+    } else if (loginValidationData.hasOwnProperty('success')) {
+        var username = loginValidationData['username'];
+        executeGetUserInfoRequest(username, loadUserInfoFrame);
+        return;
+    }
+    window.alert('Unexpected server response occured. Please report this issue.');
+}
+
+function loadUserInfoFrame(userData) {
+    console.log(userData);
+    if (userData.hasOwnProperty('error')) {
+        window.alert(userData['error']);
+        return;
+    }
+    // Save userData.
+    sessionStorage.setItem('user', JSON.stringify(userData));
+    $(userLoginDivId).html(Mustache.render($('#userInfoTemplate').html(), userData));
+}
+
+function loadUserLoginFrame() {
+    $(userLoginDivId).html(Mustache.render($('#userLoginTemplate').html()));
 }

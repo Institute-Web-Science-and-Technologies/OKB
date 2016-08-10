@@ -121,7 +121,6 @@ function createWikidataGetUserDataRequest(callbackFunc) {
     var params = 
     { action : 'query'
     , meta : 'userinfo'
-    , uiprop : 'rights|groups|editcount'
     , format : 'json'
     };
     return createWikidataRequest(params, callbackFunc);
@@ -163,6 +162,18 @@ function executeEventByIdRequest(eventId, callbackFunc) {
 // TODO: doc
 function executeGetUserInfoRequest(username, callbackFunc) {
     console.log("execute get user info request");
-    var url = OKB_EVENT_BASE_URL + "/getUserInfo";
-    $.get(url, {'username': username, callbackFunc, 'json');
+    var url = OKB_EVENT_BASE_URL + "/getUserInformation";
+    $.get(url, {'username': username}, callbackFunc, 'json');
+}
+
+// TODO: doc
+function executeCheckUserLogin(username, password, callbackFunc) {
+    console.log("execute check user info request");
+    var url = OKB_EVENT_BASE_URL + "/checkUserLogin";
+    $.ajax({
+        'type': 'POST',
+        'url': url,
+        'data': JSON.stringify({username:username, password:password}),
+        'success': callbackFunc
+    });
 }
