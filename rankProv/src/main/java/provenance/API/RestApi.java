@@ -1,6 +1,6 @@
-package rankingProvenance.API;
+package provenance.API;
 
-import rankingProvenance.rankProv.ParseJson;
+import provenance.data.ParseJson;
 import spark.Spark;
 
 public class RestApi {

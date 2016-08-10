@@ -1,4 +1,4 @@
-package rankingProvenance.rankProv;
+package provenance.data;
 
 import java.io.IOException;
 import java.sql.SQLException;

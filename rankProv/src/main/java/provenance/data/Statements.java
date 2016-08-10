@@ -1,4 +1,4 @@
-package rankingProvenance.rankProv;
+package provenance.data;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -8,50 +8,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventStatementClaim {
+public class Statements {
+  Integer id;
+  Integer propertyId;
+  String label;
   
-  Integer eventId, statementId, claimId;
-  
-  
-  
-  public Integer getEventId() {
-    return eventId;
+  public Integer getId() {
+    return id;
   }
 
-  public void setEventId(Integer eventId) {
-    this.eventId = eventId;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
-  public Integer getStatementId() {
-    return statementId;
+  public Integer getPropertyId() {
+    return propertyId;
   }
 
-  public void setStatementId(Integer statementId) {
-    this.statementId = statementId;
+  public void setPropertyId(Integer propertyId) {
+    this.propertyId = propertyId;
   }
 
-  public Integer getClaimId() {
-    return claimId;
+  public String getLabel() {
+    return label;
   }
 
-  public void setClaimId(Integer claimId) {
-    this.claimId = claimId;
+  public void setLabel(String label) {
+    this.label = label;
   }
 
   public boolean save() throws SQLException
   {
-  
-    int i =  MySql.getDbCon().insert("INSERT INTO eventStatementClaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
+   
+    
+    int i =  MySql.getDbCon().insert("INSERT INTO statements (`id`,`propertyId`, `label`) VALUES ("+this.id+",'"+this.propertyId+"','"+this.label+"') ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getEvent(int id) throws SQLException
+  public List<Map<String,String>> getStatement(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE eventId="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from statements WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -67,5 +67,8 @@ public class EventStatementClaim {
         data.add(row);
     }
     return data;
+    
   }
+  
+  
 }

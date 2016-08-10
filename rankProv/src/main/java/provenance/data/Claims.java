@@ -1,4 +1,4 @@
-package rankingProvenance.rankProv;
+package provenance.data;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

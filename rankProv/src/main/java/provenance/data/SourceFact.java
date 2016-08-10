@@ -1,4 +1,4 @@
-package rankingProvenance.rankProv;
+package provenance.data;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -8,44 +8,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Events {
-  
-  Integer eventID;
-  String label;
-  String categories;
-  String location;
-  
-  public Integer getEventID() {
-    return eventID;
-  }
-  public void setEventID(Integer eventID) {
-    this.eventID = eventID;
-  }
-  public String getLabel() {
-    return label;
-  }
-  public void setLabel(String label) {
-    this.label = label;
-  }
-  public String getCategories() {
-    return categories;
-  }
-  public void setCategories(String categories) {
-    this.categories = categories;
-  }
-  public String getLocation() {
-    return location;
-  }
-  public void setLocation(String location) {
-    this.location = location;
-  }
+public class SourceFact {
 
+  Integer id;
+  String Source;
+  String fact;
+  Integer statementId;
+  
+
+  public Integer getId() {
+    return id;
+  }
+  public void setId(Integer id) {
+    this.id = id;
+  }
+  public String getSource() {
+    return Source;
+  }
+  public void setSource(String source) {
+    Source = source;
+  }
+  public String getFact() {
+    return fact;
+  }
+  public void setFact(String fact) {
+    this.fact = fact;
+  }
+  
+  public Integer getStatementId() {
+    return statementId;
+  }
+  public void setStatementId(Integer statementId) {
+    this.statementId = statementId;
+  }
   
   public boolean save() throws SQLException
   {
-   
-    
-    int i =  MySql.getDbCon().insert("INSERT INTO EVENTS (`eventId`,`label`, `categories`, `location`) VALUES ("+this.eventID+",'"+this.label+"','"+this.categories+"','"+this.location+"') ");
+  
+    int i =  MySql.getDbCon().insert("INSERT INTO sourcefact (`id`,`source`,`fact`,`statementId`) VALUES ("+this.id+",'"+this.Source+"','"+this.fact+"','"+this.statementId+"') ");
     if(i>0)
       return true;
     else
@@ -55,7 +55,7 @@ public class Events {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from events WHERE eventId="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE id="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
@@ -71,7 +71,5 @@ public class Events {
         data.add(row);
     }
     return data;
-    
   }
-  
 }

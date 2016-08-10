@@ -1,4 +1,4 @@
-package rankingProvenance.rankProv;
+package provenance.data;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -8,44 +8,40 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SourceFact {
-
-  Integer id;
-  String Source;
-  String fact;
-  Integer statementId;
+public class EventStatementClaim {
   
-
-  public Integer getId() {
-    return id;
-  }
-  public void setId(Integer id) {
-    this.id = id;
-  }
-  public String getSource() {
-    return Source;
-  }
-  public void setSource(String source) {
-    Source = source;
-  }
-  public String getFact() {
-    return fact;
-  }
-  public void setFact(String fact) {
-    this.fact = fact;
-  }
+  Integer eventId, statementId, claimId;
   
+  
+  
+  public Integer getEventId() {
+    return eventId;
+  }
+
+  public void setEventId(Integer eventId) {
+    this.eventId = eventId;
+  }
+
   public Integer getStatementId() {
     return statementId;
   }
+
   public void setStatementId(Integer statementId) {
     this.statementId = statementId;
   }
-  
+
+  public Integer getClaimId() {
+    return claimId;
+  }
+
+  public void setClaimId(Integer claimId) {
+    this.claimId = claimId;
+  }
+
   public boolean save() throws SQLException
   {
   
-    int i =  MySql.getDbCon().insert("INSERT INTO sourcefact (`id`,`source`,`fact`,`statementId`) VALUES ("+this.id+",'"+this.Source+"','"+this.fact+"','"+this.statementId+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO eventStatementClaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
     if(i>0)
       return true;
     else
@@ -55,7 +51,7 @@ public class SourceFact {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE id="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE eventId="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
