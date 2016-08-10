@@ -164,8 +164,10 @@ public class TruthFinder {
             FileOutputStream out;
             ObjectOutputStream os;
             try {
-              System.out.println(trustVector);
-              System.out.println(confidenceVector);
+                System.out.println("Trust on Website");
+                System.out.println(trustVector);
+                System.out.println("\nConfidence on facts");
+                System.out.println(confidenceVector);
                 out = new FileOutputStream(aMatrix);
                 os = new ObjectOutputStream(out);
                 os.writeObject(A);
@@ -187,7 +189,9 @@ public class TruthFinder {
             }
             return true;
         } else {
+            System.out.println("Trust on Website");
             System.out.println(trustVector);
+            System.out.println("Confidence on factor");
             System.out.println(confidenceVector);
 
             return false;

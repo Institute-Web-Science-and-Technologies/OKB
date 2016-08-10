@@ -20,7 +20,14 @@ public class References {
   String articleType;
   String title;
   float neutralityRating;
+  Integer claimId;
   
+  public Integer getClaimId() {
+    return claimId;
+  }
+  public void setClaimId(Integer claimId) {
+    this.claimId = claimId;
+  }
   public Integer getId() {
     return id;
   }
@@ -81,7 +88,7 @@ public class References {
   public boolean save() throws SQLException
   {
   
-    int i =  MySql.getDbCon().insert("INSERT INTO `references` (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"',"+this.trustRating+",'"+this.articleType+"','"+this.title+"',"+this.neutralityRating+") ");
+    int i =  MySql.getDbCon().insert("INSERT INTO `references` (`id`,`url`, `publicationDate`, `retreivalDate`, `authors`, `trustRating`, `articleType`, `title`, `neutralityRating`, `claimId`) VALUES ("+this.id+",'"+this.url+"','"+this.publicationDate+"','"+this.retrievalDate+"','"+this.authors+"',"+this.trustRating+",'"+this.articleType+"','"+this.title+"',"+this.neutralityRating+","+this.claimId+") ");
     if(i>0)
       return true;
     else

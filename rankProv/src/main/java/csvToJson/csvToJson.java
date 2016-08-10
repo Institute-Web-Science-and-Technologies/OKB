@@ -13,7 +13,7 @@ import org.json.JSONObject;
  * @author Mujji
  * 
  */
-public class csvToJson {
+public class CsvToJson {
 
   public static void main(String[] args){
   String csvFileToRead = "data.csv";

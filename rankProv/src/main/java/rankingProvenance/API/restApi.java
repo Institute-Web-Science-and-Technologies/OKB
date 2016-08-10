@@ -21,10 +21,6 @@ public class RestApi {
             }
             return js;
 
-        });
- 
-    
- 
-      
+        }); 
     }
  }

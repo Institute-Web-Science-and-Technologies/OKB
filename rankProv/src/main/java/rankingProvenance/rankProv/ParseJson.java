@@ -100,6 +100,7 @@ public class ParseJson {
                   String title = node2.path("title").asText();
                   float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
                   
+                  
                   SourceFact sf =new SourceFact();
                   sf.Source = url;
                   sf.fact = cl.value;
@@ -116,6 +117,7 @@ public class ParseJson {
                   ref.articleType=articleType;
                   ref.title = title;
                   ref.neutralityRating = neutralityRating;
+                  ref.claimId = cl.id;
                   List<Map<String,String>> refExist = ref.getReference(ref.id);
                   if(refExist.size()<1)
                     ref.save();
