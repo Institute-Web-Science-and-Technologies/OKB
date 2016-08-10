@@ -204,8 +204,19 @@ public class PostRequestProcessor {
                 response.put("failed", loginJson.getString("reason"));
             } else {
                 response.put("success", "");
+                // Add user to database, if he doesn't exist in the database.
+                ResultSet userRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
+                // Check if there is no user for the provided username.
+                if (!userRs.isBeforeFirst()) {
+                    double reputation = Reputation.DEFAULT_REPUTATION; // TODO: Actually calculate reputation.
+                    // Create a new user with this name.
+                    PreparedStatementGenerator.createUser(username, reputation).executeUpdate();
+                }
             }
-        } catch (IOException e) { //
+        } catch (IOException e) {
+            response.put("error", e.getMessage());
+            return response;
+        } catch (SQLException e) {
             response.put("error", e.getMessage());
             return response;
         }
