@@ -188,7 +188,7 @@ public class PostRequestProcessor {
 
         // Perform login.
         HttpPost postLogin = new HttpPost("https://www.wikidata.org/w/api.php?action=login&format=json");
-        List<NameValuePair> params = new ArrayList<>(2);
+        List<NameValuePair> params = new ArrayList<>(3);
         params.add(new BasicNameValuePair("lgname", username));
         params.add(new BasicNameValuePair("lgpassword", password));
         params.add(new BasicNameValuePair("lgtoken", token));
