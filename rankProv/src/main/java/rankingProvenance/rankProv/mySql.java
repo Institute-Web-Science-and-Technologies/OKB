@@ -2,8 +2,11 @@ package rankingProvenance.rankProv;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.sql.*;
 import com.mysql.jdbc.Driver;
+
+import App.Config;
 //import org.json.JSONArray;  
 //import org.json.JSONObject;  
 
@@ -13,14 +16,17 @@ import com.mysql.jdbc.Driver;
  */
 public final class MySql {
     public Connection conn;
-    private Statement statement;
+    private Statement statement;    
     public static MySql db;
+    
+    Properties prop = Config.config();
+    
     public MySql() {
-        String url= "jdbc:mysql://localhost:3306/";
-        String dbName = "okbr";
+        String url= prop.getProperty("dburl");
+        String dbName = prop.getProperty("database");
         String driver = "com.mysql.jdbc.Driver";
-        String userName = "root";
-        String password = "";
+        String userName = prop.getProperty("dbuser");
+        String password = prop.getProperty("dbpassword");
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);

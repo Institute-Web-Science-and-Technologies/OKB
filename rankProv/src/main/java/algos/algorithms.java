@@ -1,5 +1,6 @@
 package algos;
 
+import java.util.List;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
@@ -7,31 +8,57 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
+import App.Config;
 import rankingProvenance.rankProv.MySql;
 
 public class Algorithms {
 
-  public static ArrayList<Map<String, String>> rankTruthFinder() throws SQLException, URISyntaxException
+  public static Map <String, List<String>> rankTruthFinder() throws SQLException, URISyntaxException
   {
     ResultSet rs = MySql.getDbCon().query("SELECT source, fact FROM `sourcefact` ");
     ResultSetMetaData md = rs.getMetaData();
     int columns = md.getColumnCount();
-    ArrayList<Map<String, String>> rows = new ArrayList<Map<String, String>>();
+    Map <String, List<String>> rows = new HashMap<>();
     int count=1;
     while (rs.next()){
-        Map<String, String> row = new HashMap<String, String>(columns);
-       // for(int i = 1; i <= columns; ++i){
-          String k = rs.getObject(2).toString();
-            row.put(getHostName(rs.getObject(1).toString()),k);
-       // }
-        rows.add(row);
+        Map<String, List<String>> row = new HashMap<String, List<String>>(columns);
+        String k = rs.getObject(2).toString();
+        
+        
+        List<String> itemsList = rows.get((getHostName(rs.getObject(1).toString())));
+
+        // if list does not exist create it
+        if(itemsList == null) {
+             itemsList = new ArrayList<String>();
+             itemsList.add(k);
+             rows.put(getHostName(rs.getObject(1).toString()), itemsList);
+        } else {
+            // add if item is not already in list
+            if(!itemsList.contains(getHostName(rs.getObject(1).toString()))) itemsList.add(k);
+        }
+        
+      
         count++;
     }
-    long countUnique = rows.stream().distinct().count();
+   // long countUnique = rows.stream().distinct().count();
     System.out.println(rows);
-    System.out.println(countUnique);
+    System.out.println(rows.size());
+    double value[][]={};
+    Iterator itr = rows.values().iterator();
+    while(itr.hasNext()) {
+      Object element = itr.next();
+   }
+    for (int i = 0; i<=rows.size() ; i++)
+    {
+     // value
+    }
+    
+   
+    //System.out.println(countUnique);
     return  rows;
     
        
@@ -57,30 +84,46 @@ public class Algorithms {
 }
   
   public static void main( String[] args ) throws SQLException, URISyntaxException{
-  MaxAlgo mA = new MaxAlgo();
-  ArrayList<Map<Integer, Integer>>  res= mA.rankMax(2);
-  System.out.println(res);
-  
-  RecentAlgo recent = new RecentAlgo();
-  //ArrayList<Map<Integer, String>>  resRec= recent.rankRecent(4);
-  //System.out.println(resRec);
-  rankTruthFinder();
-  
-  double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
-      { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
-      { 0, 1.0, 0, 0, 0 } };
+    
+  Properties prop = Config.config();
+  if(prop.getProperty("maxAlgo").equals("true"))
+  {
+    System.out.println("\n=======Max Algo Results=====\n");
 
-    TruthFinder calc = new TruthFinder(value);
-    
-    boolean result;
-    
-    calc.calculateConfidenceVectors();
-    
-    while (!calc.shouldStop(0.99)) {
-      calc.calculateConfidenceVectors();
-    }
-    System.out.println("finished");
-  
+    MaxAlgo mA = new MaxAlgo();
+    ArrayList<Map<Integer, Integer>>  res= mA.rankMax(2);
+    System.out.println(res);
+  }
+  if(prop.getProperty("recentAlgo").equals("true"))
+  {
+    System.out.println("\n=======Recent Algo Results=====\n");
+
+    RecentAlgo recent = new RecentAlgo();
+    ArrayList<Map<Integer, String>>  resRec= recent.rankRecent(4);
+    System.out.println(resRec);
   }
   
+  if(prop.getProperty("truthFinder").equals("true"))
+  {
+    System.out.println("\n=======TruthFinder Algo Results=====\n");
+
+    
+    rankTruthFinder();
+    
+    double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
+        { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
+        { 0, 1.0, 0, 0, 0 } };
+  
+      TruthFinder calc = new TruthFinder(value);
+      
+      boolean result;
+      
+      calc.calculateConfidenceVectors();
+      
+      while (!calc.shouldStop(0.99)) {
+        calc.calculateConfidenceVectors();
+      }
+    
+    }
+  }
 }

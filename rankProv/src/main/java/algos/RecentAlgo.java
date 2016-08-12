@@ -14,11 +14,11 @@ public class RecentAlgo {
   
   public ArrayList<Map<Integer, String>> rankRecent(int statementId) throws SQLException
   {
-    ResultSet rs = MySql.getDbCon().query("SELECT fact"
+    ResultSet rs = MySql.getDbCon().query("SELECT sf.`fact`"
         + "FROM `sourcefact` `sf`"
         + "JOIN eventstatementclaim `esc` ON esc.`statementId`=sf.`statementId`"
         + "JOIN `references` `ref` ON esc.`claimId`=ref.`claimId`"
-        + "WHERE sf.`statementId` = 4 AND ref.`url`=sf.`source`"
+        + "WHERE sf.`statementId` = "+statementId+" AND ref.`url`=sf.`source`"
         + "ORDER BY STR_TO_DATE(ref.`publicationDate`,'%d.%m.%Y') DESC");
     ResultSetMetaData md = rs.getMetaData();
     int columns = md.getColumnCount();
