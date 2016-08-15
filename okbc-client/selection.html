@@ -14,6 +14,7 @@
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
     <script src="thirdparty/js/mustache.min.js"></script>
 
+    <script src="resources/js/usermanager.js"></script>
     <script src="resources/js/selectionform.js"></script>
     <script src="resources/js/wdsearch.js"></script>
     <script src="resources/js/wdapihandler.js"></script>
@@ -22,10 +23,20 @@
     <script src="resources/js/wditemprinter.js"></script>
     <script src="resources/js/config.js"></script>
 </head>
-<body>
+<body onload="initUserManager();">
     <header>
         <a href="index.html"><img alt="OKB LOGO" src=""></a>
         <h1>This is a slogan about OKB and curation.</h1>
+        <div id="userlogin"></div>
+        <script id="userLoginTemplate" type="x-tmpl-mustache">
+            <input id="username" type="text" placeholder="username" />
+            <input id="password" type="password" placeholder="password" />
+            <button onclick="executeLogin();">Login</button>
+        </script>
+        <script id="userInfoTemplate" type="x-tmpl-mustache">
+            {{username}} ({{reputation}}) <br />
+            <span class="logout" onClick="executeLogout();">logout</span>
+        </script>
     </header>
     <main>
         <div id="suggestions">

@@ -8,7 +8,7 @@ function initUserManager() {
     userLoginFrame = $(userLoginDivId);
     // user already logged in.
     if (sessionStorage.getItem('user')) {
-        var userData = JSON.parse(sessionStorage.getIem('user'));
+        var userData = JSON.parse(sessionStorage.getItem('user'));
         loadUserInfoFrame(userData);
         return;
     } else {
@@ -58,4 +58,13 @@ function loadUserInfoFrame(userData) {
 
 function loadUserLoginFrame() {
     $(userLoginDivId).html(Mustache.render($('#userLoginTemplate').html()));
+}
+
+function getUserNameOrEmpty() {
+    if (sessionStorage.getItem('user')) {
+        var userData = JSON.parse(sessionStorage.getItem('user'));
+        return userData['username'];
+    } else {
+        return '';
+    }
 }

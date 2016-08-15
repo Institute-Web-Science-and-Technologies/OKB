@@ -354,6 +354,8 @@ function processOverviewForm() {
     curatingData.eventId = parseInt(currentEvent.id.substring(1));
     // Add event label to curating data.
     curatingData.eventName = currentEvent.label;
+    // Add user name to curating data.
+    curatingData.user = getUserNameOrEmpty();
     // Push a copy of curatedData into curatedClaims.
     curatedClaims.push(jQuery.extend(true, {}, curatingData));
     // Submit curation data to server.

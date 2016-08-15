@@ -1,7 +1,7 @@
 var currentEvent;
 
 // TODO: doc, improve timeout, save id label store in localStorage
-function init() {
+function init() {    
     if (!sessionStorage["itemdata"]) {
         window.location = "selection.html";
         return;
