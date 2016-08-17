@@ -1,5 +1,6 @@
 package de.unikoblenz.west.okb.c.restapi;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import spark.Request;
 
@@ -191,6 +192,28 @@ public class GetRequestProcessor {
             } catch (SQLException e) {
                 result.put("error", e.getMessage());
             }
+        }
+        return result;
+    }
+
+    public static JSONObject processGetAllUsers(Request req) {
+        int limit = ParameterExtractor.extractLimit(req, 50);
+        JSONObject result = new JSONObject();
+        result.put("users", new JSONArray());
+        try {
+            ResultSet allUsers = PreparedStatementGenerator.getAllUsers(limit).executeQuery();
+            if (allUsers.isBeforeFirst()) {
+                while (allUsers.next()) {
+                    JSONObject user = new JSONObject();
+                    user.put("userid", allUsers.getInt("userid"));
+                    user.put("username", allUsers.getNString("username"));
+                    user.put("reputation", allUsers.getFloat("reputation"));
+                    result.append("users", user);
+                }
+                allUsers.beforeFirst();
+            }
+        } catch (SQLException e) {
+            result.put("error", e.getMessage());
         }
         return result;
     }

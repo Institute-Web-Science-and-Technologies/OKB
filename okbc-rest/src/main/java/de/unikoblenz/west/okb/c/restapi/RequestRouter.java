@@ -63,6 +63,11 @@ public class RequestRouter {
             return response.toString();
         });
 
+        Spark.get("/getAllUsers", (req, res) -> {
+           JSONObject response = GetRequestProcessor.processGetAllUsers(req);
+            return response.toString();
+        });
+
         Spark.get("/utility/getEventsByCategory", (req, res) -> {
             WikidataSparqlAccessor acc = new WikidataSparqlAccessor();
             JSONObject obj;

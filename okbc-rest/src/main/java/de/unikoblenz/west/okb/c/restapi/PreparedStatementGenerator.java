@@ -124,6 +124,14 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getAllUsers(int limit) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT userid, username, reputation FROM Users ORDER BY reputation DESC LIMIT ?"
+        );
+        stmt.setInt(1, limit);
+        return stmt;
+    }
+
     public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "UPDATE Claims SET ranking=? WHERE claimid=?;"
