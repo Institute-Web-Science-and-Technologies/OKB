@@ -2,7 +2,41 @@
 * ID_LABEL_STORE behaves as a key-value set.
 * Keys are Wikidata entity IDs and the values are the corresponding labels.
 */
-var ID_LABEL_STORE = {};
+var ID_LABEL_STORE = {
+    "P426": "aircraft registration",
+    "P1110": "attendance",
+    "P726": "candidate",
+    "P488": "chairperson",
+    "P625": "coordinate location",
+    "P2630": "cost of damage",
+    "P17": "country",
+    "P2047": "duration",
+    "P1867": "eligible voters",
+    "P2257": "frequency of event",
+    "P828": "has cause",
+    "P31": "instance of",
+    "P276": "location",
+    "P131": "located in the administrative territorial entity",
+    "P1356": "losses",
+    "P1120": "number of deaths",
+    "P1339": "number of injured",
+    "P1350": "number of matches played",
+    "P1446": "number of missing",
+    "P1132": "number of participants",
+    "P1351": "number of points/goals scored",
+    "P710": "participant",
+    "P1923": "participating teams",
+    "P361": "part of",
+    "P585": "point in time",
+    "P577": "publication date",
+    "P854": "reference URL",
+    "P813": "retrieved",
+    "P641": "sport",
+    "P533": "target",
+    "P1697": "total valid votes",
+    "P1335": "wins",
+    "P1346": "winner"
+};
 /*
 * Counts the number of currently active requests to Wikidata,
 * which were made to get missing labels.
