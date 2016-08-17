@@ -22,7 +22,7 @@ public class Algorithms {
     ResultSet rs = MySql.getDbCon().query("SELECT source, fact FROM `sourcefact` ");
     ResultSetMetaData md = rs.getMetaData();
     int columns = md.getColumnCount();
-    Map <String, List<String>> rows = new HashMap<>();
+    Map <String, List<String>> rows = new HashMap<String, List<String>>();
     int count=1;
     while (rs.next()){
         Map<String, List<String>> row = new HashMap<String, List<String>>(columns);
