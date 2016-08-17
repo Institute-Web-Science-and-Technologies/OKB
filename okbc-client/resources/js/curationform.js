@@ -421,6 +421,13 @@ function printCuratedClaims(data) {
                 return label;
             }
         };
+        data.shorten = function() {
+            return function(text, render) {
+                var value = render(text);
+                var dotIndex = value.indexOf('.');
+                return value.substring(0, dotIndex+3);
+            }
+        }
         $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS_SORTED, data));
     }
 }
