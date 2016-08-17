@@ -19,7 +19,8 @@ var TEMPLATE = {
     CREATE_QUALIFIER: undefined,
     SHOW_OVERVIEW: undefined,
     ADDITIONAL_SUGGESTED_PROPERTIES: undefined,
-    LIST_CURATED_CLAIMS: undefined
+    LIST_CURATED_CLAIMS: undefined,
+    LIST_CURATED_CLAIMS_SORTED: undefined
 };
 
 /*
@@ -94,6 +95,9 @@ function loadCurationTemplates() {
 
     TEMPLATE.LIST_CURATED_CLAIMS = $('#listCuratedClaimsTemplate').html();
     Mustache.parse(TEMPLATE.LIST_CURATED_CLAIMS);
+    
+    TEMPLATE.LIST_CURATED_CLAIMS_SORTED = $('#listCuratedClaimsSortedTemplate').html();
+    Mustache.parse(TEMPLATE.LIST_CURATED_CLAIMS_SORTED);
 }
 
 /*
@@ -112,7 +116,6 @@ function loadStartCurationForm() {
     var args = {};
     $('#curationForm').html(Mustache.render(TEMPLATE.START_CURATION, args));
     loadSuggestedProperties();
-    loadCuratedClaims();
 }
 
 /*
@@ -390,14 +393,36 @@ function printSuggestedProperties(data) {
 
 // TODO: doc
 function loadCuratedClaims() {
-    // TODO: GET request to server.
-    printCuratedClaims({});
+    executeEventByIdRequest(currentEvent.id, printCuratedClaims)
 }
 
 // TODO: doc
 function printCuratedClaims(data) {
-    var args = {'claims': curatedClaims};
-    $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS, args));
+    console.log('print curated claims');
+    if (data.hasOwnProperty('missing')) { // no curated claims exist at the moment.
+        $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS, {'claims': curatedClaims}));
+    } else if (data.hasOwnProperty('error')) { // some kind of server-sided error occured
+        window.alert(data['error']);
+    } else { // received some claims
+        var curatedClaims = []; // Sort by statement and by rank.
+        var stmts = data['statements'];
+        for (var i = 0; i < stmts.length; i++) {
+            stmts[i]['claims'] = arrangeClaimsByRank(stmts[i]['claims']);
+        }
+        data.labelIt = function() {
+            return function(text, render) {
+                var pid = render(text);
+                var label;
+                try {
+                    label = getLabelOfId(pid);
+                } catch (err) {
+                    label = pid;
+                }
+                return label;
+            }
+        };
+        $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS_SORTED, data));
+    }
 }
 
 // TODO: doc

@@ -16,6 +16,7 @@
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
 
     <script src="resources/js/usermanager.js"></script>
+    <script src="resources/js/utility.js"></script>
     <script src="resources/js/config.js"></script>
     <script src="resources/js/wdapihandler.js"></script>
     <script src="resources/js/idlabelstore.js"></script>
@@ -80,6 +81,111 @@
                         </details>
                     </li>
                     {{/claims}}
+                </ul>
+            </script>
+            <script id="listCuratedClaimsSortedTemplate" type="x-tmpl-mustache">
+                <ul>
+                    {{#statements}}
+                        <li>
+                            {{#labelIt}}{{propertyid}}{{/labelIt}} <br />
+                            <ul>
+                                {{#claims}}
+                                    {{#preferred}}
+                                    <li class="claim">
+                                        {{value}} <emph class="preferred">preferred</emph> <br />
+                                        <details>
+                                            <summary>qualifiers({{qualifiers.length}})</summary>
+                                            {{#qualifiers}}
+                                                - {{#labelIt}}{{propertyid}}{{/labelIt}}: {{value}} <br />
+                                            {{/qualifiers}}
+                                        </details>
+                                        <details>
+                                            {{#sources}}
+                                                <summary>reference</summary>
+                                                <div class="refdetails">
+                                                url: <a href="{{url}}">{{url}}</a> <br />
+                                                publication: {{publicationdate}} <br />
+                                                retrieval: {{retrievaldate}} <br />
+                                                reliabilty: {{trustrating}} <br />
+                                                neutrality: {{neutralityrating}} <br />
+                                                </div>
+                                            {{/sources}}
+                                        </details>
+                                    </li>
+                                    {{/preferred}}
+                                    {{#normal}}
+                                    <li class="claim">
+                                        {{value}} <emph class="normal">normal</emph> <br />
+                                        <details>
+                                            <summary>qualifiers({{qualifiers.length}})</summary>
+                                            {{#qualifiers}}
+                                                - {{#labelIt}}{{propertyid}}{{/labelIt}}: {{value}} <br />
+                                            {{/qualifiers}}
+                                        </details>
+                                        <details>
+                                            {{#sources}}
+                                                <summary>reference</summary>
+                                                <div class="refdetails">
+                                                url: <a href="{{url}}">{{url}}</a> <br />
+                                                publication: {{publicationdate}} <br />
+                                                retrieval: {{retrievaldate}} <br />
+                                                reliabilty: {{trustrating}} <br />
+                                                neutrality: {{neutralityrating}} <br />
+                                                </div>
+                                            {{/sources}}
+                                        </details>
+                                    </li class="claim">
+                                    {{/normal}}
+                                    {{#deprecated}}
+                                    <li>
+                                        {{value}} <emph class="deprecated">deprecated</emph> <br />
+                                        <details>
+                                            <summary>qualifiers({{qualifiers.length}})</summary>
+                                            {{#qualifiers}}
+                                                - {{#labelIt}}{{propertyid}}{{/labelIt}}: {{value}} <br />
+                                            {{/qualifiers}}
+                                        </details>
+                                        <details>
+                                            {{#sources}}
+                                                <summary>reference</summary>
+                                                <div class="refdetails">
+                                                url: <a href="{{url}}">{{url}}</a> <br />
+                                                publication: {{publicationdate}} <br />
+                                                retrieval: {{retrievaldate}} <br />
+                                                reliabilty: {{trustrating}} <br />
+                                                neutrality: {{neutralityrating}} <br />
+                                                </div>
+                                            {{/sources}}
+                                        </details>
+                                    </li>
+                                    {{/deprecated}}
+                                    {{#unranked}}
+                                    <li class="claim">
+                                        {{value}} <emph class="unranked">unranked</emph>
+                                        <details>
+                                            <summary>qualifiers({{qualifiers.length}})</summary>
+                                            {{#qualifiers}}
+                                                - {{#labelIt}}{{propertyid}}{{/labelIt}}: {{value}} <br />
+                                            {{/qualifiers}}
+                                        </details>
+                                        <details>
+                                            {{#sources}}
+                                                <summary>reference</summary>
+                                                <div class="refdetails">
+                                                url: <a href="{{url}}">{{url}}</a> <br />
+                                                publication: {{publicationdate}} <br />
+                                                retrieval: {{retrievaldate}} <br />
+                                                reliabilty: {{trustrating}} <br />
+                                                neutrality: {{neutralityrating}} <br />
+                                                </div>
+                                            {{/sources}}
+                                        </details>
+                                    </li>
+                                    {{/unranked}}
+                                {{/claims}}
+                            </ul>
+                        </li>
+                    {{/statements}}
                 </ul>
             </script>
         </div>
@@ -270,6 +376,7 @@
                             <summary>
                                 references ({{references.length}})
                             </summary>
+                            <div class="refdetails">
                             <ul>
                                 {{#references}}
                                 <li class="reference">
@@ -280,6 +387,7 @@
                                 </li>
                                 {{/references}}
                             </ul>
+                            </div>
                         </details>
                     </li>
                     {{/claims}}

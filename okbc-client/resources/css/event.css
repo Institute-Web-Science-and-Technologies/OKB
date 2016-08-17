@@ -20,6 +20,30 @@
     list-style-type: none;
 }
 
+.preferred {
+    font-size: 0.75em;
+    color: rgb(0, 255, 0);
+}
+
+.normal {
+    font-size: 0.75em;
+    color: rgb(255, 163, 0);
+}
+
+.deprecated {
+    font-size: 0.75em;
+    color: rgb(255, 0, 0);
+}
+
+.unranked {
+    font-size: 0.75em;
+    color: rgb(186, 186, 186);
+}
+
+.refdetails {
+    font-size: 0.75em;
+}
+
 .statement {
 }
 
