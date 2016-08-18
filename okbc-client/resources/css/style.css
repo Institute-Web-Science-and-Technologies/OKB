@@ -167,6 +167,8 @@ input[type=url] {
     list-style-type: none;
     border-style: solid;
     padding: .5%;
+    height: 75vh;
+    overflow-y: auto;
 }
 
 #leaderboard li {
@@ -179,9 +181,5 @@ input[type=url] {
     font-style: normal;
     width: 4em;
     display: inline-block;
-}
-
-.username {
-    
 }
 
