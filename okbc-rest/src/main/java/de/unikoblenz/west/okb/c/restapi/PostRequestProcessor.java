@@ -138,7 +138,7 @@ public class PostRequestProcessor {
 
     public static JSONObject processAddRankedClaims(Request req) {
         String reqBody = req.body();
-        JSONObject response = processAddCuratedClaim(reqBody);
+        JSONObject response = processAddRankedClaims(reqBody);
         return response;
     }
 
