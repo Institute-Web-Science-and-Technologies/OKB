@@ -94,6 +94,27 @@ public class Algorithms {
     ArrayList<Map<Integer, Integer>>  res= mA.rankMax(2);
     System.out.println(res);
   }
+  
+  if(prop.getProperty("averageAlgo").equals("true"))
+  {
+    System.out.println("\n=======Average Algo Results=====\n");
+
+    Map <String, String> data = new HashMap<>();
+    //  data.put("dw.com", "Novak");
+    //  data.put("nytimes.com", "Andy Murray");
+    //  data.put("bbc.com", "Federer");
+    //data.put("dw.com", "12");
+    //data.put("nytimes.com", "20");
+    //data.put("bbc.com", "18");     
+      
+    //  data.put("aljazeera.com", "Roger Federer");
+      data.put("dw.com", "2016-08-27");
+      data.put("nytimes.com", "2016-08-26");
+      data.put("bbc.com", "2016-08-01");
+      Average avg = new Average();
+      avg.rankAverage(data);
+    //System.out.println(res);
+  }
   if(prop.getProperty("recentAlgo").equals("true"))
   {
     System.out.println("\n=======Recent Algo Results=====\n");
