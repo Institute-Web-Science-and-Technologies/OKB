@@ -97,6 +97,7 @@ public class PostRequestProcessor {
                     ResultSet userIdRs = newUserPs.getGeneratedKeys();
                     userIdRs.next();
                     userId = userIdRs.getInt(1);
+                    response.put("username", userName);
                 }
             }
             // Add new claim to database.

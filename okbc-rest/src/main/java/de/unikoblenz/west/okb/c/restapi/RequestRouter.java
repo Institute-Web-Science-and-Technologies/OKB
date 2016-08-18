@@ -84,11 +84,15 @@ public class RequestRouter {
 
         Spark.post("/addCuratedClaim", (req, res) -> {
             JSONObject response = PostRequestProcessor.processAddCuratedClaim(req);
+            if (response.has("username")) {
+                Reputation.updateUserReputation(response.getString("username"));
+            }
             return response.toString();
         });
 
         Spark.post("/addRankedClaims", (req, res) -> {
             JSONObject response = PostRequestProcessor.processAddRankedClaims(req);
+            Reputation.updateUserReputationForAllUsers();
             return response.toString();
         });
 

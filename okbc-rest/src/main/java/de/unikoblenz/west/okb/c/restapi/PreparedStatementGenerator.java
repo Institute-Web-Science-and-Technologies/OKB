@@ -132,12 +132,36 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getAllUsers() throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT userid, username, reputation FROM Users ORDER BY reputation DESC"
+        );
+        return stmt;
+    }
+
+    public static PreparedStatement getRanksOfClaimsByUser(String username) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT ranking FROM Claims WHERE userid IN (SELECT userid FROM Users WHERE username = ?);"
+        );
+        stmt.setString(1, username);
+        return stmt;
+    }
+
     public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "UPDATE Claims SET ranking=? WHERE claimid=?;"
         );
         stmt.setString(1, rank);
         stmt.setInt(2, claimid);
+        return stmt;
+    }
+
+    public static PreparedStatement updateUserReputation(String username, double reputation) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "UPDATE Users SET reputation=? WHERE username=?;"
+        );
+        stmt.setDouble(1, (float)reputation);
+        stmt.setString(2, username);
         return stmt;
     }
 
@@ -233,6 +257,4 @@ public class PreparedStatementGenerator {
         stmt.setFloat(2, (float)reputation);
         return stmt;
     }
-
-
 }
