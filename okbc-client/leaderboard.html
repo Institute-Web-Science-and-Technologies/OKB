@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OKB - Start</title>
+
+    <meta charset="utf8">
+    <meta name="author" content="Alex Baier">
+
+    <link rel="stylesheet" href="resources/css/header.css">
+    <link rel="stylesheet" href="resources/css/main.css">
+    <link rel="stylesheet" href="resources/css/footer.css">
+    
+    <script src="thirdparty/js/mustache.min.js"></script>
+    <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
+    
+    <script src="resources/js/config.js"></script>
+    <script src="resources/js/wdapihandler.js"></script>
+    <script src="resources/js/usermanager.js"></script>
+    <script src="resources/js/leaderboardpage.js"></script>
+</head>
+<body onload="initUserManager(); initLeaderboard();">
+    <header>
+        <a href="index.html"><img alt="OKB LOGO" src=""></a>
+        <h1>This is a slogan about OKB and curation.</h1>
+        <!-- user login frame -->
+        <div id="userlogin"></div>
+        <script id="userLoginTemplate" type="x-tmpl-mustache">
+            <input id="username" type="text" placeholder="username" />
+            <input id="password" type="password" placeholder="password" />
+            <button onclick="executeLogin();">Login</button>
+        </script>
+        <script id="userInfoTemplate" type="x-tmpl-mustache">
+            {{username}} ({{reputation}}) <br />
+            <span class="logout" onClick="executeLogout();">logout</span>
+        </script>
+    </header>
+    <main>
+        <div id="leaderboard"></div>
+        <script id="leaderboardTemplate" type="x-tmpl-mustache">
+            <ul>
+                {{#users}}
+                <li><emph class="reputationScore">{{reputation}}</emph> {{username}}</li>
+                {{/users}}
+            </ul>
+        </script>
+        <script id="leaderboardErrorTemplate" type="x-tmpl-mustache">
+            <emph class="error">the leaderboard is currently not accessible</emph>
+        </script>
+    </main>
+    <footer>
+        <a href="about.html" hreflang="en">About</a>
+        <a href="copyright.html" hreflang="en">Copyright</a>
+        <a href="https://github.com/Institute-Web-Science-and-Technologies/OKB" hreflang="en">Code</a>
+    </footer>
+</body>
+</html>

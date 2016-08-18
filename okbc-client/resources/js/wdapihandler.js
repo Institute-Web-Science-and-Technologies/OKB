@@ -167,6 +167,13 @@ function executeGetUserInfoRequest(username, callbackFunc) {
 }
 
 // TODO: doc
+function executeGetAllUsersRequest(limit, callbackFunc) {
+    console.log("execute get all users request");
+    var url = OKB_EVENT_BASE_URL + "/getAllUsers";
+    $.get(url, {'limit': limit}, callbackFunc, 'json');
+}
+
+// TODO: doc
 function executeCheckUserLogin(username, password, callbackFunc) {
     console.log("execute check user info request");
     var url = OKB_EVENT_BASE_URL + "/checkUserLogin";
