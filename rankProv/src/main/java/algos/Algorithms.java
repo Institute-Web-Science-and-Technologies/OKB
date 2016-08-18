@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -83,7 +84,7 @@ public class Algorithms {
     return hostname;
 }
   
-  public static void main( String[] args ) throws SQLException, URISyntaxException{    
+  public static void main( String[] args ) throws SQLException, URISyntaxException, ParseException{    
   Properties prop = Config.config();
   if(prop.getProperty("maxAlgo").equals("true"))
   {
