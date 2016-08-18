@@ -6,11 +6,7 @@
     <meta charset="utf8">
     <meta name="author" content="Alex Baier">
 
-    <link rel="stylesheet" href="resources/css/header.css">
-    <link rel="stylesheet" href="resources/css/main.css">
-    <link rel="stylesheet" href="resources/css/curation.css">
-    <link rel="stylesheet" href="resources/css/footer.css">
-    <link rel="stylesheet" href="resources/css/event.css">
+    <link rel="stylesheet" href="resources/css/style.css" />
 
     <script src="thirdparty/js/mustache.min.js"></script>
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
@@ -28,8 +24,12 @@
 </head>
 <body onload="initUserManager(); init();">
     <header>
-        <a href="index.html"><img alt="OKB LOGO" src=""></a>
-        <h1>This is a slogan about OKB and curation.</h1>
+        <h1><img alt="OKB LOGO" src=""> This is a slogan about OKB and curation.</h1>
+    </header>
+    <nav>
+        <a href="index.html">start</a> |
+        <a href="selection.html">event selection</a> |
+        <a href="leaderboard.html">leaderboard</a> |
         <div id="userlogin"></div>
         <script id="userLoginTemplate" type="x-tmpl-mustache">
             <input id="username" type="text" placeholder="username" />
@@ -37,10 +37,10 @@
             <button onclick="executeLogin();">Login</button>
         </script>
         <script id="userInfoTemplate" type="x-tmpl-mustache">
-            {{username}} ({{reputation}}) <br />
-            <span class="logout" onClick="executeLogout();">logout</span>
+            {{username}} ({{reputation}})
+            <span class="smalltext cancel" onClick="executeLogout();">logout</span>
         </script>
-    </header>
+    </nav>
     <main>
         <div id="curation">
             <datalist id="propertyOptions">
@@ -56,9 +56,7 @@
             </div>
             <script id="listCuratedClaimsTemplate" type="x-tmpl-mustache">
                 <h4>user-curated claims</h4>
-                <ul>
                     {{#claims}}
-                    <li>
                         {{propertyName}}: {{value}} <br />
                         <em class="data smalltext">curated by {{user}}</em> <br/>
                         {{#claimType}}
@@ -79,14 +77,12 @@
                             neutrality: {{source.neutralityRating}} <br />
                             authors: {{#source.authors}}{{.}}.{{/source.authors}}
                         </details>
-                    </li>
                     {{/claims}}
-                </ul>
             </script>
             <script id="listCuratedClaimsSortedTemplate" type="x-tmpl-mustache">
-                <ul>
+                    <h4>statements in OKB</h4>
                     {{#statements}}
-                        <li>
+                        <div class="statement">
                             {{#labelIt}}{{propertyid}}{{/labelIt}} <br />
                             <ul>
                                 {{#claims}}
@@ -184,9 +180,8 @@
                                     {{/unranked}}
                                 {{/claims}}
                             </ul>
-                        </li>
+                        </div>
                     {{/statements}}
-                </ul>
             </script>
         </div>
         <!-- Templates for the stages of claim curation -->
@@ -327,7 +322,7 @@
             </details>
             <details>
                 <summary>reference</summary>
-                url: <a>{{url}}</a> <br />
+                url: <a href="{{url}}">{{url}}</a><br />
                 publication: {{pubdate}} <br />
                 retrieval: {{retdate}} <br />
                 reliability: {{reliability}} <br />

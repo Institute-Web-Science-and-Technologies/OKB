@@ -6,9 +6,7 @@
     <meta charset="utf8">
     <meta name="author" content="Alex Baier">
 
-    <link rel="stylesheet" href="resources/css/header.css">
-    <link rel="stylesheet" href="resources/css/main.css">
-    <link rel="stylesheet" href="resources/css/footer.css">
+    <link rel="stylesheet" href="resources/css/style.css" />
     
     <script src="thirdparty/js/mustache.min.js"></script>
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
@@ -22,6 +20,11 @@
     <header>
         <a href="index.html"><img alt="OKB LOGO" src=""></a>
         <h1>This is a slogan about OKB and curation.</h1>
+
+    </header>
+    <nav>
+        <a href="index.html">start</a> |
+        <a href="selection.html">event selection</a> |
         <!-- user login frame -->
         <div id="userlogin"></div>
         <script id="userLoginTemplate" type="x-tmpl-mustache">
@@ -33,13 +36,18 @@
             {{username}} ({{reputation}}) <br />
             <span class="logout" onClick="executeLogout();">logout</span>
         </script>
-    </header>
+    </nav>
     <main>
         <div id="leaderboard"></div>
         <script id="leaderboardTemplate" type="x-tmpl-mustache">
+            <h2>reputation leaderboard</h2>
+            <p class="description">
+            explanation on what reputation is and how it is calculated and so on
+            </p>
             <ul>
                 {{#users}}
-                <li><emph class="reputationScore">{{reputation}}</emph> {{username}}</li>
+                <li><emph class="reputationScore">{{#shorten}}{{reputation}}{{/shorten}}</emph><emph class="username">{{username}}</emph></li>
+                <hr />
                 {{/users}}
             </ul>
         </script>

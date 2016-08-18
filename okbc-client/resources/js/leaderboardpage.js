@@ -6,5 +6,12 @@ function printLeaderboard(data) {
     if (data.hasOwnProperty('error')) {
         $('#leaderboard').html(Mustache.render($('#leaderboardErrorTemplate').html()));
     }
+    data.shorten = function() {
+        return function(text, render) {
+            var value = render(text);
+            var dotIndex = value.indexOf('.');
+            return value.substring(0, dotIndex+4);
+        }
+    };
     $('#leaderboard').html(Mustache.render($('#leaderboardTemplate').html(), data));
 }

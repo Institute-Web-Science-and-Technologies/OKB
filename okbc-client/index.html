@@ -6,10 +6,7 @@
     <meta charset="utf8">
     <meta name="author" content="Alex Baier">
 
-    <link rel="stylesheet" href="resources/css/header.css">
-    <link rel="stylesheet" href="resources/css/main.css">
-    <link rel="stylesheet" href="resources/css/footer.css">
-    <link rel="stylesheet" href="resources/css/start.css">
+    <link rel="stylesheet" href="resources/css/style.css" />
     
     <script src="thirdparty/js/mustache.min.js"></script>
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
@@ -20,8 +17,11 @@
 </head>
 <body onload="initUserManager();">
     <header>
-        <a href="index.html"><img alt="OKB LOGO" src=""></a>
-        <h1>This is a slogan about OKB and curation.</h1>
+        <h1><img alt="OKB LOGO" src=""> This is a slogan about OKB and curation.</h1>
+    </header>
+    <nav>
+        <a href="selection.html">event selection</a> |
+        <a href="leaderboard.html">leaderboard</a> |
         <!-- user login frame -->
         <div id="userlogin"></div>
         <script id="userLoginTemplate" type="x-tmpl-mustache">
@@ -33,7 +33,7 @@
             {{username}} ({{reputation}}) <br />
             <span class="logout" onClick="executeLogout();">logout</span>
         </script>
-    </header>
+    </nav>
     <main>
         <div id="description">
             <p>
@@ -44,10 +44,6 @@
             luptatum nec ex, enim vidit vidisse id pro. Essent delectus iracundia qui te, ad sit 
             falli lucilius.
             </p>
-        </div>
-        <div id="loginoptions">
-            <button type="button">Login into Wikidata</button>
-            <button type="button" onclick="window.location='selection.html'">Continue without Login</button>
         </div>
     </main>
     <footer>

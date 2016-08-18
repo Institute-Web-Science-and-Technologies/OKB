@@ -1,0 +1,187 @@
+body {
+    font-family: Arial, Sans-serif;
+    color: rgb(0,0,0);
+    background-color: rgb(255,255,255);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+header {
+    text-align: center;
+}
+
+nav {
+    text-align: center;
+}
+nav div {
+    /* let login form be placed in the same line as other nav elements */
+    display: inline;
+}
+nav input {
+    /* make login input fields smaller */
+    width: 8em;
+}
+
+main {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 2.5%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 2.5%;
+}
+footer a {
+    padding: .5%;
+}
+
+/* input fields */
+input[type=url] {
+    color: rgb(0,0,255);
+    text-decoration: underline;
+}
+
+/* emphasized text */
+.cancel {
+    color: rgb(255,0,0);
+    font-size: 75%;
+    font-style: italic;
+}
+.cancel:hover {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.back {
+    color: rgb(0,0,255);
+    font-size: 75%;
+    font-style: italic;
+}
+.back:hover {
+    font-weight: bold;
+    cursor: pointer; 
+}
+
+.smalltext {
+    font-size: 75%;
+}
+
+.data {
+    font-style: normal;
+    font-weight: bold;
+}
+
+.instruction {
+    font-style: italic;
+}
+
+/* this is put on p tags */
+.description {
+    
+}
+
+/* selection.html */
+.searchoption {
+    display: inline-block;
+    border-style: dashed;
+    text-align: left;
+    padding: .5%;
+    margin: 0 1%;
+}
+
+#results {
+   margin-top: 1%;
+}
+#results ul {
+    list-style-type: none;
+    overflow-y:auto;
+    height:50vh;
+}
+#results li {
+    cursor: pointer;
+    color: rgb(0,0,255);
+}
+#results li:hover {
+    color: rgb(127,0,255);
+    background-color: rgb(221,221,221);
+}
+
+/* event.html */
+#curation {
+    text-align: left;
+    float: left;
+    width: 50%;
+}
+
+#curationForm {
+    margin: 2.5% 0;
+}
+
+#curatedClaims {
+    height: 62vh;
+    overflow-y: auto
+}
+
+#item {
+    text-align: left;
+    float: right;
+    width: 50%;
+    height: 75vh;
+    overflow-y: auto;
+}
+
+.statement {
+    width: 80%;
+    border-style: dashed;
+    padding: 1%;
+    border-width: .5px;
+}
+.statement ul {
+    list-style-type: none;
+}
+
+.preferred,.normal,.deprecated,.unranked {
+    font-size: 75%;
+}
+.preferred {
+    color: rgb(0,255,0);
+}
+.normal {
+    color: rgb(225,123,0);
+}
+.deprecated {
+    color: rgb(255,0,0);
+}
+.unranked {
+    color: rgb(168,168,168);
+}
+
+/* leaderboard.html */
+#leaderboard ul {
+    list-style-type: none;
+    border-style: solid;
+    padding: .5%;
+}
+
+#leaderboard li {
+    background-color: rgb(255,255,255);
+    display: inline-block;
+}
+
+.reputationScore {
+    font-weight: bold;
+    font-style: normal;
+    width: 4em;
+    display: inline-block;
+}
+
+.username {
+    
+}
+

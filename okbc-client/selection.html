@@ -6,10 +6,7 @@
     <meta charset="utf8">
     <meta name="author" content="Alex Baier">
 
-    <link rel="stylesheet" href="resources/css/header.css">
-    <link rel="stylesheet" href="resources/css/main.css">
-    <link rel="stylesheet" href="resources/css/footer.css">
-    <link rel="stylesheet" href="resources/css/selection.css">
+    <link rel="stylesheet" href="resources/css/style.css" />
 
     <script src="thirdparty/js/jquery-3.0.0.min.js"></script>
     <script src="thirdparty/js/mustache.min.js"></script>
@@ -25,8 +22,11 @@
 </head>
 <body onload="initUserManager();">
     <header>
-        <a href="index.html"><img alt="OKB LOGO" src=""></a>
-        <h1>This is a slogan about OKB and curation.</h1>
+        <h1><img alt="OKB LOGO" src=""> This is a slogan about OKB and curation.</h1>
+    </header>
+    <nav>
+        <a href="index.html">start</a> |
+        <a href="leaderboard.html">leaderboard</a> |
         <div id="userlogin"></div>
         <script id="userLoginTemplate" type="x-tmpl-mustache">
             <input id="username" type="text" placeholder="username" />
@@ -37,16 +37,12 @@
             {{username}} ({{reputation}}) <br />
             <span class="logout" onClick="executeLogout();">logout</span>
         </script>
-    </header>
+    </nav>
     <main>
-        <div id="suggestions">
-            <div id="recentedits">
-                recent edits
-            </div>
-            <div id="neededits">
-                needs edits
-            </div>
-        </div>
+        <h2>event search</h2>
+        <p class="description">
+            Search and select an event you are interested in or want to create claims for.
+        </p>
         <div id="search">
             <div class="searchoption" id="directsearch">
                 I know what to edit
@@ -56,20 +52,22 @@
                 </div>
             </div>
             <div class="searchoption" id="categorysearch">
-                Find events by category <br>
-                <select id="categoryselect">
-                    <option value="Q744913">aviation accident</option>
-                    <option value="Q175331">demonstration</option>
-                    <option value="Q7944">earthquake</option>
-                    <option value="Q40231">election</option>
-                    <option value="Q167903">landslide</option>
-                    <option value="Q124757">riot</option>
-                    <option value="Q1539532">sports season</option>
-                    <option value="Q5710433">terrorist attack</option>
-                    <option value="Q9687">traffic accident</option>
-                    <option value="Q8070">tsunami</option>
-                </select>
-                <button onclick="handleCategorySelect();">Go</button>
+                Find events by category
+                <div>
+                    <select id="categoryselect">
+                        <option value="Q744913">aviation accident</option>
+                        <option value="Q175331">demonstration</option>
+                        <option value="Q7944">earthquake</option>
+                        <option value="Q40231">election</option>
+                        <option value="Q167903">landslide</option>
+                        <option value="Q124757">riot</option>
+                        <option value="Q1539532">sports season</option>
+                        <option value="Q5710433">terrorist attack</option>
+                        <option value="Q9687">traffic accident</option>
+                        <option value="Q8070">tsunami</option>
+                    </select>
+                    <button onclick="handleCategorySelect();">Go</button>
+                </div>
             </div>
         </div>
         <div id="results">

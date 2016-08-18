@@ -366,7 +366,7 @@ function processOverviewForm() {
         'type': 'POST',
         'url': CURATING_DATA_POST_URL,
         'data': JSON.stringify(curatingData),
-        'success': function(data) {console.log(data);}
+        'success': function(data) {loadSuggestedProperties();}
     });
     resetCurationForm();
 }
@@ -427,7 +427,7 @@ function printCuratedClaims(data) {
                 var dotIndex = value.indexOf('.');
                 return value.substring(0, dotIndex+3);
             }
-        }
+        };
         $('#curatedClaims').html(Mustache.render(TEMPLATE.LIST_CURATED_CLAIMS_SORTED, data));
     }
 }
