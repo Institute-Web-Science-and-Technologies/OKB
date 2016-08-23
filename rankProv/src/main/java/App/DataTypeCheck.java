@@ -2,9 +2,17 @@ package App;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+/**
+ * Check data type for numeric, date or string values
+ * @author Mujji
+ *
+ */
 public class DataTypeCheck {
-
+/**
+ * Returns date, integer, double or string. 
+ * @param s
+ * @return
+ */
   public static String checkDataType (String s){
     
       try{

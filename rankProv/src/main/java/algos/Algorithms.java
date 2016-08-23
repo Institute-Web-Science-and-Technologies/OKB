@@ -1,5 +1,8 @@
 package algos;
 
+/**
+ * Execution of all algorithms
+ */
 import java.util.List;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +21,12 @@ import rankingProvenance.rankProv.MySql;
 
 public class Algorithms {
 
+  /**
+   * Rank for truthfinder
+   * @return
+   * @throws SQLException
+   * @throws URISyntaxException
+   */
   public static Map <String, List<String>> rankTruthFinder() throws SQLException, URISyntaxException
   {
     ResultSet rs = MySql.getDbCon().query("SELECT source, fact FROM `sourcefact` ");
@@ -57,9 +66,6 @@ public class Algorithms {
     {
      // value
     }
-    
-   
-    //System.out.println(countUnique);
     return  rows;
     
        
@@ -74,6 +80,12 @@ public class Algorithms {
     
   }
   
+  /**
+   * Gets hostName from a url
+   * @param url
+   * @return hostname in string
+   * @throws URISyntaxException
+   */
   public static String getHostName(String url) throws URISyntaxException {
     URI uri = new URI(url);
     String hostname = uri.getHost();

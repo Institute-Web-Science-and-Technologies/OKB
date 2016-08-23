@@ -10,8 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * @author Mujji
- * 
+ * @author OKB-R
+ * Converts CSV data into JSON Array
  */
 public class CsvToJson {
 

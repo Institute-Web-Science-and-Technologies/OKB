@@ -12,12 +12,12 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+/**
+ * Parse JSON data and enter into the data base
+ * @author OKB-R
+ *
+ */
 public class ParseJson {
-
-    public static void main(String[] args) {
-        
-    }
 
     public void parse(String data) {
       ObjectMapper mapper = new ObjectMapper();

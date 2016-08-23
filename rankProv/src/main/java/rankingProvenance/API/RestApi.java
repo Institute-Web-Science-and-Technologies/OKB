@@ -3,6 +3,11 @@ package rankingProvenance.API;
 import rankingProvenance.rankProv.ParseJson;
 import spark.Spark;
 
+/**
+ * 
+ * @author OKB-R
+ * REST API for OKB-R with end points like notification
+ */
 public class RestApi {
     
     public static void main( String[] args ){

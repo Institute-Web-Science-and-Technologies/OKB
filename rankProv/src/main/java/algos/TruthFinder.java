@@ -19,12 +19,12 @@ import cern.jet.math.Functions;
 
 
 /** TruthFinder Algorithm
- * @author Mujji
+ * @author OKB-R
  * Takes a set of facts provided by set of websites and computes trustworthiness 
  */
 public class TruthFinder {
 	SparseDoubleMatrix2D A, B;
-	double initTrust = 0.9;
+	double initTrust = 0.2;
 	double dampeningFactor = 0.3;
 	DoubleMatrix1D trustVector, logTrustVector, confidenceVector, logConfidenceVector, temp;
 	String aMatrix = "amatrix";
@@ -198,27 +198,7 @@ public class TruthFinder {
 		}
 	}
 
-	public static void main(String args[]) {
-		// double value[][] = {{1.0, 0.0, 0.0, 1.0,1.0}, { 1.0, 0.0, 0.0, 0,
-		// 0.0}, {1.0, 0,1.0, 1.0, 1.0},
-		// {1.0,0.0,0.0,0.0,1.0}};
 
-		// double value [][]=
-		// {{1.0,0,0,0,0},{0,1.0,0,0,0},{1.0,0,0,0,1.0},{1.0,0,0,0,1.0},{0,0,0,1.0,0},{1.0,0,1.0,0,0},{0,0,1.0,0,0},{1.0,1.0,0,0,0},{0,0,1.0,0,0},{0,0,1.0,0,0},{1.0,0,0,0,0},{0,1.0,0,0,0}};
-
-		// considering same facts as 1 in matrix
-		double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
-				{ 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
-				{ 0, 1.0, 0, 0, 0 } };
-
-		TruthFinder calc = new TruthFinder(value);
-		boolean result;
-		calc.calculateConfidenceVectors();
-		while (!calc.shouldStop(0.99)) {
-			calc.calculateConfidenceVectors();
-		}
-		System.out.println("finished");
-	}
 
 }
 

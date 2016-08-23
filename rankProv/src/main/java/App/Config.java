@@ -1,11 +1,19 @@
 package App;
 
+/**
+ * Load config file
+ */
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+
 public class Config {
+  /**
+   * Properies are loaded and return
+   * @return property object
+   */
   public static Properties config() {
 
     Properties prop = new Properties();
@@ -18,10 +26,6 @@ public class Config {
         // load a properties file
         prop.load(input);
 
-        // get the property value and print it out
-       /// System.out.println(prop.getProperty("database"));
-       // System.out.println(prop.getProperty("dbuser"));
-       // System.out.println(prop.getProperty("dbpassword"));
         return prop;
     } catch (IOException ex) {
         ex.printStackTrace();
