@@ -98,6 +98,8 @@ public class Algorithms {
   
   public static void main( String[] args ) throws SQLException, URISyntaxException, ParseException{    
   Properties prop = Config.config();
+  
+  
   if(prop.getProperty("maxAlgo").equals("true"))
   {
     System.out.println("\n=======Max Algo Results=====\n");
@@ -108,7 +110,7 @@ public class Algorithms {
   }
   
   if(prop.getProperty("averageAlgo").equals("true"))
-  {
+  {    
     System.out.println("\n=======Average Algo Results=====\n");
 
     Map <String, String> data = new HashMap<>();
