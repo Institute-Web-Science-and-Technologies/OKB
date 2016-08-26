@@ -18,58 +18,25 @@ import rankingProvenance.rankProv.MySql;
 
 
 public class RecentAlgo {
-  
+
   public static Map recent = new HashMap<String, Map<String,String>>();
-  
-  public ArrayList<Map<Integer, String>> rankRecent(int statementId) throws SQLException, ParseException
+
+  /**
+   * Assuming all data is in descending order received just source and fact are returned
+   * @param data
+   * @return
+   * @throws SQLException
+   * @throws ParseException
+   */
+  public ArrayList<Map<String, String>> rankRecent(ArrayList<Map<String, Map<String, String>>> data) throws SQLException, ParseException
   {
-/*    Map<String, String> abc = new HashMap();
-    Map<String, String> abc2 = new HashMap();
-    Map<String, String> sortedList = new HashMap<>();
-    abc.put("20","02-15-2016");
-    recent.put("dw.com", abc);
-    abc2.put("30","03-15-2016");
-    recent.put("nytimes.com",abc2 );
-    
-    Iterator entries = recent.entrySet().iterator();
-    while (entries.hasNext()) {
-      Entry thisEntry = (Entry) entries.next();
-      String key = (String) thisEntry.getKey();
-      Map<String,String> value = (Map) thisEntry.getValue();
-      value.get(key);
+    ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>();
+    for (int i = 0; i < data.size(); i++) {
+      Map <String, String> mp = new HashMap();
+      String key = data.get(i).keySet().toArray()[0].toString();
+      mp.put(key, data.get(i).get(key).keySet().toArray()[0].toString());
+      result.add(i,mp);
     }
-
-    String str_date="03-15-2016";
-    DateFormat formatter ; 
-    Date date ; 
-    formatter = new SimpleDateFormat("MM-dd-yyyy");
-    date = formatter.parse(str_date);
-    
-    System.out.println(date.getTime());
-    Collections.sort(list, Collections.reverseOrder());
-    System.out.println(recent);
-    */
-    ResultSet rs = MySql.getDbCon().query("SELECT sf.`fact`"
-        + "FROM `sourcefact` `sf`"
-        + "JOIN eventstatementclaim `esc` ON esc.`statementId`=sf.`statementId`"
-        + "JOIN `references` `ref` ON esc.`claimId`=ref.`claimId`"
-        + "WHERE sf.`statementId` = "+statementId+" AND ref.`url`=sf.`source`"
-        + "ORDER BY STR_TO_DATE(ref.`publicationDate`,'%d.%m.%Y') DESC");
-
-    ResultSetMetaData md = rs.getMetaData();
-    int columns = md.getColumnCount();
-    ArrayList<Map<Integer, String>> rows = new ArrayList<Map<Integer, String>>();
-    int count = 1;
-    while (rs.next()) {
-      Map<Integer, String> row = new HashMap<Integer, String>(columns);
-      for (int i = 1; i <= columns; ++i) {
-        String k = rs.getObject(i).toString();
-        row.put(count, k);
-      }
-      rows.add(row);
-      count++;
-    }
-    return rows;
-
+    return result;
   }
 }

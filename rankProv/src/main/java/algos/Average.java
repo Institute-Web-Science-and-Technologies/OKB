@@ -34,68 +34,88 @@ public class Average {
    * @return
    * @throws ParseException
    */
-  public ArrayList<Map<String, Object>> rankAverage(Map<String, String> data) throws ParseException
+  public ArrayList<Map<String, String>> rankAverage(ArrayList<Map<String, Map<String, String>>> stmtData) throws ParseException
   {
+    
+    Map <String, String> data = new HashMap<>();
+    
+    for (int k = 0; k < stmtData.size(); k++) {
+      String key = stmtData.get(k).keySet().toArray()[0].toString();
+      String value = stmtData.get(k).get(key).keySet().toArray()[0].toString();
+      if(data.containsKey(key)){
+          key=key.concat("-article"+String.valueOf(k));
+      }
+      data.put(key, value);
+    }
     Map<String, Object> mp =new HashMap<>();
-
+    ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>();
     Iterator entries = data.entrySet().iterator();
     int count = 0;
     double avg=0.0; 
     while (entries.hasNext()) {
       Entry thisEntry = (Entry) entries.next();
-      String key = (String) thisEntry.getKey();
-      String value = thisEntry.getValue().toString();
-      String dataType = DataTypeCheck.checkDataType(value);
-
+      String key2 = (String) thisEntry.getKey();
+      String value2 = thisEntry.getValue().toString();
+      String dataType = DataTypeCheck.checkDataType(value2);
+      if (mp.containsKey(key2)){
+        key2=key2+count;
+      }
       if(dataType.equals("String")) {
-        double length = (double) value.length();
+        double length = (double) value2.length();
         avg += length;
-        mp.put(key, length);
+        mp.put(key2, length);
       }
       if(dataType.equals("int")) {
-        int i = Integer.parseInt(value);
+        int i = Integer.parseInt(value2);
         avg += i;
-        mp.put(key, i);
+        mp.put(key2, i);
       }
 
       if(dataType.equals("date")) {
         DateFormat formatter ; 
         Date date ; 
         formatter = new SimpleDateFormat("yyyy-MM-dd");
-        date = formatter.parse(value);
+        date = formatter.parse(value2);
         double dt = date.getTime();
         avg += dt;
-        mp.put(key, dt);
+        mp.put(key2, dt);
       }
       count++;
     }
     System.out.println(avg/(double)count);
 
     avg = avg/(double) count;
-    Map<String, Double> avgSorted =new HashMap<>();
+    Map<String, Double> avgSorted = new HashMap<>();
 
 
     Iterator entries2 = mp.entrySet().iterator();
     while (entries2.hasNext()) {
       Entry thisEntry = (Entry) entries2.next();
-      String key = (String) thisEntry.getKey();
-      double value = Double.parseDouble(thisEntry.getValue().toString());
+      String key3 = (String) thisEntry.getKey();
+      double value3 = Double.parseDouble(thisEntry.getValue().toString());
 
-      double distance = Math.abs(avg - value);
-      avgSorted.put(key, distance);
+      double distance = Math.abs(avg - value3);
+      avgSorted.put(key3, distance);      
     }
 
-
     System.out.println(avgSorted);
+    List sorted= avgSorted.entrySet()
+        .stream()
+        .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue())) // custom Comparator
+        .map(e -> e.getKey())
+        .collect(Collectors.toList());
+    int count2=0;
+    for (Object source: sorted){
+      Map<String, String> sortedMap = new HashMap<String, String>();
 
-    System.out.println("Sorted:  "+avgSorted.entrySet()
-    .stream()
-    .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue())) // custom Comparator
-    .map(e -> e.getKey())
-    .collect(Collectors.toList()));
-    return null;
+      sortedMap.put(source.toString(), data.get(source.toString()));
+      result.add(count2, sortedMap);
+      count2++;
+    }
+    //System.out.println("Sorted:  "+result);
+    return result;
 
   }
-
+  
 
 }

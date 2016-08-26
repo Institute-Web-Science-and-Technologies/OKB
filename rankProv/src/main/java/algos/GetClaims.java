@@ -1,5 +1,6 @@
 package algos;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -41,8 +42,9 @@ public class GetClaims {
    * @param statementId
    * @return arrayList map containing source, fact and publication date
    * @throws SQLException
+   * @throws URISyntaxException 
    */
-  public static ArrayList<Map<String, Map<String, String>>> getClaims(int statementId) throws SQLException{
+  public static ArrayList<Map<String, Map<String, String>>> getClaims(int statementId) throws SQLException, URISyntaxException{
     ResultSet rs = MySql.getDbCon().query("SELECT sf.`source`, sf.`fact`, ref.`publicationDate` "
         + "FROM `sourcefact` `sf`"
         + "JOIN eventstatementclaim `esc` ON esc.`statementId`=sf.`statementId`"
@@ -59,7 +61,7 @@ public class GetClaims {
       Map<String, String> row2 = new HashMap<>();
         String k = rs.getObject(3).toString();
         row2.put(rs.getObject(2).toString(), k);
-        row.put(rs.getObject(1).toString(), row2);
+        row.put(getHostName(rs.getObject(1).toString()), row2);
 
       rows.add(count, row);
       count++;
@@ -70,4 +72,19 @@ public class GetClaims {
   }
   
   
+  /**
+   * Gets hostName from a url
+   * @param url
+   * @return hostname in string
+   * @throws URISyntaxException
+   */
+  public static String getHostName(String url) throws URISyntaxException {
+    URI uri = new URI(url);
+    String hostname = uri.getHost();
+    // to provide faultproof result, check if not null then return only hostname, without www.
+    if (hostname != null) {
+        return hostname.startsWith("www.") ? hostname.substring(4) : hostname;
+    }
+    return hostname;
+}
 }
