@@ -1,16 +1,12 @@
 package de.unikoblenz.west.okb.c.junit_test;
 
-import de.unikoblenz.west.okb.c.restapi.GetRequestProcessor;
 import de.unikoblenz.west.okb.c.restapi.PreparedStatementGenerator;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PreparedStatementGeneratorTest {
@@ -227,7 +223,7 @@ public class PreparedStatementGeneratorTest {
         String st="a", value="b"; int uid=1, sid=2;
         PreparedStatement l = null;
         try {
-            l = PreparedStatementGenerator.createClaim(st,value,uid,sid);
+            l = PreparedStatementGenerator.createClaim(st,value,uid,sid, "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -239,7 +235,7 @@ public class PreparedStatementGeneratorTest {
         String st="a", value="b"; int sid=2;
         PreparedStatement l = null;
         try {
-            l = PreparedStatementGenerator.createClaim(st,value,sid);
+            l = PreparedStatementGenerator.createClaim(st,value,sid, "");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -266,7 +262,7 @@ public class PreparedStatementGeneratorTest {
         PreparedStatement l = null;
         try {
             l = PreparedStatementGenerator.createReference(url, publicationDate, retrievalDate,
-                    reliabilityRating, neutralityRating, "b", claimId);
+                    reliabilityRating, neutralityRating, claimId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
