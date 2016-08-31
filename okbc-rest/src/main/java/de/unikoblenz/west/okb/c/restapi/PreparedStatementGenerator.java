@@ -139,6 +139,54 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getDetailedUserByName(String name) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT U.username, U.reputation, \n" +
+                        "\tCOUNT(*) as noofclaims,\n" +
+                        "    COUNT(case C.ranking when \"preferred\" then 1 else null end) as noofpreferred,\n" +
+                        "    COUNT(case C.ranking when \"normal\" then 1 else null end) as noofnormal,\n" +
+                        "    COUNT(case C.ranking when \"deprecated\" then 1 else null end) as noofdeprecated\n" +
+                        "FROM Claims AS C, Users AS U\n" +
+                        "WHERE C.userid = U.userid \n" +
+                        "    AND U.username = ?" +
+                        "ORDER BY reputation DESC;"
+        );
+        stmt.setString(1, name);
+        return stmt;
+    }
+
+    public static PreparedStatement getAllDetailedUsers() throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT U.username, U.reputation, \n" +
+                        "\tCOUNT(*) as noofclaims,\n" +
+                        "    COUNT(case C.ranking when \"preferred\" then 1 else null end) as noofpreferred,\n" +
+                        "    COUNT(case C.ranking when \"normal\" then 1 else null end) as noofnormal,\n" +
+                        "    COUNT(case C.ranking when \"deprecated\" then 1 else null end) as noofdeprecated\n" +
+                        "FROM Claims AS C, Users AS U\n" +
+                        "WHERE C.userid = U.userid\n" +
+                        "GROUP BY U.userid" +
+                        "ORDER BY reputation DESC;"
+        );
+        return stmt;
+    }
+
+    public static PreparedStatement getAllDetailedUsers(int limit) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT U.username, U.reputation, \n" +
+                        "\tCOUNT(*) as noofclaims,\n" +
+                        "    COUNT(case C.ranking when \"preferred\" then 1 else null end) as noofpreferred,\n" +
+                        "    COUNT(case C.ranking when \"normal\" then 1 else null end) as noofnormal,\n" +
+                        "    COUNT(case C.ranking when \"deprecated\" then 1 else null end) as noofdeprecated\n" +
+                        "FROM Claims AS C, Users AS U\n" +
+                        "WHERE C.userid = U.userid\n" +
+                        "GROUP BY U.userid" +
+                        "ORDER BY reputation DESC" +
+                        "LIMIT ?;"
+        );
+        stmt.setInt(1, limit);
+        return stmt;
+    }
+
     public static PreparedStatement getRanksOfClaimsByUser(String username) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "SELECT ranking FROM Claims WHERE userid IN (SELECT userid FROM Users WHERE username = ?);"

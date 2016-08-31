@@ -201,13 +201,16 @@ public class GetRequestProcessor {
         JSONObject result = new JSONObject();
         result.put("users", new JSONArray());
         try {
-            ResultSet allUsers = PreparedStatementGenerator.getAllUsers(limit).executeQuery();
+            ResultSet allUsers = PreparedStatementGenerator.getAllDetailedUsers(limit).executeQuery();
             if (allUsers.isBeforeFirst()) {
                 while (allUsers.next()) {
                     JSONObject user = new JSONObject();
-                    user.put("userid", allUsers.getInt("userid"));
                     user.put("username", allUsers.getNString("username"));
                     user.put("reputation", allUsers.getFloat("reputation"));
+                    user.put("noofclaims", allUsers.getInt("noofclaims"));
+                    user.put("noofpreferred", allUsers.getInt("noofpreferred"));
+                    user.put("noofnormal", allUsers.getInt("noofnormal"));
+                    user.put("noofdeprecated", allUsers.getInt("noofdeprecated"));
                     result.append("users", user);
                 }
                 allUsers.beforeFirst();
