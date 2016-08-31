@@ -179,9 +179,8 @@ public class PreparedStatementGenerator {
                         "    COUNT(case C.ranking when \"deprecated\" then 1 else null end) as noofdeprecated\n" +
                         "FROM Claims AS C, Users AS U\n" +
                         "WHERE C.userid = U.userid\n" +
-                        "GROUP BY U.userid" +
-                        "ORDER BY reputation DESC" +
-                        "LIMIT ?;"
+                        "GROUP BY U.userid\n" +
+                        "ORDER BY reputation DESC LIMIT ?;"
         );
         stmt.setInt(1, limit);
         return stmt;
