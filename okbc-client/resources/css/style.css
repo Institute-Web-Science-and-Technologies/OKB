@@ -163,18 +163,20 @@ input[type=url] {
 }
 
 /* leaderboard.html */
-#leaderboard ul {
-    list-style-type: none;
-    border-style: solid;
-    padding: .5%;
-    height: 75vh;
-    overflow-y: auto;
+#leaderboard {
+    width: 50%;
+    margin: 0 auto;
+}
+.leaderboardtable {
+    border-collapse: collapse;
+}
+.leaderboardtable td,th {
+    
+}
+.leaderboardtable tr {
+    border: .5px solid black;
 }
 
-#leaderboard li {
-    background-color: rgb(255,255,255);
-    display: inline-block;
-}
 
 .reputationScore {
     font-weight: bold;

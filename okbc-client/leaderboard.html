@@ -40,14 +40,27 @@
         <script id="leaderboardTemplate" type="x-tmpl-mustache">
             <h2>reputation leaderboard</h2>
             <p class="description">
-            explanation on what reputation is and how it is calculated and so on
             </p>
-            <ul>
+            <table class="leaderboardtable">
+                <tr>
+                    <th>reputation</th>
+                    <th>user name</th>
+                    <th>number of claims</th>
+                    <th>number of preferred</th>
+                    <th>number of normal</th>
+                    <th>number of deprecated</th>
+                </tr>
                 {{#users}}
-                <li><emph class="reputationScore">{{#shorten}}{{reputation}}{{/shorten}}</emph><emph class="username">{{username}}</emph></li>
-                <hr />
+                <tr>
+                    <td><emph class="reputationScore">{{#shorten}}{{reputation}}{{/shorten}}</emph></td>
+                    <td><emph class="username">{{username}}</emph></td>
+                    <td>{{noofclaims}}</td>
+                    <td>{{noofpreferred}}</td>
+                    <td>{{noofnormal}}</td>
+                    <td>{{noofdeprecated}}</td>
+                </tr>
                 {{/users}}
-            </ul>
+            </table>
         </script>
         <script id="leaderboardErrorTemplate" type="x-tmpl-mustache">
             <emph class="error">the leaderboard is currently not accessible</emph>

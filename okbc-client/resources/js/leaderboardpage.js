@@ -3,8 +3,10 @@ function initLeaderboard() {
 }
 
 function printLeaderboard(data) {
+    console.log(data);
     if (data.hasOwnProperty('error')) {
         $('#leaderboard').html(Mustache.render($('#leaderboardErrorTemplate').html()));
+        return;
     }
     data.shorten = function() {
         return function(text, render) {
