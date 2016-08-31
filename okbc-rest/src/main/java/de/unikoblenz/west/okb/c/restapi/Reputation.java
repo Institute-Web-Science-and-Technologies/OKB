@@ -3,6 +3,7 @@ package de.unikoblenz.west.okb.c.restapi;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -10,27 +11,53 @@ import java.util.List;
  */
 public class Reputation {
 
-    public static final double DEFAULT_REPUTATION = 0.5;
-
-    private static final int PREFERRED_INDEX = 0;
-    private static final int NORMAL_INDEX = 1;
-    private static final int DEPRECATED_INDEX = 2;
-    private static final int UNRANKED_INDEX = 3;
+    public static final double DEFAULT_REPUTATION = 0;
 
     private static final String PREFERRED = "preferred";
     private static final String NORMAL = "normal";
     private static final String DEPRECATED = "deprecated";
     private static final String UNRANKED = "null";
 
-    private static final double PREFERRED_WEIGHT = 1;
-    private static final double NORMAL_WEIGHT = 0.75;
-    private static final double DEPRECATED_WEIGHT = -1.25;
-    private static final double UNRANKED_WEIGHT = 0.4;
+    private static final double PREFERRED_WEIGHT = 1.5;
+    private static final double NORMAL_WEIGHT = 1;
+    private static final double DEPRECATED_WEIGHT = 0;
+    private static final double UNRANKED_WEIGHT = 0.5;
+
+    private static final double CONFLICT_MODIFIER = 1.5;
 
     /*
      * SLOPE_FALL_OFF has to be higher than 1. The higher the value the slower is increase/decrease of reputation.
      */
-    private static final float SLOPE_FALL_OFF = 50;
+    private static final float SLOPE_FALL_OFF = 25;
+
+    /*
+ * Simple data capsule for storing relevant data about claims.
+ */
+    private static class ClaimRanking {
+        private String ranking;
+        private boolean conflicted;
+
+        ClaimRanking(String ranking, boolean conflicted) {
+            this.ranking = ranking;
+            this.conflicted = conflicted;
+        }
+
+        double getWeight() {
+            if (ranking.equals(PREFERRED)) {
+                return PREFERRED_WEIGHT;
+            } else if (ranking.equals(NORMAL)) {
+                return NORMAL_WEIGHT;
+            } else if (ranking.equals(DEPRECATED)) {
+                return DEPRECATED_WEIGHT;
+            } else {
+                return UNRANKED_WEIGHT;
+            }
+        }
+
+        int isConflicted() {
+            return conflicted ? 1 : 0;
+        }
+    }
 
     public static void updateUserReputationForAllUsers() {
         try {
@@ -65,44 +92,31 @@ public class Reputation {
     }
 
     public static double calculateCurrentUserReputation(String username) throws SQLException, IllegalArgumentException {
-        int[] rankCount = getNumberOfClaimsPerRankOfUser(username);
-        int sumOfRanks = rankCount[PREFERRED_INDEX] + rankCount[NORMAL_INDEX] + rankCount[DEPRECATED_INDEX] + rankCount[UNRANKED_INDEX];
-        if (sumOfRanks == 0) {
+        List<ClaimRanking> claims = getClaimsByUser(username);
+
+        if (claims.isEmpty()) {
             return (float)DEFAULT_REPUTATION;
         }
-        double x = PREFERRED_WEIGHT*rankCount[PREFERRED_INDEX]
-                + NORMAL_WEIGHT*rankCount[NORMAL_INDEX]
-                + DEPRECATED_WEIGHT*rankCount[DEPRECATED_INDEX]
-                + UNRANKED_WEIGHT*rankCount[UNRANKED_INDEX];
+        double sum = 0;
+        for (ClaimRanking claim : claims) {
+            sum += Math.pow(CONFLICT_MODIFIER, claim.isConflicted()) * claim.getWeight();
+        }
         double reputation =
-                DEFAULT_REPUTATION + x/(x+SLOPE_FALL_OFF);
-        if (reputation < 0)
-            reputation = 0;
+                DEFAULT_REPUTATION + sum/(sum+SLOPE_FALL_OFF);
         return reputation;
     }
 
-    private static int[] getNumberOfClaimsPerRankOfUser(String username) throws SQLException {
-        int[] rankCount = new int[4];
-        ResultSet ranks = PreparedStatementGenerator.getRanksOfClaimsByUser(username).executeQuery();
-        if (ranks.isBeforeFirst()) {
-            while (ranks.next()) {
-                String rank = ranks.getNString("ranking");
-                if (rank == null)
-                    rank = UNRANKED;
-                if (rank.equals(PREFERRED)) {
-                    rankCount[PREFERRED_INDEX]++;
-                } else if (rank.equals(NORMAL)) {
-                    rankCount[NORMAL_INDEX]++;
-                } else if (rank.equals(DEPRECATED)) {
-                    rankCount[DEPRECATED_INDEX]++;
-                } else if (rank.equals(UNRANKED)) {
-                    rankCount[UNRANKED_INDEX]++;
-                } else {
-                    // TODO: some exception behaviour?
-                }
+    private static List<ClaimRanking> getClaimsByUser(String username) throws SQLException {
+        List<ClaimRanking> result = new LinkedList<>();
+        ResultSet claims = PreparedStatementGenerator.getClaimRankingDataByUser(username).executeQuery();
+        if (claims.isBeforeFirst()) {
+            while (claims.next()) {
+                String rank = claims.getNString("ranking");
+                if (rank == null) rank = UNRANKED;
+                boolean conflict = claims.getNString("multiclaimtype").trim().equals("");
+                result.add(new ClaimRanking(rank, conflict));
             }
         }
-        return rankCount;
+        return result;
     }
-
 }
