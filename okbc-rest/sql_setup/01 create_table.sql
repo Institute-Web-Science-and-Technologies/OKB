@@ -25,6 +25,7 @@ CREATE TABLE Claims (
   snaktype   ENUM ('value', 'novalue', 'missingvalue'),
   cvalue     NVARCHAR(255),
   ranking    ENUM ('deprecated', 'normal', 'preferred'),
+  multiclaimtype NVARCHAR(31) DEFAULT '',
   statementid INT NOT NULL,
   FOREIGN KEY (statementid) REFERENCES Statements(statementid),
   userid     INT,

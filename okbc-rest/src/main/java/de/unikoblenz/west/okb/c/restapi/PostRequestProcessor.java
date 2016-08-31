@@ -103,9 +103,9 @@ public class PostRequestProcessor {
             // Add new claim to database.
             PreparedStatement newClaimPs;
             if (userId == 0) { // No or anonymous user.
-                newClaimPs = PreparedStatementGenerator.createClaim("value", value, statementId);
+                newClaimPs = PreparedStatementGenerator.createClaim("value", value, statementId, multiClaimType);
             } else { // User.
-                newClaimPs = PreparedStatementGenerator.createClaim("value", value, userId, statementId);
+                newClaimPs = PreparedStatementGenerator.createClaim("value", value, userId, statementId, multiClaimType);
             }
             newClaimPs.executeUpdate();
             // Get claimId.
@@ -118,7 +118,7 @@ public class PostRequestProcessor {
                 PreparedStatementGenerator.createQualifier(qualifierJson.getInt("propertyId"), qualifierJson.getString("value"), claimId).executeUpdate();
             }
             // Add new reference to database.
-            PreparedStatement referencePs = PreparedStatementGenerator.createReference(url, publicationDate, retrievalDate, reliabilityRating, neutralityRating, multiClaimType, claimId);
+            PreparedStatement referencePs = PreparedStatementGenerator.createReference(url, publicationDate, retrievalDate, reliabilityRating, neutralityRating, claimId);
             referencePs.executeUpdate();
             // Get referenceid.
             ResultSet referenceIdRs = referencePs.getGeneratedKeys();

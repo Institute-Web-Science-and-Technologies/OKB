@@ -147,6 +147,14 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getClaimRankingDataByUser(String username) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+            "SELECT ranking, multiclaimtype FROM Claims WHERE userid IN (SELECT userid FROM Users WHERE username = ?);"
+        );
+        stmt.setString(1, username);
+        return stmt;
+    }
+
     public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "UPDATE Claims SET ranking=? WHERE claimid=?;"
@@ -189,26 +197,28 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
-    public static PreparedStatement createClaim(String snaktype, String value, int statementid) throws SQLException {
+    public static PreparedStatement createClaim(String snaktype, String value, int statementid, String multiclaimtype) throws SQLException {
        PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO Claims(snaktype, cvalue, statementid) VALUES (?,?,?);",
+                "INSERT INTO Claims(snaktype, cvalue, statementid, multiclaimtype) VALUES (?,?,?,?);",
                 Statement.RETURN_GENERATED_KEYS
         );
         stmt.setString(1, snaktype);
         stmt.setString(2, value);
         stmt.setInt(3, statementid);
+        stmt.setString(4, multiclaimtype);
         return stmt;
     }
 
-    public static PreparedStatement createClaim(String snaktype, String value, int userid, int statementid) throws SQLException {
+    public static PreparedStatement createClaim(String snaktype, String value, int userid, int statementid, String multiclaimtype) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
-                "INSERT INTO Claims(snaktype, cvalue, userid, statementid) VALUES (?,?,?,?);",
+                "INSERT INTO Claims(snaktype, cvalue, userid, statementid, multiclaimtype) VALUES (?,?,?,?,?);",
                 Statement.RETURN_GENERATED_KEYS
         );
         stmt.setString(1, snaktype);
         stmt.setString(2, value);
         stmt.setInt(3, userid);
         stmt.setInt(4, statementid);
+        stmt.setString(5, multiclaimtype);
         return stmt;
     }
 
@@ -224,7 +234,7 @@ public class PreparedStatementGenerator {
     }
 
     //TODO: consistent type for Date
-    public static PreparedStatement createReference(String url, String publicationDate, String retrievalDate, double reliabilityRating, double neutralityRating, String multiClaimType, int claimId) throws SQLException {
+    public static PreparedStatement createReference(String url, String publicationDate, String retrievalDate, double reliabilityRating, double neutralityRating, int claimId) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "INSERT INTO Refs(url, publicationdate, retrievaldate, trustrating, neutralityrating, claimid) VALUES (?,?,?,?,?,?);",
                 Statement.RETURN_GENERATED_KEYS
