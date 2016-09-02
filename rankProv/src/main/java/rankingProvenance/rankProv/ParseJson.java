@@ -12,6 +12,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import algos.UserVotes;
 /**
  * Parse JSON data and enter into the data base
  * @author OKB-R
@@ -78,6 +80,15 @@ public class ParseJson {
                 if(claimExist.size()<1)
                 {
                   cl.save();
+                  
+                  // Add user votes to 0 for first time when claim is created
+                  UserVotes uv = new UserVotes();
+                  uv.setFact_id(cl.id);
+                  uv.setDeprecated_count(0);
+                  uv.setPreferred_count(0);
+                  uv.save();
+                  
+                  
                   EventStatementClaim esc= new EventStatementClaim();
                   esc.eventId = ev.eventID;
                   esc.statementId = st.id;

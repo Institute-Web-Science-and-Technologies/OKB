@@ -157,7 +157,7 @@ public class Algorithms {
     
     
     // Aglo data input and read
-    AlgoRankCrud eg = new AlgoRankCrud();
+/*    AlgoRankCrud eg = new AlgoRankCrud();
     eg.algoId = 1;
     eg.claimId = 1 ; 
     eg.label = "Preferred";
@@ -168,7 +168,29 @@ public class Algorithms {
     eg.label = "Deprecated";
     eg.save();
     
-    System.out.println(eg.getRanks(1));
+    System.out.println(eg.getRanks(1));*/
+    
+  // User Votes CRUD usage 
+   /* UserVotes uv = new UserVotes();
+    uv.fact_id = 1;
+    uv.deprecated_count = 0 ;
+    uv.preferred_count = 2 ;
+    uv.save();
+    
+    uv.fact_id = 2;
+    uv.deprecated_count = 3 ;
+    uv.preferred_count = 1 ;
+    uv.save();  
+    
+    //update usage
+    uv.deprecated_count = 1 ;
+    uv.preferred_count = 4 ;
+    uv.update(1);
+    
+    System.out.println(uv.getAllVotes());
+    System.out.println(uv.getVotes(1));*/
+    
+    
     
   }
 }
