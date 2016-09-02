@@ -12,6 +12,27 @@ MySQL - 5.6.21 : Database - okbr
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*Table structure for table `algorithmnames` */
+
+DROP TABLE IF EXISTS `algorithmnames`;
+
+CREATE TABLE `algorithmnames` (
+  `id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+/*Table structure for table `baseline` */
+
+DROP TABLE IF EXISTS `baseline`;
+
+CREATE TABLE `baseline` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `claimid` int(11) unsigned DEFAULT NULL,
+  `rank` int(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 /*Table structure for table `claims` */
 
 DROP TABLE IF EXISTS `claims`;
@@ -22,6 +43,17 @@ CREATE TABLE `claims` (
   `snakType` enum('value','novalue','somevalue') DEFAULT 'value',
   `qualifiers` text,
   `userid` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `evaluationrank` */
+
+DROP TABLE IF EXISTS `evaluationrank`;
+
+CREATE TABLE `evaluationrank` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `claimId` int(10) unsigned NOT NULL,
+  `label` enum('Preferred','Deprecated','Normal') DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -38,15 +70,29 @@ CREATE TABLE `events` (
   PRIMARY KEY (`eventId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-/*Table structure for table `eventstatment` */
+/*Table structure for table `eventstatementclaim` */
 
-DROP TABLE IF EXISTS `eventstatment`;
+DROP TABLE IF EXISTS `eventstatementclaim`;
 
-CREATE TABLE `eventstatment` (
-  `eventId` int(11) NOT NULL,
-  `statmentId` int(11) NOT NULL,
-  PRIMARY KEY (`eventId`,`statmentId`)
+CREATE TABLE `eventstatementclaim` (
+  `eventId` int(11) unsigned NOT NULL,
+  `statementId` int(11) unsigned NOT NULL,
+  `claimId` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`eventId`,`statementId`,`claimId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `factranks` */
+
+DROP TABLE IF EXISTS `factranks`;
+
+CREATE TABLE `factranks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `claimId` int(10) unsigned NOT NULL,
+  `algoId` tinyint(1) unsigned NOT NULL,
+  `label` enum('Preferred','Deprecated','Normal') NOT NULL DEFAULT 'Normal',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `references` */
 
@@ -62,6 +108,7 @@ CREATE TABLE `references` (
   `articleType` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `neutralityRating` float DEFAULT NULL,
+  `claimId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -75,7 +122,7 @@ CREATE TABLE `sourcefact` (
   `fact` varchar(255) DEFAULT NULL,
   `statementId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `statements` */
 
@@ -98,6 +145,18 @@ CREATE TABLE `truthfinder` (
   `sourceId` int(10) unsigned NOT NULL,
   `factId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `uservotes` */
+
+DROP TABLE IF EXISTS `uservotes`;
+
+CREATE TABLE `uservotes` (
+  `fact_id` int(10) unsigned NOT NULL,
+  `preferred_count` int(1) unsigned NOT NULL,
+  `deprecated_count` int(1) unsigned NOT NULL,
+  `modified_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`fact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
 import App.Config;
 import rankingProvenance.rankProv.MySql;
 
@@ -148,5 +150,25 @@ public class Algorithms {
       }
 
     }
+    
+    
+    // Lavenshtien Example
+    System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
+    
+    
+    // Aglo data input and read
+    AlgoRankCrud eg = new AlgoRankCrud();
+    eg.algoId = 1;
+    eg.claimId = 1 ; 
+    eg.label = "Preferred";
+    eg.save();
+    
+    eg.algoId = 1;
+    eg.claimId = 2 ; 
+    eg.label = "Deprecated";
+    eg.save();
+    
+    System.out.println(eg.getRanks(1));
+    
   }
 }

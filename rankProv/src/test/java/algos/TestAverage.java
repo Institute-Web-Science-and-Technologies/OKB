@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import junit.framework.TestCase;
 
 public class TestAverage extends TestCase {
@@ -26,7 +27,7 @@ public class TestAverage extends TestCase {
     mp.put("al-jezeera.com", "20");
     expectedOutput.add(mp);
 
-
+    
     assertEquals(expectedOutput, actual_output);
   }
 }
