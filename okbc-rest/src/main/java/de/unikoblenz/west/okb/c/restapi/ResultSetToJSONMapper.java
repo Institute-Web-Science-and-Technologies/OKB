@@ -41,6 +41,7 @@ public class ResultSetToJSONMapper {
         return result;
     }
 
+    // TODO: instead of using PreparedStatementGenerator actually use the provided arguments.
     public static JSONObject mapEventWithClaims(ResultSet event, ResultSet categories, ResultSet statements,
                                                 Map<Integer, ResultSet> statementClaims,
                                                 Map<Integer, ResultSet> claimQualifiers,

@@ -81,6 +81,7 @@ public class PostRequestProcessor {
                 statement.first();
                 statementId = statement.getInt("statementid");
             }
+            response.put("statementid", statementId);
             // Check if a username was provided.
             int userId = 0;
             if (userName.length() != 0) {

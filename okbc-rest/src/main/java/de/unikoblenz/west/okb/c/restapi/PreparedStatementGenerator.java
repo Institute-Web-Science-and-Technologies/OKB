@@ -202,6 +202,22 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getNumberOfUnrankedClaims(int statementid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT COUNT(*) as numberofclaims FROM Claims WHERE statementid = ? AND ranking IS NULL;"
+        );
+        stmt.setInt(1, statementid);
+        return stmt;
+    }
+
+    public static PreparedStatement getEventIdByStatementId(int statementid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT eventid FROM Statements WHERE statementid = ?;"
+        );
+        stmt.setInt(1, statementid);
+        return stmt;
+    }
+
     public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "UPDATE Claims SET ranking=? WHERE claimid=?;"

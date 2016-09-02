@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class RequestRouter {
 
+    private static OKBRClaimProvider provider = new OKBRClaimProvider(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+
     public static void enableCORS(final String origin, final String methods, final String headers){
         Spark.options("/*", (req, res)->{
             String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
@@ -87,6 +89,7 @@ public class RequestRouter {
             if (response.has("username")) {
                 Reputation.updateUserReputation(response.getString("username"));
             }
+            provider.sendEventOnClaimCountCondition(response.getInt("statementid"));
             return response.toString();
         });
 
