@@ -51,7 +51,7 @@ public class ResultSetToJSONMapper {
             event.first();
             // Put general event info into JSON.
             result.put("eventid", event.getInt("eventid"));
-            result.put("label", event.getNString("label"));
+            result.put("label", event.getNString("label") == null ? event.getNString("label") : "" );
             result.put("lastedited", event.getDate("lastedited"));
             // Put categories into JSON.
             result.put("categories", new JSONArray());
@@ -69,8 +69,9 @@ public class ResultSetToJSONMapper {
                     int statementId = statements.getInt("statementid");
                     stmtJson.put("statementid", statementId);
                     stmtJson.put("label", statements.getNString("label"));
-                    stmtJson.put("propertyid", "P" + statements.getInt("propertyid"));
+                    stmtJson.put("propertyid", statements.getInt("propertyid"));
                     stmtJson.put("datatype", statements.getNString("datatype"));
+                    stmtJson.put("location", "");
                     //Put claims into JSON.
                     stmtJson.put("claims", new JSONArray());
                     ResultSet claims = statementClaims.get(statementId);
@@ -109,6 +110,8 @@ public class ResultSetToJSONMapper {
                                     refJson.put("retrievaldate", references.getDate("retrievaldate"));
                                     refJson.put("trustrating", references.getFloat("trustrating"));
                                     refJson.put("neutralityrating", references.getFloat("neutralityrating"));
+                                    refJson.put("articletype", "");
+                                    refJson.put("authors", new JSONArray());
                                     claimJson.append("sources", refJson);
                                 }
                                 references.beforeFirst();
