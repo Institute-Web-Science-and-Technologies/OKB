@@ -6,20 +6,19 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 /**
  * Created by Alex on 30.08.2016.
  */
 public class OKBRClaimProvider {
 
-    public static String DEFAULT_CONFIG_FILE_PATH = "settings/config.json";
+    public static String DEFAULT_CONFIG_FILE_PATH = "config.json";
 
     private static int DEFAULT_CLAIM_COUNT_LIMIT = 5;
     private static String DEFAULT_TARGET_URL = "";
@@ -72,12 +71,25 @@ public class OKBRClaimProvider {
 
     private void loadConfiguration() {
         try {
-            String content = new Scanner(new File(configFilePath)).useDelimiter("\\Z").next();
+            //String content = new Scanner(new File(configFilePath)).useDelimiter("\\Z").next();
+            FileInputStream stream = new FileInputStream(configFilePath);
+            StringBuilder builder = new StringBuilder();
+            int ch;
+            while ((ch = stream.read()) != -1) {
+                builder.append((char)ch);
+            }
+            String content = builder.toString();
+
             JSONObject config = new JSONObject(content);
 
             targetUrl = config.getString("target");
             claimCountLimit = config.getInt("limit");
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            // Set unusable default values.
+            targetUrl = DEFAULT_TARGET_URL;
+            claimCountLimit = DEFAULT_CLAIM_COUNT_LIMIT;
+        } catch (IOException e) {
             e.printStackTrace();
             // Set unusable default values.
             targetUrl = DEFAULT_TARGET_URL;
