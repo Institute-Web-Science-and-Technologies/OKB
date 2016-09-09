@@ -99,7 +99,10 @@ function storeIdLabelPair(id, label) {
 function getLabelOfId(id) {
     if (ID_LABEL_STORE.hasOwnProperty(id)) {
         return ID_LABEL_STORE[id];   
-    } else {
+    } else if (ID_LABEL_STORE.hasOwnProperty("P"+id)) {
+        return ID_LABEL_STORE["P"+id]; 
+    }
+    else {
         throw new NotExistingIdError(id);
     }
 }
