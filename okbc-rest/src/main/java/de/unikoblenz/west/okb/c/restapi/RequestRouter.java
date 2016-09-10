@@ -89,7 +89,9 @@ public class RequestRouter {
             if (response.has("username")) {
                 Reputation.updateUserReputation(response.getString("username"));
             }
-            provider.sendEventOnClaimCountCondition(response.getInt("statementid"));
+            if (response.has("statementid")) {
+                provider.sendEventOnClaimCountCondition(response.getInt("statementid"));
+            }
             return response.toString();
         });
 
