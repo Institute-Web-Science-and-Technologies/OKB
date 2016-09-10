@@ -1,5 +1,10 @@
 package de.unikoblenz.west.okb.c.restapi;
 
+import org.json.JSONObject;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -9,13 +14,30 @@ public class MySQLConnector {
     private static MySQLConnector db;
     private Connection conn;
 
-    private MySQLConnector() {
-        /* TODO: Replace with loading of configuration file. */
-        String url = "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/";
-        String dbName = "OKBCDB";
-        String driver = "com.mysql.jdbc.Driver";
-        String userName = "cstein1";
-        String password = "95_curati_R/O_78";
+    private MySQLConnector() throws FileNotFoundException, IOException, SQLException{
+        String url;
+        String dbName;
+        String driver;
+        String userName;
+        String password;
+
+
+        //String content = new Scanner(new File(configFilePath)).useDelimiter("\\Z").next();
+        FileInputStream stream = new FileInputStream(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+        StringBuilder builder = new StringBuilder();
+        int ch;
+        while ((ch = stream.read()) != -1) {
+            builder.append((char)ch);
+        }
+        String content = builder.toString();
+
+        JSONObject config = new JSONObject(content);
+
+        url = config.getString("dburl");
+        dbName = config.getString("dbname");
+        driver = config.getString("dbdriver");
+        userName = config.getString("dbusername");
+        password = config.getString("dbpassword");
 
         try {
             Class.forName(driver).newInstance();
@@ -26,9 +48,14 @@ public class MySQLConnector {
     }
 
     public static synchronized MySQLConnector getInstance() {
-        if (db == null) {
-            db = new MySQLConnector();
-        }
+        if (db == null)
+            try {
+                db = new MySQLConnector();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         return db;
     }
 

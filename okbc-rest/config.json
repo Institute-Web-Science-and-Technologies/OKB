@@ -1,4 +1,9 @@
 {
   "target": "",
-  "limit": 3
+  "limit": 3,
+  "dbusername": "cstein1",
+  "dbpassword": "95_curati_R/O_78",
+  "dbdriver": "com.mysql.jdbc.Driver",
+  "dburl": "jdbc:mysql://mysqlhost.uni-koblenz.de:3306/",
+  "dbname": "OKBCDB"
 }
