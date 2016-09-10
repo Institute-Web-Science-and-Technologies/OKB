@@ -2,36 +2,20 @@ package de.unikoblenz.west.okb.c.restapi;
 
 import org.json.JSONObject;
 import spark.Spark;
+import spark.servlet.SparkApplication;
 
 import java.io.IOException;
 
-public class RequestRouter {
+/**
+ * Created by Alex on 10.09.2016.
+ */
+public class OKBCSparkApplication implements SparkApplication {
 
-    private static OKBRClaimProvider provider = new OKBRClaimProvider(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+    private OKBRClaimProvider provider = new OKBRClaimProvider(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
 
-    public static void enableCORS(final String origin, final String methods, final String headers){
-        Spark.options("/*", (req, res)->{
-            String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
-            if (accessControlRequestHeaders != null) {
-                res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-            }
-            String accessControlRequestMethod = req.headers("Access-Control-Request-Method");
-            if (accessControlRequestMethod != null) {
-                res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-            }
-            return "OK";
-        });
-
-        Spark.before((req, res)->{
-            res.header("Access-Control-Allow-Origin", origin);
-            res.header("Access-Control-Request-Method", methods);
-            res.header("Access-Control-Allow-Headers", headers);
-            // Note: this may or may not be necessary in your particular application
-            res.type("application/json");
-        });
-    }
-
-    public RequestRouter() {
+    @Override
+    public void init() {
+        enableCORS("*","*","*");
         //returns limit# or default 10 of the latest edited events
         //is called by: localhost.com:4567/getLatestEditedEvents
         Spark.get("/getLatestEditedEvents", (req, res) -> {
@@ -61,12 +45,12 @@ public class RequestRouter {
         });
 
         Spark.get("/getUserInformation", (req, res) -> {
-           JSONObject response = GetRequestProcessor.processGetUserInformation(req);
+            JSONObject response = GetRequestProcessor.processGetUserInformation(req);
             return response.toString();
         });
 
         Spark.get("/getAllUsers", (req, res) -> {
-           JSONObject response = GetRequestProcessor.processGetAllUsers(req);
+            JSONObject response = GetRequestProcessor.processGetAllUsers(req);
             return response.toString();
         });
 
@@ -116,4 +100,25 @@ public class RequestRouter {
         });
     }
 
+    private void enableCORS(final String origin, final String methods, final String headers){
+        Spark.options("/*", (req, res)->{
+            String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+            String accessControlRequestMethod = req.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+            return "OK";
+        });
+
+        Spark.before((req, res)->{
+            res.header("Access-Control-Allow-Origin", origin);
+            res.header("Access-Control-Request-Method", methods);
+            res.header("Access-Control-Allow-Headers", headers);
+            // Note: this may or may not be necessary in your particular application
+            res.type("application/json");
+        });
+    }
 }

@@ -22,23 +22,22 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <source>${maven.source}</source>
-                    <target>${maven.target}</target>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <webXml>WEB-INF/web.xml</webXml>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${exec-maven.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
-                    <mainClass>me.tomassetti.BlogService</mainClass>
-                    <arguments></arguments>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
 
     <dependencies>

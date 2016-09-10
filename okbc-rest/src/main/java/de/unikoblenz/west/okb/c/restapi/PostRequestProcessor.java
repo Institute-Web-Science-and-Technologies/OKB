@@ -226,4 +226,9 @@ public class PostRequestProcessor {
 
         return response;
     }
+
+    public static JSONObject processVoteClaimRank(Request req) {
+        JSONObject response = new JSONObject();
+        return response;
+    }
 }
