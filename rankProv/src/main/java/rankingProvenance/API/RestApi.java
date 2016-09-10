@@ -3,15 +3,16 @@ package rankingProvenance.API;
 import rankingProvenance.rankProv.ParseJson;
 import rankingProvenance.rankProv.ParseUpdateVotes;
 import spark.Spark;
+import spark.servlet.SparkApplication;
 
 /**
  * 
  * @author OKB-R
  * REST API for OKB-R with end points like notification
  */
-public class RestApi {
+public class RestApi implements SparkApplication{ 
     
-    public static void main( String[] args ){
+	public void init() {
         Spark.post("/notification",  (request, response) -> {
             //System.out.println(request.queryParams("id"));
             String data = request.queryParams("data");

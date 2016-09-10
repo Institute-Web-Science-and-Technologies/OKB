@@ -1,7 +1,13 @@
 .settings
 .classpath
+.idea
+.project
 amatrix
 bmatrix
 trustVectorObject
 sport-event.json
-/target/
+target/classes/**
+target/maven-archiver/**
+target/maven-status/**
+target/rankProv-0.0.1-SNAPSHOT/**
+rankProv.iml
