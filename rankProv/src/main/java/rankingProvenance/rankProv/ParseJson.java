@@ -109,8 +109,8 @@ public class ParseJson {
                   float trustrating =  Float.parseFloat((node2.get("trustrating").asText()));
                   String articleType = node2.path("article-type").asText();
                   String title = node2.path("title").asText();
-                  float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
-                  
+                 // float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
+                    float neutralityRating = 0; //use above code when neutrality rating is being used
                   
                   SourceFact sf =new SourceFact();
                   sf.Source = url;

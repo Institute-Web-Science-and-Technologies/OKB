@@ -44,7 +44,7 @@ public class UserVotes {
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO USERVOTES (`fact_id`, `preferred_count`, `deprecated_count`, `modified_at`) VALUES ("+this.fact_id+","+this.preferred_count+","+this.deprecated_count+", NOW()) ");
+    int i =  MySql.getDbCon().insert("INSERT INTO uservotes (`fact_id`, `preferred_count`, `deprecated_count`, `modified_at`) VALUES ("+this.fact_id+","+this.preferred_count+","+this.deprecated_count+", NOW()) ");
     if(i>0)
       return true;
     else

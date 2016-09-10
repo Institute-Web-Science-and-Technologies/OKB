@@ -45,7 +45,7 @@ public class Events {
   {
    
     
-    int i =  MySql.getDbCon().insert("INSERT INTO EVENTS (`eventId`,`label`, `categories`, `location`) VALUES ("+this.eventID+",'"+this.label+"','"+this.categories+"','"+this.location+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO events (`eventId`,`label`, `categories`, `location`) VALUES ("+this.eventID+",'"+this.label+"','"+this.categories+"','"+this.location+"') ");
     if(i>0)
       return true;
     else

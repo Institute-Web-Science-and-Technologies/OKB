@@ -41,7 +41,7 @@ public class EventStatementClaim {
   public boolean save() throws SQLException
   {
   
-    int i =  MySql.getDbCon().insert("INSERT INTO eventStatementClaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO eventstatementclaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
     if(i>0)
       return true;
     else
@@ -51,7 +51,7 @@ public class EventStatementClaim {
   public List<Map<String,String>> getEvent(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
-    ResultSet rs = MySql.getDbCon().query("Select * from sourcefact WHERE eventId="+id);
+    ResultSet rs = MySql.getDbCon().query("Select * from eventstatementclaim WHERE eventId="+id);
    
     ResultSetMetaData rsmd = rs.getMetaData();
     List<String> columns = new ArrayList<String>(rsmd.getColumnCount());

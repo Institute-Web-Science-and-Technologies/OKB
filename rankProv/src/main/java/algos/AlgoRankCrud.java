@@ -46,7 +46,7 @@ public class AlgoRankCrud {
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO FACTRANKS (`claimId`, `algoId`, `label`) VALUES ("+this.claimId+",'"+this.algoId+"','"+this.label+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO factranks (`claimId`, `algoId`, `label`) VALUES ("+this.claimId+",'"+this.algoId+"','"+this.label+"') ");
     if(i>0)
       return true;
     else
