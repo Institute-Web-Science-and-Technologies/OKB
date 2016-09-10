@@ -67,3 +67,11 @@ CREATE TABLE Categories (
   eventid  INT,
   FOREIGN KEY (eventid) REFERENCES Events(eventid)
 );
+
+CREATE TABLE UserVotes (
+  userid INT,
+  FOREIGN KEY (userid) REFERENCES Users(userid),
+  claimid INT,
+  FOREIGN KEY (claimid) REFERENCES Claims(claimid),
+  preferred BOOLEAN DEFAULT FALSE
+);
