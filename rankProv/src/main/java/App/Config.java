@@ -1,5 +1,6 @@
 package App;
 
+import java.io.File;
 /**
  * Load config file
  */
@@ -20,15 +21,17 @@ public class Config {
     InputStream input = null;
 
     try {
-
-        input = new FileInputStream("config.properties");
-
-        // load a properties file
+    	File configDir = new File(System.getProperty("catalina.base"), "conf");
+    	File configFile = new File(configDir, "config.properties");
+    	input = new FileInputStream(configFile);
+    	//input = Config.class.getClass().getResourceAsStream("/config.properties");
+        input.available();
+    	// load a properties file
         prop.load(input);
-
         return prop;
-    } catch (IOException ex) {
+    } catch (Exception ex) {
         ex.printStackTrace();
+
     } finally {
         if (input != null) {
             try {
