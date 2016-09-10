@@ -26,6 +26,7 @@
                 <configuration>
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <webXml>WEB-INF/web.xml</webXml>
+                    <packagingExcludes>/config.json</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
