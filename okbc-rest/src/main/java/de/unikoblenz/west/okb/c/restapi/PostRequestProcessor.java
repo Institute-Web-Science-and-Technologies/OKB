@@ -229,6 +229,55 @@ public class PostRequestProcessor {
 
     public static JSONObject processVoteClaimRank(Request req) {
         JSONObject response = new JSONObject();
+        // get claimid and username.
+        String username = req.queryParams("username");
+        int claimid = Integer.parseInt(req.queryParams("claimid"));
+
+        if (username == null) {
+            response.put("error", "username missing");
+            return response;
+        }
+        try {
+            ResultSet userIdRs = PreparedStatementGenerator.getUserByName(username).executeQuery();
+            if (!userIdRs.isBeforeFirst()) {
+                response.put("error", "user does not exist in database");
+            }
+            userIdRs.first();
+            int userId = userIdRs.getInt("userid");
+
+            ResultSet claimIdsRs = PreparedStatementGenerator.getClaimIdsByClaimId(claimid).executeQuery();
+            if (claimIdsRs.isBeforeFirst()) {
+                while (claimIdsRs.next()) {
+                    // Add all claims of the same statement to user votes.
+                    // If it is the preferred one set preferred to true otherwise to false.
+                    PreparedStatementGenerator.addUserVote(claimIdsRs.getInt("claimid"),userId,claimIdsRs.getInt("claimid") == claimid).executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            response.put("error", e.getMessage());
+            return response;
+        }
+        try {
+            ResultSet voteCountRs = PreparedStatementGenerator.getUserVotesForClaim(claimid).executeQuery();
+            voteCountRs.first();
+            int prefCount = voteCountRs.getInt("prefcount");
+            int unPrefCount = voteCountRs.getInt("unprefcount");
+
+            JSONObject message = new JSONObject();
+            message.put("claimId", claimid);
+            message.put("preferred_count", prefCount);
+            message.put("deprecated_count", unPrefCount);
+            // Send user votes about claim to OKBR.
+            boolean success = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH).sendUserVoteJson(message);
+            if (!success) {
+                response.put("error", "failed sending user votes to OKBR");
+                return response;
+            }
+        } catch (SQLException e) {
+            response.put("error", e.getMessage());
+            return response;
+        }
+
         return response;
     }
 }

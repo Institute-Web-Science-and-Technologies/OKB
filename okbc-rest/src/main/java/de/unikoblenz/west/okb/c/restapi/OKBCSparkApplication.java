@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class OKBCSparkApplication implements SparkApplication {
 
-    private OKBRClaimProvider provider = new OKBRClaimProvider(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+    private OKBRDataProvider provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
 
     @Override
     public void init() {
@@ -95,7 +95,6 @@ public class OKBCSparkApplication implements SparkApplication {
 
         Spark.post("/voteClaimRank", (req, res) -> {
             JSONObject response = PostRequestProcessor.processVoteClaimRank(req);
-            // TODO: send aggregated vote stats for specific claim.
             return response.toString();
         });
     }

@@ -23,7 +23,7 @@ public class MySQLConnector {
 
 
         //String content = new Scanner(new File(configFilePath)).useDelimiter("\\Z").next();
-        FileInputStream stream = new FileInputStream(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+        FileInputStream stream = new FileInputStream(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
         StringBuilder builder = new StringBuilder();
         int ch;
         while ((ch = stream.read()) != -1) {

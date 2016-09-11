@@ -1,6 +1,7 @@
 {
   "target": "",
   "limit": 3,
+  "uservotetarget": "",
   "dbusername": "cstein1",
   "dbpassword": "95_curati_R/O_78",
   "dbdriver": "com.mysql.jdbc.Driver",

@@ -91,6 +91,14 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getClaimIdsByClaimId(int id) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT claimid FROM Claims WHERE statementid IN (SELECT statementid FROM Claims WHERE claimid=?);"
+        );
+        stmt.setInt(1, id);
+        return stmt;
+    }
+
     public static PreparedStatement getQualifiersByClaimId(int id) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "SELECT qualifierid, datatype, qvalue FROM Qualifiers WHERE claimid = ?;"
@@ -218,6 +226,16 @@ public class PreparedStatementGenerator {
         return stmt;
     }
 
+    public static PreparedStatement getUserVotesForClaim(int claimid) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "SELECT COUNT(case preferred when TRUE then 1 else null end) as prefcount," +
+                        " COUNT(case preferred when FALSE then 1 else null end) as unprefcount " +
+                        "FROM UserVotes WHERE claimid=?;"
+        );
+        stmt.setInt(1, claimid);
+        return stmt;
+    }
+
     public static PreparedStatement updateRankOfClaim(int claimid, String rank) throws SQLException {
         PreparedStatement stmt = connector.getConnection().prepareStatement(
                 "UPDATE Claims SET ranking=? WHERE claimid=?;"
@@ -328,6 +346,15 @@ public class PreparedStatementGenerator {
         );
         stmt.setString(1, userName);
         stmt.setFloat(2, (float)reputation);
+        return stmt;
+    }
+
+    public static PreparedStatement addUserVote(int claimid, int userid, boolean preferred) throws SQLException {
+        PreparedStatement stmt = connector.getConnection().prepareStatement(
+                "INSERT INTO UserVotes(userid, claimid,preferred) VALUES (?,?,?);"
+        );
+        stmt.setInt(1, userid);
+        stmt.setInt(2, claimid);
         return stmt;
     }
 }

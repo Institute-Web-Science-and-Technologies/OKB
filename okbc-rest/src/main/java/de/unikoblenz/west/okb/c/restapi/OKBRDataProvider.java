@@ -16,20 +16,20 @@ import java.sql.SQLException;
 /**
  * Created by Alex on 30.08.2016.
  */
-public class OKBRClaimProvider {
+public class OKBRDataProvider {
 
     public static String DEFAULT_CONFIG_FILE_PATH = "config.json";
 
     private static int DEFAULT_CLAIM_COUNT_LIMIT = 5;
     private static String DEFAULT_TARGET_URL = "";
-
-    private static OKBRClaimProvider instance;
+    private static String DEFAULT_USER_VOTE_TARGET_URL = "";
 
     private String configFilePath;
     private String targetUrl;
     private int claimCountLimit = -1;
+    private String userVoteTargetUrl;
 
-    public OKBRClaimProvider(String configFilePath) {
+    public OKBRDataProvider(String configFilePath) {
         this.configFilePath = configFilePath;
         loadConfiguration();
     }
@@ -51,8 +51,16 @@ public class OKBRClaimProvider {
             return false;
         }
         JSONObject data = GetRequestProcessor.processGetEventById(eventId);
+        return postJsonDataToUrl(targetUrl, data);
+    }
+
+    public boolean sendUserVoteJson(JSONObject data) {
+        return postJsonDataToUrl(userVoteTargetUrl, data);
+    }
+
+    private boolean postJsonDataToUrl(String url, JSONObject data) {
         HttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(targetUrl);
+        HttpPost httpPost = new HttpPost(url);
         httpPost.setHeader("Content-Type", "application/json");
         try {
             httpPost.setEntity(new StringEntity(data.toString()));
@@ -84,6 +92,7 @@ public class OKBRClaimProvider {
 
             targetUrl = config.getString("target");
             claimCountLimit = config.getInt("limit");
+            userVoteTargetUrl = config.getString("uservotetarget");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             // Set unusable default values.
@@ -94,6 +103,7 @@ public class OKBRClaimProvider {
             // Set unusable default values.
             targetUrl = DEFAULT_TARGET_URL;
             claimCountLimit = DEFAULT_CLAIM_COUNT_LIMIT;
+            userVoteTargetUrl = DEFAULT_USER_VOTE_TARGET_URL;
         }
     }
 

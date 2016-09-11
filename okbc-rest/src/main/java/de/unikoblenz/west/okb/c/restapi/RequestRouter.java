@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class RequestRouter {
 
-    private static OKBRClaimProvider provider = new OKBRClaimProvider(OKBRClaimProvider.DEFAULT_CONFIG_FILE_PATH);
+    private static OKBRDataProvider provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
 
     public static void enableCORS(final String origin, final String methods, final String headers){
         Spark.options("/*", (req, res)->{
@@ -113,7 +113,6 @@ public class RequestRouter {
 
         Spark.post("/voteClaimRank", (req, res) -> {
             JSONObject response = PostRequestProcessor.processVoteClaimRank(req);
-            // TODO: send aggregated vote stats for specific claim.
             return response.toString();
         });
     }
