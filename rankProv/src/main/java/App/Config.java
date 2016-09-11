@@ -23,7 +23,11 @@ public class Config {
     try {
     	File configDir = new File(System.getProperty("catalina.base"), "conf");
     	File configFile = new File(configDir, "config.properties");
+    	if(configFile.exists()){
     	input = new FileInputStream(configFile);
+    	}else{
+    		input = new FileInputStream("config.properties");
+    	}
     	//input = Config.class.getClass().getResourceAsStream("/config.properties");
         input.available();
     	// load a properties file
