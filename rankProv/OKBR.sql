@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v9.10 
-MySQL - 5.6.21 : Database - okbr
+MySQL - 5.5.5-10.0.26-MariaDB : Database - okbr
 *********************************************************************
 */
 
@@ -12,6 +12,10 @@ MySQL - 5.6.21 : Database - okbr
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`okbr` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `okbr`;
+
 /*Table structure for table `algorithmnames` */
 
 DROP TABLE IF EXISTS `algorithmnames`;
@@ -20,7 +24,7 @@ CREATE TABLE `algorithmnames` (
   `id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `baseline` */
 
@@ -92,7 +96,7 @@ CREATE TABLE `factranks` (
   `label` enum('Preferred','Deprecated','Normal') NOT NULL DEFAULT 'Normal',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Table structure for table `references` */
 
@@ -122,7 +126,7 @@ CREATE TABLE `sourcefact` (
   `fact` varchar(255) DEFAULT NULL,
   `statementId` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Table structure for table `statements` */
 
@@ -135,6 +139,18 @@ CREATE TABLE `statements` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Table structure for table `totalvotecounts` */
+
+DROP TABLE IF EXISTS `totalvotecounts`;
+
+CREATE TABLE `totalvotecounts` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `totalPreferredCount` int(11) unsigned NOT NULL DEFAULT '0',
+  `totalDeprecatedCount` int(11) unsigned NOT NULL DEFAULT '0',
+  `modified_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `truthfinder` */
 

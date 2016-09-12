@@ -83,7 +83,7 @@ public class Algorithms {
   }
 
 
-  public static void main( String[] args ) throws SQLException, URISyntaxException, ParseException{    
+  public static String runAlgos() throws SQLException, URISyntaxException, ParseException{    
     Properties prop = Config.config();
 
     ArrayList<Map<String, Map<String, String>>> stmtData = GetClaims.getClaims(2);
@@ -154,6 +154,7 @@ public class Algorithms {
     
     // Lavenshtien Example
     System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
+    return "executed";
     
     
     // Aglo data input and read
