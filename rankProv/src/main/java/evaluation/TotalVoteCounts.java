@@ -30,7 +30,7 @@ public class TotalVoteCounts {
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO totalvotecounts (`totalPreferredCount`, `totalDeprecatedCounts`) VALUES ("+this.totalPreferredCount+","+this.totalDeprecatedCount+"");
+    int i =  MySql.getDbCon().insert("INSERT INTO totalvotecounts (`totalPreferredCount`, `totalDeprecatedCounts`) VALUES ("+this.totalPreferredCount+","+this.totalDeprecatedCount+")");
     if(i>0)
       return true;
     else

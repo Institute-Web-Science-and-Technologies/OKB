@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import rankingProvenance.rankProv.ParseJson;
+
 /**
  * @author OKB-R
  * Converts CSV data into JSON Array
@@ -16,7 +18,7 @@ import org.json.JSONObject;
 public class CsvToJson {
 
 	public static void main(String[] args){
-		String csvFileToRead = "data.csv";
+		String csvFileToRead = "conflicteddata.csv";
 		BufferedReader br = null;
 		String line = "";
 		String splitBy = ",";
@@ -47,7 +49,7 @@ public class CsvToJson {
 
 				}
 				catch (JSONException e){
-					System.out.println("not found");
+					//System.out.println("not found");
 				}
 
 				event.put("eventid", data[0]);
@@ -93,11 +95,17 @@ public class CsvToJson {
 				event.put("statements", new JSONArray().put(stmt));
 
 				jArray.put(event);
-				try (FileWriter file = new FileWriter("output"+data[0]+"-"+data[8]+".json")) {
-					file.write(event.toString().replace(";", ","));
-					System.out.println("Successfully Copied JSON Object to File...");
-
-				}
+				
+				// If create json file uncomment code below
+//				try (FileWriter file = new FileWriter("output"+data[0]+"-"+data[8]+".json")) {
+//					file.write(event.toString().replace(";", ","));
+//
+//					System.out.println("Successfully Copied JSON Object to File...");
+//
+//				}
+				System.out.println(event.toString());
+                ParseJson ps = new ParseJson();
+                ps.parse(event.toString());
 			}
 
 		} catch (FileNotFoundException e) {

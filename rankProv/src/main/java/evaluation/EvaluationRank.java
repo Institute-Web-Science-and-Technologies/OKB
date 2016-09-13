@@ -30,7 +30,7 @@ public class EvaluationRank {
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO evaluationrank (`claimId`, `label`) VALUES ("+this.claimId +",'"+this.label+"'");
+    int i =  MySql.getDbCon().insert("INSERT INTO evaluationrank (`claimId`, `label`) VALUES ("+this.claimId +", '"+this.label+"')");
     if(i>0)
       return true;
     else

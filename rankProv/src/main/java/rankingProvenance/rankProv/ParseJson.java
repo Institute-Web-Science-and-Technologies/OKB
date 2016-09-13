@@ -112,11 +112,7 @@ public class ParseJson {
                  // float neutralityRating = Float.parseFloat((node2.get("neutralityRating").asText()));
                     float neutralityRating = 0; //use above code when neutrality rating is being used
                   
-                  SourceFact sf =new SourceFact();
-                  sf.Source = url;
-                  sf.fact = cl.value;
-                  sf.statementId = st.id;
-                  sf.save();
+
 
 
                   ref.id=Integer.parseInt((node2.get("referenceid").asText()));
@@ -131,7 +127,14 @@ public class ParseJson {
                   ref.claimId = cl.id;
                   List<Map<String,String>> refExist = ref.getReference(ref.id);
                   if(refExist.size()<1)
+                  {
                     ref.save();
+                    SourceFact sf =new SourceFact();
+                    sf.Source = url;
+                    sf.fact = cl.value;
+                    sf.statementId = st.id;
+                    sf.save();
+                  }
        
               }
                 
