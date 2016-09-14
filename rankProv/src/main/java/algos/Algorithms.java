@@ -99,25 +99,10 @@ public class Algorithms  {
     if(prop.getProperty("averageAlgo").equals("true"))
     {    
       System.out.println("\n=======Average Algo Results=====\n");
-
+      Average.runAverage();
 
     }
-    //      data.put("dw.com", "Novak");
-    //      data.put("nytimes.com", "Andy Murray");
-    //      data.put("bbc.com", "Federer");
-    //      data.put("aljazeera.com", "Roger Federer");
 
-    //data.put("dw.com", "12");
-    //data.put("nytimes.com", "20");
-    //data.put("bbc.com", "18");     
-
-    //      data.put("dw.com", "2016-08-27");
-    //      data.put("nytimes.com", "2016-08-26");
-    //      data.put("bbc.com", "2016-08-01");
-   // Average avg = new Average();
-   // System.out.println(avg.rankAverage(stmtData,6));
-   // System.out.println(res);
-    Average.runAverage();
 
     if(prop.getProperty("recentAlgo").equals("true"))
     {
