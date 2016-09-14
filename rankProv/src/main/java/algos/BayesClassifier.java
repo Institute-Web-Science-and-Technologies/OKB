@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.StyleConstants.ColorConstants;
+
+import App.Constants;
 import evaluation.FactRanks;
+import evaluation.TotalVoteCounts;
 
 public class BayesClassifier {
 	int totalTrueVotes;
@@ -13,15 +17,19 @@ public class BayesClassifier {
 	int preferredVoteCount;
 	int deprecatedVoteCount;
 	int algoname;
-	 public BayesClassifier(){
-		 this.totalTrueVotes = 0;
-		 this.totalFalseVotes = 0;
-		 algoname = 3;
+	 public BayesClassifier() throws SQLException{
+	     List<Map<String, String>> total = TotalVoteCounts.getVotes(1);
+	     
+		 this.totalTrueVotes = Integer.parseInt(total.get(0).get("totalPreferredCount"));
+		 this.totalFalseVotes = Integer.parseInt(total.get(0).get("totalDeprecatedCount"));;
+		 algoname = Constants.OKBR;
 	 }
 	 
-	 public void getAllFactId(){
-		 int probabilityOfPreferred;
-		 int probabilityOfDeprecated;
+	 public void calculate() throws SQLException{
+	     double truthProbability = (double) totalTrueVotes / (totalTrueVotes + totalFalseVotes);
+		 double falseProbaility = (double) totalFalseVotes / (totalTrueVotes + totalFalseVotes) ;
+	     double probabilityOfPreferred;
+		 double probabilityOfDeprecated;
 		 List<Map<String,String>> votesMap = null;
 		 try {
 			 votesMap = UserVotes.getAllVotes();
@@ -33,18 +41,25 @@ public class BayesClassifier {
 		 for(Map<String,String> vote : votesMap){
 			 preferredVoteCount = Integer.parseInt(vote.get("preferred_count"));
 			 deprecatedVoteCount = Integer.parseInt(vote.get("deprecated_count"));
-			 probabilityOfPreferred = preferredVoteCount / (preferredVoteCount + deprecatedVoteCount);
-			 probabilityOfDeprecated = deprecatedVoteCount / (preferredVoteCount + deprecatedVoteCount);
+			 probabilityOfPreferred = (double) preferredVoteCount / (preferredVoteCount + deprecatedVoteCount) ;
+			 probabilityOfDeprecated = (double) deprecatedVoteCount / (preferredVoteCount + deprecatedVoteCount);
+			 probabilityOfPreferred = probabilityOfPreferred * truthProbability;
+			 probabilityOfDeprecated = probabilityOfDeprecated * falseProbaility;
+			 
 			 if(probabilityOfPreferred > probabilityOfDeprecated){
-				 FactRanks factRank = new FactRanks(Integer.parseInt(vote.get("fact_id")), algoname, "preferred");
+				 FactRanks factRank = new FactRanks(Integer.parseInt(vote.get("fact_id")), algoname, Constants.PREFERRED);
+				 factRank.save();
 			 }else{
-				 
+               FactRanks factRank = new FactRanks(Integer.parseInt(vote.get("fact_id")), algoname, Constants.DEPRECATED);
+               factRank.save();
+
 			 }
 		 }
 	 }
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
-
+	    BayesClassifier bs = new BayesClassifier();
+	    bs.calculate();
 	}
 
 }

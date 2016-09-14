@@ -14,8 +14,8 @@ public class CalculatePrecision {
     EvaluationRank ev = new EvaluationRank();
     System.out.println(ev.getAllClaims());
     
-    FactRanks fr = new FactRanks();
-    System.out.println(fr.getAllClaims());
+//    FactRanks fr = new FactRanks();
+  //  System.out.println(fr.getAllClaims());
     
   }
 }

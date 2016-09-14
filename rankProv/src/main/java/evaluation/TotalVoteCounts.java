@@ -30,7 +30,7 @@ public class TotalVoteCounts {
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO totalvotecounts (`totalPreferredCount`, `totalDeprecatedCounts`) VALUES ("+this.totalPreferredCount+","+this.totalDeprecatedCount+")");
+    int i =  MySql.getDbCon().insert("INSERT INTO totalvotecounts (`totalPreferredCount`, `totalDeprecatedCount`) VALUES ("+this.totalPreferredCount+","+this.totalDeprecatedCount+")");
     if(i>0)
       return true;
     else
@@ -41,14 +41,14 @@ public class TotalVoteCounts {
   public boolean update(int id) throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("Update totalvotecounts SET `totalPreferredCount`="+this.totalPreferredCount+", `totalDeprecatedCounts`="+this.totalDeprecatedCount+" WHERE `id`="+id+" ");
+    int i =  MySql.getDbCon().insert("Update totalvotecounts SET `totalPreferredCount`="+this.totalPreferredCount+", `totalDeprecatedCount`="+this.totalDeprecatedCount+" WHERE `id`="+id+" ");
     if(i>0)
       return true;
     else
       return false;
   }
   
-  public List<Map<String,String>> getVotes(int id) throws SQLException
+  public static List<Map<String,String>> getVotes(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
     ResultSet rs = MySql.getDbCon().query("Select * from totalvotecounts WHERE id="+id);

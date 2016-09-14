@@ -51,8 +51,8 @@ public class ParseUpdateVotes {
         TotalVoteCounts totalvotes = new TotalVoteCounts();
         List<Map<String, String>> getVotes = totalvotes.getVotes(1);
         if(getVotes.size()>0){
-          int totalPreferredCount = Integer.parseInt(ls.get(0).get("totalPreferredCounts"));
-          int totalDeprecatedCount = Integer.parseInt(ls.get(0).get("totalDeprecatedCounts"));
+          int totalPreferredCount = Integer.parseInt(getVotes.get(0).get("totalPreferredCount"));
+          int totalDeprecatedCount = Integer.parseInt(getVotes.get(0).get("totalDeprecatedCount"));
 
           totalvotes.setTotalPreferredCount(totalPreferredCount+dataPreferredCount);
           totalvotes.setTotalDeprecatedCount(totalDeprecatedCount+dataDeprecatedCount);
