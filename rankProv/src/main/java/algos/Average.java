@@ -19,7 +19,12 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import App.Constants;
 import App.DataTypeCheck;
+import evaluation.FactRanks;
+import rankingProvenance.rankProv.Claims;
+import rankingProvenance.rankProv.EventStatementClaim;
+import rankingProvenance.rankProv.Statements;
 
 /**
  * Ranking Algorithm for average
@@ -27,14 +32,25 @@ import App.DataTypeCheck;
  *
  */
 public class Average {
+  
+  public static void runAverage() throws SQLException, URISyntaxException, ParseException{
+    Average avg = new Average();
+    List<Map<String, String>> stmtIds = Statements.getAllStatement();
+    for(Map<String,String> stmt : stmtIds){
+        int stmtId = Integer.parseInt(stmt.get("id"));
+        ArrayList<Map<String, Map<String, String>>> stmtData = GetClaims.getClaims(stmtId);
+        ArrayList<Map<String, String>>  resRec= avg.rankAverage(stmtData,stmtId);
+    }
+  }
 
   /**
    * Find out the average of given time, string or numeric values and ranks accodring to the closest to average in ascending order
    * @param data
    * @return
    * @throws ParseException
+   * @throws SQLException 
    */
-  public ArrayList<Map<String, String>> rankAverage(ArrayList<Map<String, Map<String, String>>> stmtData) throws ParseException
+  private ArrayList<Map<String, String>> rankAverage(ArrayList<Map<String, Map<String, String>>> stmtData, int stmtId) throws ParseException, SQLException
   {
     
     Map <String, String> data = new HashMap<>();
@@ -107,12 +123,34 @@ public class Average {
     int count2=0;
     for (Object source: sorted){
       Map<String, String> sortedMap = new HashMap<String, String>();
-
-      sortedMap.put(source.toString(), data.get(source.toString()));
+      String fact = data.get(source.toString());
+      sortedMap.put(source.toString(), fact);
       result.add(count2, sortedMap);
+      
+      EventStatementClaim esc = new EventStatementClaim();
+      List<Map<String, String>> escList = esc.getEventStatment(stmtId);
+      for(Map<String,String> list : escList){
+          int claimId = Integer.parseInt(list.get("claimId"));
+          List<Map<String, String>> claim = Claims.getClaims(claimId);
+          if(claim.get(0).get("value").equals(fact)){
+            if(count2==0){
+              FactRanks factRank = new FactRanks(claimId, Constants.AVERAGE, Constants.PREFERRED);
+              factRank.setProbabilityRank(1.0);
+              factRank.save();
+            }
+            else{
+              FactRanks factRank = new FactRanks(claimId, Constants.AVERAGE, Constants.DEPRECATED);
+              factRank.setProbabilityRank(((double)escList.size()-(double)count2)/escList.size());
+              factRank.save();
+            }
+          }
+      }
       count2++;
     }
     //System.out.println("Sorted:  "+result);
+    System.out.println(result);
+    
+    
     return result;
 
   }

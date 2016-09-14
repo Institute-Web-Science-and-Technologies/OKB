@@ -15,6 +15,7 @@ public class FactRanks {
   Integer claimId;
   Integer algoId;
   String label;
+  Double probabilityRank;
   public FactRanks(Integer claimId, Integer algoId, String label){
 	  this.claimId = claimId;
 	  this.algoId = algoId;
@@ -40,10 +41,16 @@ public class FactRanks {
     this.label = label;
   }
   
+  public Double getProbabilityRank() {
+    return probabilityRank;
+  }
+  public void setProbabilityRank(Double probabilityRank) {
+    this.probabilityRank = probabilityRank;
+  }
   public boolean save() throws SQLException
   {
      
-    int i =  MySql.getDbCon().insert("INSERT INTO factranks (`claimId`, `algoId`, `label`) VALUES ("+this.claimId +", "+this.algoId +" ,'"+this.label+"')");
+    int i =  MySql.getDbCon().insert("INSERT INTO factranks (`claimId`, `algoId`, `label`, `probabilityRank`) VALUES ("+this.claimId +", "+this.algoId +" ,'"+this.label+"', "+this.probabilityRank +")");
     if(i>0)
       return true;
     else

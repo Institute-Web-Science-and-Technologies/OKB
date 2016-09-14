@@ -48,9 +48,11 @@ public class BayesClassifier {
 			 
 			 if(probabilityOfPreferred > probabilityOfDeprecated){
 				 FactRanks factRank = new FactRanks(Integer.parseInt(vote.get("fact_id")), algoname, Constants.PREFERRED);
+				 factRank.setProbabilityRank(probabilityOfPreferred);
 				 factRank.save();
 			 }else{
                FactRanks factRank = new FactRanks(Integer.parseInt(vote.get("fact_id")), algoname, Constants.DEPRECATED);
+               factRank.setProbabilityRank(probabilityOfDeprecated);
                factRank.save();
 
 			 }

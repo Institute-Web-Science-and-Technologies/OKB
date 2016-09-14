@@ -21,7 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import App.Config;
 import rankingProvenance.rankProv.MySql;
 
-public class Algorithms {
+public class Algorithms  {
 
   /**
    * Rank for truthfinder
@@ -85,16 +85,16 @@ public class Algorithms {
 
   public static String runAlgos() throws SQLException, URISyntaxException, ParseException{    
     Properties prop = Config.config();
-
-    ArrayList<Map<String, Map<String, String>>> stmtData = GetClaims.getClaims(2);
-    if(prop.getProperty("maxAlgo").equals("true"))
-    {
-      System.out.println("\n=======Max Algo Results=====\n");
-
-      MaxAlgo mA = new MaxAlgo();
-      ArrayList<Map<Integer, Integer>>  res= mA.rankMax(2);
-      System.out.println(res);
-    }
+    
+    
+//    if(prop.getProperty("maxAlgo").equals("true"))
+//    {
+//      System.out.println("\n=======Max Algo Results=====\n");
+//
+//      MaxAlgo mA = new MaxAlgo();
+//      ArrayList<Map<Integer, Integer>>  res= mA.rankMax(2);
+//      System.out.println(res);
+//    }
 
     if(prop.getProperty("averageAlgo").equals("true"))
     {    
@@ -114,18 +114,18 @@ public class Algorithms {
     //      data.put("dw.com", "2016-08-27");
     //      data.put("nytimes.com", "2016-08-26");
     //      data.put("bbc.com", "2016-08-01");
-    Average avg = new Average();
-    System.out.println(avg.rankAverage(stmtData));
-    //System.out.println(res);
+   // Average avg = new Average();
+   // System.out.println(avg.rankAverage(stmtData,6));
+   // System.out.println(res);
+    Average.runAverage();
 
     if(prop.getProperty("recentAlgo").equals("true"))
     {
       System.out.println("\n=======Recent Algo Results=====\n");
 
-      RecentAlgo recent = new RecentAlgo();
-
-      ArrayList<Map<String, String>>  resRec= recent.rankRecent(stmtData);
-      System.out.println(resRec);
+      
+      RecentAlgo.runRecent();
+//      System.out.println(resRec);
     }
 
     if(prop.getProperty("truthFinder").equals("true"))

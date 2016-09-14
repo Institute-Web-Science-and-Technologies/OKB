@@ -57,7 +57,7 @@ public class Claims {
       return false;
   }
   
-  public List<Map<String,String>> getClaims(int id) throws SQLException
+  public static List<Map<String,String>> getClaims(int id) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
     ResultSet rs = MySql.getDbCon().query("Select * from claims WHERE id="+id);
