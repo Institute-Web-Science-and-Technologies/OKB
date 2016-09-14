@@ -11,11 +11,16 @@ import java.io.IOException;
  */
 public class OKBCSparkApplication implements SparkApplication {
 
-    private OKBRDataProvider provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
+    private OKBRDataProvider provider;
 
     @Override
     public void init() {
+        provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
         enableCORS("*","*","*");
+
+        Spark.get("/test", (req, res)-> {
+            return "test";
+        });
         //returns limit# or default 10 of the latest edited events
         //is called by: localhost.com:4567/getLatestEditedEvents
         Spark.get("/getLatestEditedEvents", (req, res) -> {
