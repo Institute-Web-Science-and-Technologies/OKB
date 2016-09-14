@@ -85,7 +85,7 @@ public class UserVotes {
   }
   
   
-  public List<Map<String,String>> getAllVotes() throws SQLException
+  public static List<Map<String,String>> getAllVotes() throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
     ResultSet rs = MySql.getDbCon().query("Select * from uservotes");
@@ -106,5 +106,6 @@ public class UserVotes {
     return data;
     
   }
+   
   
 }

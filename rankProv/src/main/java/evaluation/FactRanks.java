@@ -15,6 +15,12 @@ public class FactRanks {
   Integer claimId;
   Integer algoId;
   String label;
+  public FactRanks(Integer claimId, Integer algoId, String label){
+	  this.claimId = claimId;
+	  this.algoId = algoId;
+	  this.label = label;
+	  
+  }
   public Integer getClaimId() {
     return claimId;
   }
