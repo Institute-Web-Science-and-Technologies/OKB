@@ -36,8 +36,8 @@ public class CalculatePrecision {
   
   public static void main(String[] args) throws SQLException{
 
-
-   calcPrecsision(Constants.OKBR);
+    //System.out.println(FactRanks.getAllAlgoRank(6));
+    calcPrecsision(Constants.RECENT);
    // System.out.println(EvaluationResults.getPrecision(Constants.OKBR));
     
 //    FactRanks fr = new FactRanks();

@@ -103,7 +103,7 @@ public class FactRanks {
   }
   
   
-  public List<Map<String,String>> getAllAlgoRank(int factId) throws SQLException
+  public static List<Map<String,String>> getAllAlgoRank(int factId) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
     ResultSet rs = MySql.getDbCon().query("SELECT * FROM (SELECT  DISTINCT(algoId) AS algo, claimId, label, probabilityRank, created_at  FROM factranks WHERE claimId ="+factId+"  ORDER BY id DESC) AS res GROUP BY res.algo");

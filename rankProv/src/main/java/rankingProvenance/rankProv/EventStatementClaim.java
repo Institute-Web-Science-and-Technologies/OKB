@@ -10,10 +10,18 @@ import java.util.Map;
 
 public class EventStatementClaim {
   
-  Integer eventId, statementId, claimId;
+  Integer eventId, statementId, claimId, sourceFactId;
   
   
   
+  public Integer getSourceFactId() {
+    return sourceFactId;
+  }
+
+  public void setSourceFactId(Integer sourceFactId) {
+    this.sourceFactId = sourceFactId;
+  }
+
   public Integer getEventId() {
     return eventId;
   }
@@ -41,7 +49,7 @@ public class EventStatementClaim {
   public boolean save() throws SQLException
   {
   
-    int i =  MySql.getDbCon().insert("INSERT INTO eventstatementclaim (`eventId`,`statementId`,`claimId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"') ");
+    int i =  MySql.getDbCon().insert("INSERT INTO eventstatementclaim (`eventId`,`statementId`,`claimId`, `sourceFactId`) VALUES ("+this.eventId+",'"+this.statementId+"','"+this.claimId+"','"+this.sourceFactId+"') ");
     if(i>0)
       return true;
     else

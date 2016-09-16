@@ -72,4 +72,14 @@ public class SourceFact {
     }
     return data;
   }
+  
+  public static int lastId() throws SQLException
+  {
+    ResultSet rs = MySql.getDbCon().query("SELECT MAX(id) as `last_id` FROM sourcefact");
+    //String lastid = rs.getString("last_id");
+    if(rs.next())
+      return rs.getInt("last_id");
+    return 0;
+  }
+  
 }

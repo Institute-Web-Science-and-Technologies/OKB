@@ -86,14 +86,8 @@ public class ParseJson {
                   uv.setFact_id(cl.id);
                   uv.setDeprecated_count(0);
                   uv.setPreferred_count(0);
-                  uv.save();
+                  uv.save();              
                   
-                  
-                  EventStatementClaim esc= new EventStatementClaim();
-                  esc.eventId = ev.eventID;
-                  esc.statementId = st.id;
-                  esc.claimId = cl.id;
-                  esc.save();
                 }
                 
                 
@@ -134,6 +128,14 @@ public class ParseJson {
                     sf.fact = cl.value;
                     sf.statementId = st.id;
                     sf.save();
+                    
+                    EventStatementClaim esc= new EventStatementClaim();
+                    esc.eventId = ev.eventID;
+                    esc.statementId = st.id;
+                    esc.claimId = cl.id;
+                    esc.sourceFactId = sf.lastId();
+                    esc.save();
+                    
                   }
        
               }
