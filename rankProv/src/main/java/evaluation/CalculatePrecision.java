@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import App.Constants;
+import algos.GetClaims;
 
 public class CalculatePrecision {
   public static void calcPrecsision (int algoId) throws SQLException{
@@ -36,8 +37,12 @@ public class CalculatePrecision {
   
   public static void main(String[] args) throws SQLException{
 
-    //System.out.println(FactRanks.getAllAlgoRank(6));
+   // System.out.println(GetClaims.getAllClaimsWithId());
+    calcPrecsision(Constants.OKBR);
+    calcPrecsision(Constants.AVERAGE);
     calcPrecsision(Constants.RECENT);
+    //calcPrecsision(Constants.TRUSTWORTHINESS);
+
    // System.out.println(EvaluationResults.getPrecision(Constants.OKBR));
     
 //    FactRanks fr = new FactRanks();
