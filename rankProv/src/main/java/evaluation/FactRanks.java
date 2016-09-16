@@ -79,6 +79,30 @@ public class FactRanks {
     
   }
   
+  
+  public static List<Map<String,String>> getAlgoRank(int algoId) throws SQLException
+  {
+    HashMap<String, String> hm = new HashMap<String, String>();
+    ResultSet rs = MySql.getDbCon().query("SELECT * FROM (SELECT  DISTINCT(claimId) AS claimId, algoId, label, probabilityRank, created_at  FROM factranks WHERE algoId ="+algoId+"  ORDER BY id DESC) AS res GROUP BY res.claimId");
+   
+    ResultSetMetaData rsmd = rs.getMetaData();
+    List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
+    for(int i = 1; i <= rsmd.getColumnCount(); i++){
+        columns.add(rsmd.getColumnName(i));
+    }
+    List<Map<String,String>> data = new ArrayList<Map<String,String>>();
+    while(rs.next()){                
+        Map<String,String> row = new HashMap<String, String>(columns.size());
+        for(String col : columns) {
+            row.put(col, rs.getString(col));
+        }
+        data.add(row);
+    }
+    return data;
+    
+  }
+  
+  
   public List<Map<String,String>> getAllAlgoRank(int factId) throws SQLException
   {
     HashMap<String, String> hm = new HashMap<String, String>();
