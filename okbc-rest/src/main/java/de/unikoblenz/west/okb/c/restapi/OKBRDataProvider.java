@@ -18,7 +18,7 @@ import java.sql.SQLException;
  */
 public class OKBRDataProvider {
 
-    public static String DEFAULT_CONFIG_FILE_PATH = "config.json";
+    public static String DEFAULT_CONFIG_FILE_PATH = "conf/config.json";
 
     private static int DEFAULT_CLAIM_COUNT_LIMIT = 5;
     private static String DEFAULT_TARGET_URL = "";

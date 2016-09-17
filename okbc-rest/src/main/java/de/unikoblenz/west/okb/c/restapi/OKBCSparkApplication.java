@@ -16,7 +16,6 @@ public class OKBCSparkApplication implements SparkApplication {
     @Override
     public void init() {
         provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
-        enableCORS("*","*","*");
 
         Spark.get("/test", (req, res)-> {
             return "test";
@@ -102,6 +101,8 @@ public class OKBCSparkApplication implements SparkApplication {
             JSONObject response = PostRequestProcessor.processVoteClaimRank(req);
             return response.toString();
         });
+
+        enableCORS("*", "*", "*");
     }
 
     private void enableCORS(final String origin, final String methods, final String headers){
