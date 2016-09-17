@@ -118,13 +118,34 @@ public class Algorithms  {
       System.out.println("\n=======TruthFinder Algo Results=====\n");
 
 
-      rankTruthFinder();
+      
+     // rankTruthFinder();
+      Map <String, List<Integer>> sourceClaimIdListMap = new HashMap <String, List<Integer>>();
+      
+      
+      Map <Integer, Map<Integer, String>> eventIdClaimIdPublicationDateMap = new HashMap<>();
+      
+      List<Map<String, String>> list = GetClaims.getAllClaimsWithId();
+      for(Map<String,String> result : list){
+        if(sourceClaimIdListMap.containsKey(result.get("source"))){
+          List<Integer> values = sourceClaimIdListMap.get(result.get("source")) ;
+          values.add(Integer.parseInt(result.get("claimId")));
+          sourceClaimIdListMap.put(result.get("source"), values);
+        }
+        else
+        {
+          List<Integer> values = null ;
+          values.add(Integer.parseInt(result.get("claimId")));
+          sourceClaimIdListMap.put(result.get("source"), values);
+        }
+      }
+      System.out.println(sourceClaimIdListMap);
+      
+//      double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
+//          { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
+//          { 0, 1.0, 0, 0, 0 } };
 
-      double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
-          { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
-          { 0, 1.0, 0, 0, 0 } };
-
-      TruthFinder calc = new TruthFinder(value);
+      TruthFinder calc = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);
 
       boolean result;
 
