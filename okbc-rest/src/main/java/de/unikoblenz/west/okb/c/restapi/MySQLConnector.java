@@ -1,9 +1,5 @@
 package de.unikoblenz.west.okb.c.restapi;
 
-import org.json.JSONObject;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 
@@ -14,30 +10,14 @@ public class MySQLConnector {
     private static MySQLConnector db;
     private Connection conn;
 
-    private MySQLConnector() throws FileNotFoundException, IOException, SQLException{
-        String url;
-        String dbName;
-        String driver;
-        String userName;
-        String password;
+    private MySQLConnector() throws IOException, SQLException{
+        Configuration inst = Configuration.getInstance();
 
-
-        //String content = new Scanner(new File(configFilePath)).useDelimiter("\\Z").next();
-        FileInputStream stream = new FileInputStream(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
-        StringBuilder builder = new StringBuilder();
-        int ch;
-        while ((ch = stream.read()) != -1) {
-            builder.append((char)ch);
-        }
-        String content = builder.toString();
-
-        JSONObject config = new JSONObject(content);
-
-        url = config.getString("dburl");
-        dbName = config.getString("dbname");
-        driver = config.getString("dbdriver");
-        userName = config.getString("dbusername");
-        password = config.getString("dbpassword");
+        String url = inst.getDbUrl();
+        String dbName = inst.getDbName();
+        String driver = inst.getDbDriver();
+        String userName = inst.getDbUsername();
+        String password = inst.getDbPassword();
 
         try {
             Class.forName(driver).newInstance();

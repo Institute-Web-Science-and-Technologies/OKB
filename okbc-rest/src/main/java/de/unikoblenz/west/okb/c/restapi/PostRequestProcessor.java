@@ -268,7 +268,7 @@ public class PostRequestProcessor {
             message.put("preferred_count", prefCount);
             message.put("deprecated_count", unPrefCount);
             // Send user votes about claim to OKBR.
-            boolean success = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH).sendUserVoteJson(message);
+            boolean success = new OKBRDataProvider().sendUserVoteJson(message);
             if (!success) {
                 response.put("error", "failed sending user votes to OKBR");
                 return response;

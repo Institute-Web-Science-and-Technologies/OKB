@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class RequestRouter {
 
-    private static OKBRDataProvider provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
+    private static OKBRDataProvider provider = new OKBRDataProvider();
 
     public static void enableCORS(final String origin, final String methods, final String headers){
         Spark.options("/*", (req, res)->{

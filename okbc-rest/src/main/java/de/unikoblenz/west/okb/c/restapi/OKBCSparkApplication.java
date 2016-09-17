@@ -15,7 +15,7 @@ public class OKBCSparkApplication implements SparkApplication {
 
     @Override
     public void init() {
-        provider = new OKBRDataProvider(OKBRDataProvider.DEFAULT_CONFIG_FILE_PATH);
+        provider = new OKBRDataProvider();
 
         Spark.get("/test", (req, res)-> {
             return "test";
