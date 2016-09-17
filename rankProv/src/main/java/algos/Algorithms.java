@@ -117,7 +117,6 @@ public class Algorithms  {
     {
       System.out.println("\n=======TruthFinder Algo Results=====\n");
 
-
       
      // rankTruthFinder();
       Map <String, List<Integer>> sourceClaimIdListMap = new HashMap <String, List<Integer>>();
@@ -145,21 +144,25 @@ public class Algorithms  {
 //          { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
 //          { 0, 1.0, 0, 0, 0 } };
 
-      TruthFinder calc = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);
+      //TruthFinder calc = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);
+
+      TruthFinder truthFinder = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);;
 
       boolean result;
 
-      calc.calculateConfidenceVectors();
+      truthFinder.calculateConfidenceVectors();
 
-      while (!calc.shouldStop(0.99)) {
-        calc.calculateConfidenceVectors();
+      while (!truthFinder.shouldStop(0.99)) {
+    	  truthFinder.calculateConfidenceVectors();
       }
-
+      Map<String, Double> sourceTrustMap = truthFinder.getsourceTrustMap();
+      System.out.println(sourceTrustMap);
+      // If this value is right please write it back to db.
     }
     
     
     // Lavenshtien Example
-    System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
+    //System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
     return "executed";
     
     

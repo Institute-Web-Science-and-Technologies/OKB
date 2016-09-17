@@ -226,4 +226,11 @@ public class TruthFinder {
 			return false;
 		}
 	}
+	public Map<String, Double> getsourceTrustMap(){
+		Map<String, Double> sourceTrustMap = new HashMap<String, Double>();
+		for(Map.Entry<Integer, String> entry :this.matrixIdToSourceMap.entrySet()){
+			sourceTrustMap.put(entry.getValue(), this.trustVector.get(entry.getKey()));
+		}
+		return sourceTrustMap;
+	}
 }
