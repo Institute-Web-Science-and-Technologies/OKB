@@ -50,11 +50,11 @@ public class CalculatePrecision {
     Map <String, List<Integer>> sourceClaimIdListMap = new HashMap <String, List<Integer>>();
     
     
-    Map <Integer, Map<Integer, String>> eventIdClaimIdPublicationDateMap = new HashMap<>();
+    Map <Integer, List<Map<Integer, String>>> eventIdClaimIdPublicationDateMap = new HashMap<>();
     
     List<Map<String, String>> list = GetClaims.getAllClaimsWithId();
     for(Map<String,String> result : list){
-      int claimId = Integer.parseInt(result.get("claimId"));
+      int claimId = Integer.parseInt(result.get("statementId"));
       int eventId = Integer.parseInt(result.get("eventId"));
       
       String source = GetClaims.getHostName(result.get("source"));
@@ -69,11 +69,22 @@ public class CalculatePrecision {
         values.add(claimId);
         sourceClaimIdListMap.put(source, values);
       }
+      if(eventIdClaimIdPublicationDateMap.containsKey(eventId)){
+        List<Map<Integer, String>> ls = eventIdClaimIdPublicationDateMap.get(eventId);
+        Map<Integer, String> claimIdPublicationDateMap= new HashMap<Integer, String>();
+        claimIdPublicationDateMap.put(claimId, result.get("publicationDate"));
+        ls.add(claimIdPublicationDateMap);
+        eventIdClaimIdPublicationDateMap.put(eventId, ls);
+
+      }
+      else{
+        List<Map<Integer, String>> ls = new ArrayList<Map<Integer, String>>();
+        Map<Integer, String> claimIdPublicationDateMap= new HashMap<Integer, String>();
+        claimIdPublicationDateMap.put(claimId, result.get("publicationDate"));
+        ls.add(claimIdPublicationDateMap);
+        eventIdClaimIdPublicationDateMap.put(eventId, ls);
+      }
       
-      Map<Integer, String> claimIdPublicationDateMap= new HashMap<Integer, String>();
-      
-      claimIdPublicationDateMap.put(claimId, result.get("publicationDate"));
-      eventIdClaimIdPublicationDateMap.put(eventId, claimIdPublicationDateMap);
       
     }
     System.out.println(sourceClaimIdListMap);
@@ -84,16 +95,18 @@ public class CalculatePrecision {
 //        { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
 //        { 0, 1.0, 0, 0, 0 } };
 
-    TruthFinder calc = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);
+    TruthFinder truthFinder = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);;
 
     boolean result;
 
-    calc.calculateConfidenceVectors();
+    truthFinder.calculateConfidenceVectors();
 
-    while (!calc.shouldStop(0.99)) {
-      calc.calculateConfidenceVectors();
+    while (!truthFinder.shouldStop(0.99)) {
+        truthFinder.calculateConfidenceVectors();
     }
-
+    Map<String, Double> sourceTrustMap = truthFinder.getsourceTrustMap();
+    System.out.println(sourceTrustMap);
+    
   
     
 //    

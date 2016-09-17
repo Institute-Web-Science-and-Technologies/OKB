@@ -27,7 +27,7 @@ public class TruthFinder {
 	Map <Integer, String> matrixIdToSourceMap;
 	Map <String, Integer> sourceToMatrixIdMap;
 	Map <String, List<Integer>> sourceClaimIdListMap;
-	Map <Integer, Map<Integer, String>> eventIdClaimIdPublicationDateMap;
+	Map <Integer, List<Map<Integer, String>>> eventIdClaimIdPublicationDateMap;
 	Map <Integer, Double> claimImplications = new HashMap<>();
 	SparseDoubleMatrix2D A, B;
 	double initTrust = 0.2;
@@ -35,7 +35,7 @@ public class TruthFinder {
 	DoubleMatrix1D trustVector, logTrustVector, confidenceVector, logConfidenceVector, temp;
 
 	public TruthFinder(Map <String, List<Integer>> sourceClaimIdListMap, 
-			Map <Integer, Map<Integer, String>> eventIdClaimIdPublicationDateMap) {
+			Map <Integer, List<Map<Integer, String>>> eventIdClaimIdPublicationDateMap) {
 		// implication
 		this.sourceClaimIdListMap = sourceClaimIdListMap;
 		this.eventIdClaimIdPublicationDateMap = eventIdClaimIdPublicationDateMap;
@@ -99,14 +99,14 @@ public class TruthFinder {
 	   for(Map.Entry<Integer, Integer> entry : this.matrixIdToClaimIdMap.entrySet()){
 		   this.claimImplications.put(entry.getKey(), 1.0);
 	   }
-	   Map<Integer, String> claimsOfSameEvent;
+	   List<Map<Integer, String>> claimsOfSameEvent;
 	   String publicationDate;
 	   int claimId;
 	   long timestamp1;
 	   long timestamp2;
 	   long closeness = 0;
 	   double implication = 1.0;
-	   for(Map.Entry<Integer, Map<Integer, String>> entry: this.eventIdClaimIdPublicationDateMap.entrySet()){
+	   for(Map.Entry<Integer, List<Map<Integer, String>>> entry: this.eventIdClaimIdPublicationDateMap.entrySet()){
 		   claimsOfSameEvent = entry.getValue();
 		   for(Map.Entry<Integer, String> claimsEntry : claimsOfSameEvent.entrySet()){
 			  
