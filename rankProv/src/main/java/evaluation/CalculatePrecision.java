@@ -101,7 +101,7 @@ public class CalculatePrecision {
 
     truthFinder.calculateConfidenceVectors();
 
-    while (!truthFinder.shouldStop(0.99)) {
+    while (!truthFinder.shouldStop(0.999999999)) {
         truthFinder.calculateConfidenceVectors();
     }
     Map<String, Double> sourceTrustMap = truthFinder.getsourceTrustMap();

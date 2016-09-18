@@ -30,8 +30,8 @@ public class TruthFinder {
 	Map <Integer, List<Map<Integer, String>>> eventIdClaimIdPublicationDateMap;
 	Map <Integer, Double> claimImplications = new HashMap<>();
 	SparseDoubleMatrix2D A, B;
-	double initTrust = 0.2;
-	double dampeningFactor = 0.3;
+	double initTrust = 0.01;
+	double dampeningFactor = 1;
 	DoubleMatrix1D trustVector, logTrustVector, confidenceVector, logConfidenceVector, temp;
 
 	public TruthFinder(Map <String, List<Integer>> sourceClaimIdListMap, 
@@ -102,25 +102,40 @@ public class TruthFinder {
 	   List<Map<Integer, String>> claimsOfSameEvent;
 	   String publicationDate;
 	   int claimId;
-	   long timestamp1;
-	   long timestamp2;
-	   long closeness = 0;
-	   double implication = 1.0;
+	   long timestamp1 = 0;
+	   long timestamp2 = 0;
+	   double closeness = 0;
+	   double highestCloseness = 1.0;
 	   for(Map.Entry<Integer, List<Map<Integer, String>>> entry: this.eventIdClaimIdPublicationDateMap.entrySet()){
 		   claimsOfSameEvent = entry.getValue();
-		   for(Map.Entry<Integer, String> claimsEntry : claimsOfSameEvent.entrySet()){
-			  
-			   publicationDate = claimsEntry.getValue();
-			   claimId =claimsEntry.getKey();
-			  timestamp1 = stringToTimeStamp(publicationDate);
-			  for(Map.Entry<Integer, String> claimsEntry1 : claimsOfSameEvent.entrySet()){
-				 timestamp2 =  stringToTimeStamp(claimsEntry1.getValue());
-				 closeness += Math.abs( timestamp2 - timestamp1);
-			  }
-			  implication = Math.exp( ( -1.0 * closeness));
-			  this.claimImplications.put(claimId, implication);
+		   for(Map<Integer, String> claimWithPublicationDate : claimsOfSameEvent){
+			   for(Map.Entry<Integer, String> claimsEntry2 : claimWithPublicationDate.entrySet()){
+					 timestamp1 =  stringToTimeStamp(claimsEntry2.getValue());
+					 claimId = claimsEntry2.getKey();
+			   for(Map<Integer, String> claimWithPublicationDate1 : claimsOfSameEvent){
+				  for(Map.Entry<Integer, String> claimsEntry1 : claimWithPublicationDate1.entrySet()){
+					 timestamp2 =  stringToTimeStamp(claimsEntry1.getValue());
+					 closeness += Math.abs( timestamp2 - timestamp1);
+				  }
+			   }
+			   if( highestCloseness < closeness ){
+				   highestCloseness = closeness;
+			   }
+			   //implication = Math.exp((-1.0*closeness)/1000);
+			   this.claimImplications.put(claimId, closeness);
+			   }
+		   }
+
+	   }
+	   Double normalizedCloseness = 0D;
+	   for(Map.Entry<Integer, Double> entry : this.claimImplications.entrySet()){
+		   if(entry.getValue() != 1){
+		   normalizedCloseness = 1 - (entry.getValue() + 0.1)/highestCloseness;
+		   this.claimImplications.put(entry.getKey(), normalizedCloseness);
 		   }
 	   }
+	   System.out.println(claimImplications);
+
    }
 	public void setA() {
 		String sourceName;
