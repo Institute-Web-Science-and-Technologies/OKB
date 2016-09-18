@@ -105,25 +105,30 @@ public class OKBCSparkApplication implements SparkApplication {
         enableCORS("*", "*", "*");
     }
 
-    private void enableCORS(final String origin, final String methods, final String headers){
-        Spark.options("/*", (req, res)->{
-            String accessControlRequestHeaders = req.headers("Access-Control-Request-Headers");
+    // Enables CORS on requests. This method is an initialization method and should be called once.
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+
+        Spark.options("/*", (request, response) -> {
+
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
             if (accessControlRequestHeaders != null) {
-                res.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
             }
-            String accessControlRequestMethod = req.headers("Access-Control-Request-Method");
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
             if (accessControlRequestMethod != null) {
-                res.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
             }
+
             return "OK";
         });
 
-        Spark.before((req, res)->{
-            res.header("Access-Control-Allow-Origin", origin);
-            res.header("Access-Control-Request-Method", methods);
-            res.header("Access-Control-Allow-Headers", headers);
+        Spark.before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
             // Note: this may or may not be necessary in your particular application
-            res.type("application/json");
+            response.type("application/json");
         });
     }
 }
