@@ -54,6 +54,7 @@
             </div>
             <div id="curatedClaims">
             </div>
+            <!-- deprecated template -->
             <script id="listCuratedClaimsTemplate" type="x-tmpl-mustache">
                 <h4>user-curated claims</h4>
                     {{#claims}}
@@ -88,7 +89,7 @@
                                 {{#claims}}
                                     {{#preferred}}
                                     <li class="claim">
-                                        {{value}} <emph class="preferred">preferred</emph> <br />
+                                        {{value}} <emph class="preferred">preferred</emph><br />
                                         <details>
                                             <summary>qualifiers({{qualifiers.length}})</summary>
                                             {{#qualifiers}}
