@@ -96,9 +96,7 @@ public class TruthFinder {
 	   
    }
    public void calculateImplication(){
-	   for(Map.Entry<Integer, Integer> entry : this.matrixIdToClaimIdMap.entrySet()){
-		   this.claimImplications.put(entry.getKey(), 1.0);
-	   }
+	   
 	   List<Map<Integer, String>> claimsOfSameEvent;
 	   String publicationDate;
 	   int claimId;
@@ -106,6 +104,8 @@ public class TruthFinder {
 	   long timestamp2 = 0;
 	   double closeness = 0;
 	   double highestCloseness = 1.0;
+	   Date dateNow = new Date();
+	   long currentTimestamp = dateNow.getTime();
 	   for(Map.Entry<Integer, List<Map<Integer, String>>> entry: this.eventIdClaimIdPublicationDateMap.entrySet()){
 		   claimsOfSameEvent = entry.getValue();
 		   for(Map<Integer, String> claimWithPublicationDate : claimsOfSameEvent){
@@ -115,13 +115,16 @@ public class TruthFinder {
 			   for(Map<Integer, String> claimWithPublicationDate1 : claimsOfSameEvent){
 				  for(Map.Entry<Integer, String> claimsEntry1 : claimWithPublicationDate1.entrySet()){
 					 timestamp2 =  stringToTimeStamp(claimsEntry1.getValue());
-					 closeness += Math.abs( timestamp2 - timestamp1);
+					 closeness += Math.exp( -1.0 * Math.abs( ( (timestamp2 - timestamp1) / currentTimestamp )));
 				  }
 			   }
 			   if( highestCloseness < closeness ){
 				   highestCloseness = closeness;
 			   }
 			   //implication = Math.exp((-1.0*closeness)/1000);
+			   if(this.claimImplications.containsKey(claimId)){
+				   closeness += this.claimImplications.get(claimId);
+			   }
 			   this.claimImplications.put(claimId, closeness);
 			   }
 		   }
@@ -130,7 +133,7 @@ public class TruthFinder {
 	   Double normalizedCloseness = 0D;
 	   for(Map.Entry<Integer, Double> entry : this.claimImplications.entrySet()){
 		   if(entry.getValue() != 1){
-		   normalizedCloseness = 1 - (entry.getValue() + 0.1)/highestCloseness;
+		   normalizedCloseness =  ((entry.getValue()) / highestCloseness);
 		   this.claimImplications.put(entry.getKey(), normalizedCloseness);
 		   }
 	   }
