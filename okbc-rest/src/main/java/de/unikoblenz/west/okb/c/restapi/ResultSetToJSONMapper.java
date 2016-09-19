@@ -53,6 +53,7 @@ public class ResultSetToJSONMapper {
             result.put("eventid", event.getInt("eventid"));
             result.put("label", event.getNString("label") == null ? event.getNString("label") : "" );
             result.put("lastedited", event.getDate("lastedited"));
+            result.put("location", "");
             // Put categories into JSON.
             result.put("categories", new JSONArray());
             if (categories.isBeforeFirst()) {
@@ -112,6 +113,7 @@ public class ResultSetToJSONMapper {
                                     refJson.put("neutralityrating", references.getFloat("neutralityrating"));
                                     refJson.put("articletype", "");
                                     refJson.put("authors", new JSONArray());
+                                    refJson.put("article-type", "");
                                     claimJson.append("sources", refJson);
                                 }
                                 references.beforeFirst();
