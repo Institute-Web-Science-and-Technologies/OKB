@@ -9,6 +9,5 @@ public class Constants {
   public static final int AVERAGE = 2 ;
   public static final int TRUSTWORTHINESS = 3 ;
   public static final int OKBR = 4 ;
-
- 
+  public static final int HYBRID = 5 ; 
 }

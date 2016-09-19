@@ -19,7 +19,11 @@ import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 
 import App.Config;
+import App.Constants;
+import evaluation.FactRanks;
+import rankingProvenance.rankProv.Claims;
 import rankingProvenance.rankProv.MySql;
+import rankingProvenance.rankProv.Statements;
 
 public class Algorithms  {
 
@@ -117,49 +121,137 @@ public class Algorithms  {
     {
       System.out.println("\n=======TruthFinder Algo Results=====\n");
 
-      
-     // rankTruthFinder();
-      Map <String, List<Integer>> sourceClaimIdListMap = new HashMap <String, List<Integer>>();
-      
-      
-      Map <Integer, Map<Integer, String>> eventIdClaimIdPublicationDateMap = new HashMap<>();
-      
-      List<Map<String, String>> list = GetClaims.getAllClaimsWithId();
-      for(Map<String,String> result : list){
-        if(sourceClaimIdListMap.containsKey(result.get("source"))){
-          List<Integer> values = sourceClaimIdListMap.get(result.get("source")) ;
-          values.add(Integer.parseInt(result.get("claimId")));
-          sourceClaimIdListMap.put(result.get("source"), values);
-        }
-        else
-        {
-          List<Integer> values = null ;
-          values.add(Integer.parseInt(result.get("claimId")));
-          sourceClaimIdListMap.put(result.get("source"), values);
-        }
-      }
-      System.out.println(sourceClaimIdListMap);
-      
-//      double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
-//          { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
-//          { 0, 1.0, 0, 0, 0 } };
 
-      //TruthFinder calc = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);
+      
+      // rankTruthFinder();
+       Map <String, List<Integer>> sourceClaimIdListMap = new HashMap <String, List<Integer>>();
+       
+       
+       Map <Integer, List<Map<Integer, String>>> eventIdClaimIdPublicationDateMap = new HashMap<>();
+       
+       List<Map<String, String>> list = GetClaims.getAllClaimsWithId();
+       for(Map<String,String> result : list){
+         int claimId = Integer.parseInt(result.get("statementId"));
+         int eventId = Integer.parseInt(result.get("eventId"));
+         
+         String source = GetClaims.getHostName(result.get("source"));
+         if(sourceClaimIdListMap.containsKey(source)){
+           List<Integer> values = sourceClaimIdListMap.get(source) ;
+           values.add(claimId);
+           sourceClaimIdListMap.put(source, values);
+         }
+         else
+         {
+           List<Integer> values = new ArrayList<Integer>() ;
+           values.add(claimId);
+           sourceClaimIdListMap.put(source, values);
+         }
+         if(eventIdClaimIdPublicationDateMap.containsKey(eventId)){
+           List<Map<Integer, String>> ls = eventIdClaimIdPublicationDateMap.get(eventId);
+           Map<Integer, String> claimIdPublicationDateMap= new HashMap<Integer, String>();
+           claimIdPublicationDateMap.put(claimId, result.get("publicationDate"));
+           ls.add(claimIdPublicationDateMap);
+           eventIdClaimIdPublicationDateMap.put(eventId, ls);
 
-      TruthFinder truthFinder = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);;
+         }
+         else{
+           List<Map<Integer, String>> ls = new ArrayList<Map<Integer, String>>();
+           Map<Integer, String> claimIdPublicationDateMap= new HashMap<Integer, String>();
+           claimIdPublicationDateMap.put(claimId, result.get("publicationDate"));
+           ls.add(claimIdPublicationDateMap);
+           eventIdClaimIdPublicationDateMap.put(eventId, ls);
+         }
+         
+         
+       }
+       System.out.println(sourceClaimIdListMap);
+       System.out.println(eventIdClaimIdPublicationDateMap);
+       
+       
+//       double value[][] = { { 1.0, 0, 0, 0, 0 }, { 0, 1.0, 0, 0, 0 }, { 1.0, 0, 0, 0, 1.0 }, { 0, 0, 0, 1.0, 0 },
+//           { 1.0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 0, 0, 1.0, 0, 0 }, { 1.0, 0, 0, 0, 0 },
+//           { 0, 1.0, 0, 0, 0 } };
 
-      boolean result;
+       TruthFinder truthFinder = new TruthFinder(sourceClaimIdListMap, eventIdClaimIdPublicationDateMap);;
 
-      truthFinder.calculateConfidenceVectors();
+       boolean result;
 
-      while (!truthFinder.shouldStop(0.99)) {
-    	  truthFinder.calculateConfidenceVectors();
-      }
-      Map<String, Double> sourceTrustMap = truthFinder.getsourceTrustMap();
-      System.out.println(sourceTrustMap);
-      // If this value is right please write it back to db.
+       truthFinder.calculateConfidenceVectors();
+
+       while (!truthFinder.shouldStop(0.999999999)) {
+           truthFinder.calculateConfidenceVectors();
+       }
+       Map<String, Double> sourceTrustMap = truthFinder.getsourceTrustMap();
+       System.out.println(sourceTrustMap);
+             
+       
+       List<Map<String, String>> claimsData = GetClaims.getAllClaimsWithId();
+
+       for (Map<String, String> data : claimsData ){
+        int claimId =  Integer.parseInt(data.get("claimId"));
+        String domain = GetClaims.getHostName(data.get("source"));
+
+        FactRanks fr = new FactRanks(claimId, Constants.TRUSTWORTHINESS, "Deprecated");
+        fr.probabilityRank = sourceTrustMap.get(domain);
+        System.out.println(fr.save());
+        
+       }
+       
+       List<Map<String, String>> stmt =  Statements.getAllStatement();
+       for (Map<String, String> tr: stmt){
+         int statementId = Integer.parseInt(tr.get("id"));
+         List<Map<String, String>> claimId = FactRanks.getMaxProbability(statementId, Constants.TRUSTWORTHINESS);
+         int factRankId = Integer.parseInt(claimId.get(0).get("id"));
+         FactRanks.updateLabel(factRankId, "Preferred");
+       }
     }
     
+    
+
+    if(prop.getProperty("okbrAlgo").equals("true"))
+    {
+      
+      List<Map<String, String>> claims = Claims.getAllClaims();
+      for(Map<String, String> claim :claims){
+        double probRank = 0.0;
+        int claimID = Integer.parseInt(claim.get("id"));
+        List<Map<String, String>> factRank = FactRanks.getAllAlgoRank(claimID);
+        for (Map<String, String> algoRank : factRank){
+            String label = algoRank.get("label");
+            int algoId = Integer.parseInt(algoRank.get("algo"));
+            if(algoId == Constants.RECENT){
+                if(label.equals("Preferred"))
+                      probRank+=1;
+                else
+                      probRank-=1;
+            }
+            if(algoId == Constants.TRUSTWORTHINESS){
+              if(label.equals("Preferred"))
+                    probRank+=2;
+              else
+                    probRank-=2;
+          }
+            if(algoId == Constants.OKBR){
+              if(label.equals("Preferred"))
+                    probRank+=4;
+              else
+                    probRank-=4;
+          }
+        }
+        System.out.println(factRank);
+        FactRanks newfact = new FactRanks(claimID, Constants.HYBRID, "Deprecated");
+        newfact.probabilityRank=probRank;
+        newfact.save();
+      }
+      
+      List<Map<String, String>> stmt =  Statements.getAllStatement();
+      for (Map<String, String> tr: stmt){
+        int statementId = Integer.parseInt(tr.get("id"));
+        List<Map<String, String>> claimId = FactRanks.getMaxProbability(statementId, Constants.HYBRID);
+        int factRankId = Integer.parseInt(claimId.get(0).get("id"));
+        FactRanks.updateLabel(factRankId, "Preferred");
+      }
+    }
     
     // Lavenshtien Example
     //System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
@@ -202,5 +294,6 @@ public class Algorithms  {
     
     
     
+ 
   }
 }
