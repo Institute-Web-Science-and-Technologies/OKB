@@ -16,7 +16,7 @@ public class RestApi implements SparkApplication{
 	public  void init() {
         Spark.post("/notification",  (request, response) -> {
             //System.out.println(request.queryParams("id"));
-            String data = request.queryParams("data");
+            String data = request.body();
            // ResultSet result = null;
             String js="";
             try {
@@ -36,7 +36,7 @@ public class RestApi implements SparkApplication{
         
         Spark.post("/updatefacts",  (request, response) -> {
           //System.out.println(request.queryParams("id"));
-          String data = request.queryParams("data");
+          String data = request.body();
          // ResultSet result = null;
           String js="";
           try {
