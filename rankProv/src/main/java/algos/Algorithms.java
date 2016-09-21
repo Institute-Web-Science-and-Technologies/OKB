@@ -17,6 +17,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONArray;
+import org.json.JSONObject;
 
 import App.Config;
 import App.Constants;
@@ -207,6 +209,12 @@ public class Algorithms  {
     }
     
     
+    if(prop.getProperty("bayesAlgo").equals("true"))
+    {
+      BayesClassifier bs = new BayesClassifier();
+      bs.calculate();
+    }
+    
 
     if(prop.getProperty("okbrAlgo").equals("true"))
     {
@@ -253,8 +261,39 @@ public class Algorithms  {
       }
     }
     
+    
+    if(prop.getProperty("sendRanks").equals("true"))
+    {
+      
+      List<Map<String, String>> claims = FactRanks.getAlgoRank(Constants.HYBRID);
+      System.out.println(claims);
+      JSONObject obj = new JSONObject();
+      
+      obj.put("rankedclaims", new JSONArray());
+      for(Map<String,String> claim : claims){
+        JSONArray obj2 = new JSONArray();
+        JSONObject jobj = new JSONObject();
+        
+        int claimId = Integer.parseInt(claim.get("claimId"));
+        String rank = claim.get("label").toLowerCase();
+        
+        jobj.put("id", claimId);
+        jobj.put("rank", rank);
+        obj2.put(jobj);
+        
+        obj.put("rankedclaims", obj2);
+      }
+    //  System.out.println(obj.toString());
+
+      
+     // SendRanks.sendRank(obj.toString());
+
+    }
+    
     // Lavenshtien Example
     //System.out.println(StringUtils.getLevenshteinDistance("vae".toLowerCase(), "Va1e".toLowerCase()));
+    
+    
     return "executed";
     
     

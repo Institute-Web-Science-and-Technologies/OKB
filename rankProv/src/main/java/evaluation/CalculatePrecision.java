@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jettison.json.JSONArray;
+import org.json.JSONObject;
+
 import com.sun.xml.bind.v2.runtime.reflect.opt.Const;
 
 import App.Constants;
 import algos.GetClaims;
 import algos.TruthFinder;
+import rankingProvenance.API.SendRanks;
 import rankingProvenance.rankProv.Claims;
 import rankingProvenance.rankProv.Statements;
 
@@ -44,15 +48,15 @@ public class CalculatePrecision {
   }
   
   @SuppressWarnings("null")
-  public static void main(String[] args) throws SQLException, URISyntaxException{
+  public static void main(String[] args) throws Exception{
 
 
 //    
-//    calcPrecsision(Constants.HYBRID);
-//    calcPrecsision(Constants.AVERAGE);
-//    calcPrecsision(Constants.RECENT);
-    //calcPrecsision(Constants.TRUSTWORTHINESS);
-      //calcPrecsision(Constants.OKBR);
+    calcPrecsision(Constants.HYBRID);
+    calcPrecsision(Constants.AVERAGE);
+    calcPrecsision(Constants.RECENT);
+    calcPrecsision(Constants.TRUSTWORTHINESS);
+    calcPrecsision(Constants.OKBR);
 
    // System.out.println(EvaluationResults.getPrecision(Constants.OKBR));
     
